@@ -17,13 +17,15 @@ export default function App() {
   const BottomTabs = createBottomTabNavigator();
   return (
     <>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
+
       <Provider store={store}>
         <PersistGate loading={<Text>Loading...</Text>} persistor={persistor}>
           <NavigationContainer theme={navTheme}>
             <BottomTabs.Navigator
               screenOptions={({ route, navigation }) => ({
                 headerShown: false,
+                unmountOnBlur: true,
               })}
             >
               <BottomTabs.Screen
