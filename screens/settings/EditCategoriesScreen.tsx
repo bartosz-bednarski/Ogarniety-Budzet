@@ -5,7 +5,8 @@ import CategoryItemRow from "../../components/settings/CategoryItemRow";
 import { CategoryItem } from "../../types/settings";
 import AddCategoryButton from "../../components/settings/AddCategoryButton";
 import { Navigation } from "../../types/global";
-const EditCategoriesScreen: React.FC<Navigation> = ({ navigation }) => {
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+const EditCategoriesScreen: React.FC = () => {
   const categories = useAppSelector((state) => state.categories.categoriesList);
   // const navigateToEditCategoryHandler = (item: CategoryItem) => {
   //   navigation.navigate("editCategory", {

@@ -18,14 +18,14 @@ const categoriesInitialState = {
     { catId: 8, name: "Health", iconName: "ios-globe" },
     { catId: 9, name: "Movies", iconName: "ios-happy" },
     { catId: 10, name: "Food", iconName: "ios-alarm" },
-    { catId: 12, name: "Travel", iconName: "ios-battery-full" },
-    { catId: 13, name: "Technology", iconName: "ios-basketball" },
-    { catId: 14, name: "Music", iconName: "ios-cloudy-night" },
-    { catId: 15, name: "Sports", iconName: "ios-desktop" },
-    { catId: 16, name: "Fashion", iconName: "ios-desktop" },
-    { catId: 17, name: "Art", iconName: "ios-flask" },
-    { catId: 18, name: "Health", iconName: "ios-globe" },
-    { catId: 19, name: "Movies", iconName: "ios-happy" },
+    { catId: 11, name: "Travel", iconName: "ios-battery-full" },
+    { catId: 12, name: "Technology", iconName: "ios-basketball" },
+    { catId: 13, name: "Music", iconName: "ios-cloudy-night" },
+    { catId: 14, name: "Sports", iconName: "ios-desktop" },
+    { catId: 15, name: "Fashion", iconName: "ios-desktop" },
+    { catId: 16, name: "Art", iconName: "ios-flask" },
+    { catId: 17, name: "Health", iconName: "ios-globe" },
+    { catId: 18, name: "Movies", iconName: "ios-happy" },
   ],
 };
 
@@ -36,10 +36,14 @@ const categoriesSlice = createSlice({
     addCategory: (state, action) => {
       state.categoriesList = [...state.categoriesList, action.payload];
     },
+    editCategory: (state, action) => {
+      state.categoriesList[action.payload.catId] = action.payload;
+    },
   },
 });
 
 export const categoriesActions = categoriesSlice.actions;
 export const addCategory = categoriesSlice.actions.addCategory;
+export const editCategory = categoriesSlice.actions.editCategory;
 export const selectCategories = (state: RootState) => state.categories;
 export default categoriesSlice.reducer;
