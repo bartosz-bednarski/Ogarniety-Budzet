@@ -6,20 +6,19 @@ import { CategoryItem } from "../../types/settings";
 import AddCategoryButton from "../../components/settings/AddCategoryButton";
 import { Navigation } from "../../types/global";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-const EditCategoriesScreen: React.FC = () => {
+const EditCategoriesScreen: React.FC<{ navigation: any }> = ({
+  navigation,
+}) => {
   const categories = useAppSelector((state) => state.categories.categoriesList);
-  // const navigateToEditCategoryHandler = (item: CategoryItem) => {
-  //   navigation.navigate("editCategory", {
-  //     params: { catId: item.catId },
-  //   });
-  // };
+  const navigateToaddNewCategoryHandler = () => {
+    navigation.navigate("addNewCategory");
+  };
   const renderCategoryHandler = ({ item }: { item: CategoryItem }) => {
     return (
       <CategoryItemRow
         catId={item.catId}
         iconName={item.iconName}
         name={item.name}
-        // onPress={(item: CategoryItem) => navigateToEditCategoryHandler(item)}
       />
     );
   };
@@ -33,7 +32,7 @@ const EditCategoriesScreen: React.FC = () => {
         />
       </View>
       <View style={styles.addCategoryBox}>
-        <AddCategoryButton />
+        <AddCategoryButton onPress={navigateToaddNewCategoryHandler} />
       </View>
     </View>
   );
