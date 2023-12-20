@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SettingsScreen from "../screens/settings/SettingsScreen";
 import EditCategoriesScreen from "../screens/settings/EditCategoriesScreen";
 import EditCategoryScreen from "../screens/settings/EditCategoryScreen";
+import AddNewCategoryScreen from "../screens/settings/AddNewCategoryScreen";
 const SettingsNavigator = () => {
   const Stack = createNativeStackNavigator();
   return (
@@ -28,6 +29,11 @@ const SettingsNavigator = () => {
         options={({ route }) => {
           return { headerTitle: `Edytujesz ` };
         }}
+      />
+      <Stack.Screen
+        component={AddNewCategoryScreen}
+        name="addNewCategory"
+        options={{ headerTitle: "Dodajesz nową kategorie" }}
       />
     </Stack.Navigator>
   );

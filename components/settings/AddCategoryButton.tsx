@@ -1,8 +1,8 @@
 import { Pressable, StyleSheet, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-const AddCategoryButton = () => {
+const AddCategoryButton: React.FC<{ onPress: () => void }> = ({ onPress }) => {
   return (
-    <Pressable style={styles.container}>
+    <Pressable style={styles.container} onPress={onPress}>
       <Ionicons name="add-circle-outline" size={40} color="blue" />
       <Text style={styles.text}>Dodaj nową kategorie</Text>
     </Pressable>

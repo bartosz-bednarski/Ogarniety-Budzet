@@ -2,13 +2,13 @@ import { Pressable, StyleSheet, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { CategoryItemRowProps } from "../../types/settings";
 import { useNavigation } from "@react-navigation/native";
-import { Navigate } from "../../types/global";
+import { Navigate, Navigation } from "../../types/global";
 const CategoryItemRow: React.FC<CategoryItemRowProps> = ({
   catId,
   iconName,
   name,
 }) => {
-  const navigation: Navigate = useNavigation();
+  const navigation: Navigation = useNavigation();
   return (
     <Pressable
       style={styles.container}
