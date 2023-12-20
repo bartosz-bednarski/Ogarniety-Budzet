@@ -26,7 +26,7 @@ const SettingsNavigator = () => {
         component={EditCategoryScreen}
         name="editCategory"
         options={({ route }) => {
-          return { headerTitle: `Edytujesz ${route.params.name}` };
+          return { headerTitle: `Edytujesz ` };
         }}
       />
     </Stack.Navigator>

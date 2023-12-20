@@ -1,7 +1,9 @@
 import { Text, View, StyleSheet, Pressable } from "react-native";
 import { Navigation } from "../../types/global";
 
-const SettingsScreen: React.FC<Navigation> = ({ navigation }) => {
+const SettingsScreen: React.FC<{ navigation: Navigation }> = ({
+  navigation,
+}) => {
   return (
     <View style={styles.settingsContainer}>
       <Pressable
