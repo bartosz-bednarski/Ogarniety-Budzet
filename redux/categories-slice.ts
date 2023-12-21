@@ -3,12 +3,16 @@ import { RootState } from "./store";
 import { CategoryItem } from "../types/settings";
 
 type categoriesInitialState = {
-  categoriesList: CategoryItem[] | any[];
+  categoriesList: CategoryItem[];
 };
 const categoriesInitialState = {
   categoriesList: [
     // { catId: 0, name: "Book", iconName: "ios-add" },
-    { catId: 0, name: "Jedzenie", iconName: "restaurant-outline" },
+    {
+      catId: 0,
+      name: "Naciśniej aby edytować",
+      iconName: "restaurant-outline",
+    },
     // { catId: 2, name: "Travel", iconName: "ios-battery-full" },
     // { catId: 3, name: "Technology", iconName: "ios-basketball" },
     // { catId: 4, name: "Music", iconName: "ios-cloudy-night" },
@@ -39,9 +43,9 @@ const categoriesSlice = createSlice({
         name: action.payload.name,
         iconName: action.payload.iconName,
       };
-      if (state.categoriesList.length > 0) {
+      if (state.categoriesList.length > 0 && state.categoriesList.length < 20) {
         state.categoriesList = [...state.categoriesList, newCategory];
-      } else {
+      } else if (state.categoriesList.length === 0) {
         state.categoriesList = [newCategory];
       }
     },

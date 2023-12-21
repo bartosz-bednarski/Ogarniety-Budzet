@@ -12,6 +12,7 @@ import {
 } from "redux-persist";
 import podsumowanieSlice from "./podsumowanie-slice";
 import categoriesSlice from "./categories-slice";
+import expensesSlice from "./expenses-slice";
 const persistConfig = {
   key: "root",
   storage: AsyncStorage,
@@ -28,6 +29,7 @@ export const store = configureStore({
   reducer: {
     podsumowanie: persistedPodsumowanieReducer,
     categories: persistedCategoriesReducer,
+    expenses: expensesSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
