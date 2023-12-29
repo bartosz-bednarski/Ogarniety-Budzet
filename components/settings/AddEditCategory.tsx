@@ -10,6 +10,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { CATEGORY_ICONS } from "../../utils/categoryIcons";
 import { AddEditCategoryProps } from "../../types/settings";
+import COLORS_STYLE from "../../utils/styles/colors";
 const AddEditCategory: React.FC<AddEditCategoryProps> = ({
   onSetCategoryIcon,
   onSetInputText,
@@ -24,7 +25,7 @@ const AddEditCategory: React.FC<AddEditCategoryProps> = ({
         <Ionicons
           name={item.item.iconName}
           size={50}
-          color="black"
+          color="white"
           style={{ marginHorizontal: 10 }}
         />
       </Pressable>
@@ -33,7 +34,11 @@ const AddEditCategory: React.FC<AddEditCategoryProps> = ({
   return (
     <View style={styles.container}>
       <View style={styles.presentDataBox}>
-        <Ionicons name={categoryIcon} size={80} color="blue" />
+        <Ionicons
+          name={categoryIcon}
+          size={80}
+          color={COLORS_STYLE.basicGold}
+        />
         <Text style={styles.categoryName}>{inputText}</Text>
       </View>
       <View style={styles.categoriesBox}>
@@ -62,8 +67,8 @@ const AddEditCategory: React.FC<AddEditCategoryProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginVertical: 5,
-    marginHorizontal: 5,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
     flexDirection: "column",
   },
   presentDataBox: {
@@ -73,6 +78,7 @@ const styles = StyleSheet.create({
   },
   categoryName: {
     fontSize: 16,
+    color: "white",
   },
   categoriesBox: {
     flex: 3,
@@ -85,6 +91,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginLeft: 5,
     marginVertical: 10,
+    color: COLORS_STYLE.labelGrey,
   },
   textInput: {
     backgroundColor: "grey",
@@ -93,6 +100,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     color: "white",
     marginBottom: 20,
+    borderRadius: 10,
   },
 });
 export default AddEditCategory;

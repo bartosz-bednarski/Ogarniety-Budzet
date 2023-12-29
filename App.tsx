@@ -11,13 +11,14 @@ import SummaryNavigator from "./navigators/SummaryNavigator";
 import ExpensesNavigator from "./navigators/ExpensesNavigator";
 import IncomesNavigator from "./navigators/IncomesNavigator";
 import PiggyBankNavigator from "./navigators/PiggyBankNavigator";
+import COLORS_STYLE from "./utils/styles/colors";
 export default function App() {
   const navTheme = DefaultTheme;
-  navTheme.colors.background = "white";
+  navTheme.colors.background = "black";
   const BottomTabs = createBottomTabNavigator();
   return (
     <>
-      <StatusBar style="dark" />
+      <StatusBar style="light" />
 
       <Provider store={store}>
         <PersistGate loading={<Text>Loading...</Text>} persistor={persistor}>
@@ -26,6 +27,8 @@ export default function App() {
               screenOptions={({ route, navigation }) => ({
                 headerShown: false,
                 unmountOnBlur: true,
+                tabBarActiveTintColor: COLORS_STYLE.basicGold,
+                tabBarStyle: { backgroundColor: COLORS_STYLE.backgroundBlack },
               })}
             >
               <BottomTabs.Screen

@@ -20,8 +20,8 @@ const CategoryItemRow: React.FC<CategoryItemRowProps> = ({
         })
       }
     >
-      <Ionicons name={iconName} size={29} color="blue" />
-      <Text>{name}</Text>
+      <Ionicons name={iconName} size={29} color="white" />
+      <Text style={styles.catName}>{name}</Text>
     </Pressable>
   );
 };
@@ -31,6 +31,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginVertical: 5,
     gap: 10,
+  },
+  catName: {
+    color: "white",
   },
 });
 export default CategoryItemRow;

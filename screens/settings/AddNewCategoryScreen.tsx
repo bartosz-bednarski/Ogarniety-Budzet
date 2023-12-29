@@ -7,6 +7,7 @@ import {
 } from "../../types/settings";
 import { useAppDispatch } from "../../redux/hooks";
 import { addCategory } from "../../redux/categories-slice";
+import { setPlannedExpense } from "../../redux/expenses-slice";
 const AddNewCategoryScreen: React.FC<{
   route: any;
   navigation: any;
@@ -23,6 +24,7 @@ const AddNewCategoryScreen: React.FC<{
   const onPressHandler: OnPressHandler = () => {
     if (inputText.length < 20) {
       dispatch(addCategory({ name: inputText, iconName: categoryIcon }));
+      dispatch(setPlannedExpense({ name: inputText, iconName: categoryIcon }));
       navigation.navigate("editCategories");
     }
   };

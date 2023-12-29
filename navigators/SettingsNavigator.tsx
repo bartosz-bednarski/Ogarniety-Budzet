@@ -3,13 +3,15 @@ import SettingsScreen from "../screens/settings/SettingsScreen";
 import EditCategoriesScreen from "../screens/settings/EditCategoriesScreen";
 import EditCategoryScreen from "../screens/settings/EditCategoryScreen";
 import AddNewCategoryScreen from "../screens/settings/AddNewCategoryScreen";
+import COLORS_STYLE from "../utils/styles/colors";
 const SettingsNavigator = () => {
   const Stack = createNativeStackNavigator();
   return (
     <Stack.Navigator
       screenOptions={() => ({
-        headerTintColor: "red",
-        headerPressColor: "red",
+        headerStyle: { backgroundColor: COLORS_STYLE.backgroundBlack },
+        headerTintColor: COLORS_STYLE.basicGold,
+        headerPressColor: COLORS_STYLE.basicGold,
         headerPressOpacity: 1,
       })}
     >
