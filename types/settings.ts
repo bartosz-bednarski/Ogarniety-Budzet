@@ -10,7 +10,12 @@ export type CategoryItemRowProps = {
   name: string;
   // onPress: () => void;
 };
-
+export type PlannedExpenseCategoryItem = {
+  catId: number;
+  iconName: any;
+  name: string;
+  value: number;
+};
 export type OnSetCategoryIcon = (icon: string) => void;
 export type OnSetInputText = (text: string) => void;
 export type OnPressHandler = () => void;

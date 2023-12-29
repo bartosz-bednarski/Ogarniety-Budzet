@@ -2,17 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 import { CategoryItem } from "../types/settings";
 
-type categoriesInitialState = {
+type categoriesInitialStateType = {
   categoriesList: CategoryItem[];
 };
-const categoriesInitialState = {
+const categoriesInitialState: categoriesInitialStateType = {
   categoriesList: [
     // { catId: 0, name: "Book", iconName: "ios-add" },
-    {
-      catId: 0,
-      name: "Naciśniej aby edytować",
-      iconName: "restaurant-outline",
-    },
     // { catId: 2, name: "Travel", iconName: "ios-battery-full" },
     // { catId: 3, name: "Technology", iconName: "ios-basketball" },
     // { catId: 4, name: "Music", iconName: "ios-cloudy-night" },

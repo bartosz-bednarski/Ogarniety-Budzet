@@ -19,6 +19,7 @@ import {
   OnSetCategoryIcon,
   OnSetInputText,
 } from "../../types/settings";
+import { updatePlannedExpenseCategory } from "../../redux/expenses-slice";
 const EditCategoryScreen: React.FC<{
   route: any;
   navigation: any;
@@ -39,6 +40,13 @@ const EditCategoryScreen: React.FC<{
     if (inputText.length < 20) {
       dispatch(
         editCategory({ catId: catId, name: inputText, iconName: categoryIcon })
+      );
+      dispatch(
+        updatePlannedExpenseCategory({
+          catId: catId,
+          name: inputText,
+          iconName: categoryIcon,
+        })
       );
       navigation.navigate("editCategories");
     }

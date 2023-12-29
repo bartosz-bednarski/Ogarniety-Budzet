@@ -3,18 +3,24 @@ import { Ionicons } from "@expo/vector-icons";
 import AddExpenseScreen from "../screens/AddExpenseScreen";
 import { Pressable } from "react-native";
 import SettingsNavigator from "./SettingsNavigator";
+import COLORS_STYLE from "../utils/styles/colors";
 const AddExpenseNavigator = () => {
   const Stack = createNativeStackNavigator();
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: COLORS_STYLE.backgroundBlack },
+      }}
+    >
       <Stack.Screen
         component={AddExpenseScreen}
         name="addExpense"
         options={({ route, navigation }) => ({
-          headerTintColor: "red",
-          headerPressColor: "red",
+          headerTintColor: COLORS_STYLE.basicGold,
+          headerPressColor: COLORS_STYLE.basicGold,
           headerPressOpacity: 1,
           headerTitle: "Dodaj wydatek",
+          headerTitleAlign: "center",
           headerRight: () => {
             return (
               <Pressable
@@ -23,7 +29,7 @@ const AddExpenseNavigator = () => {
                 <Ionicons
                   name="cog"
                   size={30}
-                  color="red"
+                  color={COLORS_STYLE.basicGold}
                   style={{ marginRight: 10 }}
                 />
               </Pressable>
