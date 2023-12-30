@@ -3,6 +3,8 @@ import { useAppSelector } from "../../redux/hooks";
 import { Ionicons } from "@expo/vector-icons";
 import PieChart from "react-native-pie-chart";
 import COLORS_STYLE from "../../utils/styles/colors";
+import CategoryPieChart from "../../components/expenses/CategoryPieChart";
+import { useEffect } from "react";
 // import PieChartComponent from "../components/PieChartComponent";
 
 const ActualExpensesScreen = () => {
@@ -18,33 +20,58 @@ const ActualExpensesScreen = () => {
     color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
     ...categories.find((item) => item.catId === category.catId),
   }));
+
+  let currentCategoryRealistationPieChartData = categoriesExpenses.map(
+    (category) => ({
+      ...category,
+      ...plannedExpenses.find((item) => item.catId === category.catId),
+    })
+  );
+
   const sumOfPlannedExpenses = plannedExpenses
     .map((item) => Number(item.value))
     .reduce((partialSum, a) => partialSum + a, 0);
   const sumOfAllExpenses = categoriesExpenses
     .map((cat) => Number(cat.sum))
     .reduce((partialSum, a) => partialSum + a, 0);
+
+  const globalRealistationPieChartData = [
+    Number(((sumOfAllExpenses / sumOfPlannedExpenses) * 100).toFixed(2)),
+    100 - Number(((sumOfAllExpenses / sumOfPlannedExpenses) * 100).toFixed(2)) <
+    0
+      ? 0
+      : 100 -
+        Number(((sumOfAllExpenses / sumOfPlannedExpenses) * 100).toFixed(2)),
+  ];
+  useEffect(() => {
+    currentCategoryRealistationPieChartData = categoriesExpenses.map(
+      (category) => ({
+        ...category,
+        ...plannedExpenses.find((item) => item.catId === category.catId),
+      })
+    );
+  }, [plannedExpenses, categoriesExpenses]);
+  console.log(currentCategoryRealistationPieChartData);
   console.log("categoriesExpenses", categoriesExpenses);
-  console.log("categoriesList", categories);
-  console.log("totalSum", sumOfAllExpenses);
-  console.log("categoriesExpensesWithNames", categoriesExpensesWithNames);
-  console.log(((sumOfAllExpenses / sumOfPlannedExpenses) * 100).toFixed(2));
+  console.log("plannedExpenses", plannedExpenses);
+  // console.log("categoriesList", categories);
+  // console.log("totalSum", sumOfAllExpenses);
+  // console.log("categoriesExpensesWithNames", categoriesExpensesWithNames);
+  // console.log(((sumOfAllExpenses / sumOfPlannedExpenses) * 100).toFixed(2));
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.sumOfExpenses}>Wydano {sumOfAllExpenses} PLN</Text>
       <Text style={styles.label}>Kategorie wydatków</Text>
       <View style={styles.expensesCategories}>
-        <View style={styles.pieChart}>
-          {sumOfAllExpenses > 0 && (
-            <PieChart
-              widthAndHeight={200}
-              series={categoriesExpensesWithNames.map((item) => item.sum)}
-              sliceColor={categoriesExpensesWithNames.map((item) => item.color)}
-              coverRadius={0.45}
-              coverFill={COLORS_STYLE.backgroundBlack}
-            />
-          )}
-        </View>
+        {sumOfAllExpenses > 0 && (
+          <PieChart
+            widthAndHeight={200}
+            series={categoriesExpensesWithNames.map((item) => item.sum)}
+            sliceColor={categoriesExpensesWithNames.map((item) => item.color)}
+            coverRadius={0.45}
+            coverFill={COLORS_STYLE.tabGrey}
+          />
+        )}
         <View style={styles.legend}>
           {categoriesExpensesWithNames.map((item) => (
             <Ionicons
@@ -61,20 +88,26 @@ const ActualExpensesScreen = () => {
         {sumOfAllExpenses > 0 && (
           <PieChart
             widthAndHeight={200}
-            series={[
-              ((sumOfAllExpenses / sumOfPlannedExpenses) * 100).toFixed(2),
-              100 -
-                ((sumOfAllExpenses / sumOfPlannedExpenses) * 100).toFixed(2) <
-              0
-                ? 0
-                : 100 -
-                  ((sumOfAllExpenses / sumOfPlannedExpenses) * 100).toFixed(2),
-            ]}
+            series={globalRealistationPieChartData}
             sliceColor={["red", "green"]}
             coverRadius={0.45}
             coverFill={COLORS_STYLE.backgroundBlack}
           />
         )}
+      </View>
+      <Text style={styles.label}>
+        Realizacja wydatków w poszczególnych kategoriach
+      </Text>
+      <View style={styles.categoryExpenseBox}>
+        {currentCategoryRealistationPieChartData.map((item) => (
+          <CategoryPieChart
+            plannedExpense={item.value}
+            realExpense={item.sum}
+            key={item.catId}
+            iconName={item.iconName}
+            name={item.name}
+          />
+        ))}
       </View>
     </ScrollView>
   );
@@ -118,6 +151,12 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     marginTop: 10,
     gap: 10,
+  },
+  categoryExpenseBox: {
+    width: "100%",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    height: "auto",
   },
 });
 export default ActualExpensesScreen;
