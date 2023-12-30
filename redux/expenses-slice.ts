@@ -6,7 +6,7 @@ type ExpensesInitialState = {
   plannedExpenses: PlannedExpenseCategoryItem[];
 };
 const expensesInitialState: ExpensesInitialState = {
-  lastExpenses: [{ catId: 100, value: 100, date: "12.09.2023" }],
+  lastExpenses: [],
   categoriesExpenses: [],
   plannedExpenses: [],
 };
@@ -14,6 +14,12 @@ const expensesSlice = createSlice({
   name: "expenses",
   initialState: expensesInitialState,
   reducers: {
+    setExpense: (state) => {
+      state.categoriesExpenses = [
+        ...state.categoriesExpenses,
+        { catId: state.categoriesExpenses.length, sum: 0 },
+      ];
+    },
     addExpense: (state, action) => {
       const day = new Date().getDate();
       const month = new Date().getMonth();
@@ -80,7 +86,7 @@ const expensesSlice = createSlice({
     },
   },
 });
-
+export const setExpense = expensesSlice.actions.setExpense;
 export const addExpense = expensesSlice.actions.addExpense;
 export const setPlannedExpense = expensesSlice.actions.setPlannedExpense;
 export const addPlannedExpense = expensesSlice.actions.addPlannedExpense;
