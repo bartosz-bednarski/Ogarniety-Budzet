@@ -25,11 +25,12 @@ const persistedCategoriesReducer = persistReducer(
   persistConfig,
   categoriesSlice
 );
+const persistedExpensesReducer = persistReducer(persistConfig, expensesSlice);
 export const store = configureStore({
   reducer: {
     podsumowanie: persistedPodsumowanieReducer,
     categories: persistedCategoriesReducer,
-    expenses: expensesSlice,
+    expenses: persistedExpensesReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -4,3 +4,8 @@ export type CategoryPieChartProps = {
   iconName: string;
   name: string;
 };
+export type LastExpenseItemBoxProps = {
+  iconName: string;
+  price: number;
+  date: string;
+};

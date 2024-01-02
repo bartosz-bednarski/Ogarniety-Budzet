@@ -15,6 +15,7 @@ import { CATEGORY_ICONS } from "../../utils/categoryIcons";
 import { AddEditCategoryProps } from "../../types/settings";
 import COLORS_STYLE from "../../utils/styles/colors";
 import DeleteCategoryButton from "./DeleteCategoryButton";
+import CustomButton from "../../utils/ui/CustomButton";
 const AddEditCategory: React.FC<AddEditCategoryProps> = ({
   onSetCategoryIcon,
   onSetInputText,
@@ -45,7 +46,7 @@ const AddEditCategory: React.FC<AddEditCategoryProps> = ({
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
+          Alert.alert("Zmiany nie zostały zapisane!");
           setModalVisible(!modalVisible);
         }}
       >
@@ -55,8 +56,8 @@ const AddEditCategory: React.FC<AddEditCategoryProps> = ({
               Usuwając tą kategorię usuwasz wszystkie dane z nią powiązane!
             </Text>
             <View style={styles.modalButtonsBox}>
-              <Button title="Potwierdzam" onPress={onCategoryDelete} />
-              <Button
+              <CustomButton title="Potwierdzam" onPress={onCategoryDelete} />
+              <CustomButton
                 title="Rezygnuję"
                 onPress={() => setModalVisible(false)}
               />
@@ -90,10 +91,12 @@ const AddEditCategory: React.FC<AddEditCategoryProps> = ({
           value={inputText}
           maxLength={20}
         />
-        <Button title="Zatwierdź" onPress={onCategoryEdit} />
-        {!newCategory && (
-          <DeleteCategoryButton onPress={() => setModalVisible(true)} />
-        )}
+        <View style={styles.buttonsBox}>
+          <CustomButton title="Zatwierdź" onPress={onCategoryEdit} />
+          {!newCategory && (
+            <DeleteCategoryButton onPress={() => setModalVisible(true)} />
+          )}
+        </View>
       </View>
     </View>
   );
@@ -120,6 +123,11 @@ const styles = StyleSheet.create({
   },
   formBox: {
     flex: 4,
+  },
+  buttonsBox: {
+    gap: 30,
+    justifyContent: "center",
+    alignItems: "center",
   },
   label: {
     fontSize: 12,
@@ -159,9 +167,10 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   modalButtonsBox: {
-    flexDirection: "row",
     width: "100%",
-    justifyContent: "space-between",
+    gap: 15,
+    justifyContent: "center",
+    alignItems: "center",
   },
   modalLabel: {
     fontSize: 16,

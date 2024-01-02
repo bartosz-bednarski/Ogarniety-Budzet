@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { PlannedExpenseCategoryItem } from "../types/settings";
 type ExpensesInitialState = {
-  lastExpenses: { catId: number; value: number; date: string }[];
+  lastExpenses: { catId: number; value: number; date: string; id: string }[];
   categoriesExpenses: { catId: number; sum: number }[];
   plannedExpenses: PlannedExpenseCategoryItem[];
 };
@@ -22,15 +22,19 @@ const expensesSlice = createSlice({
     },
     addExpense: (state, action) => {
       const day = new Date().getDate();
-      const month = new Date().getMonth();
+      const month = new Date().getMonth() + 1;
       const year = new Date().getFullYear();
-      const fullDate = `${day}.${month},${year}`;
+      const fullDate = `${day}.${month}.${year}`;
+      const randLetter = String.fromCharCode(
+        65 + Math.floor(Math.random() * 26)
+      );
       state.lastExpenses = [
         ...state.lastExpenses,
         {
           catId: action.payload.catId,
           value: action.payload.value,
           date: fullDate,
+          id: randLetter + Date.now(),
         },
       ];
       // Update do sum wydatków w poszczególnych kategoriach:
