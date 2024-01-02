@@ -34,10 +34,11 @@ const categoriesSlice = createSlice({
   reducers: {
     addCategory: (state, action) => {
       const newCategory = {
-        catId: state.categoriesList.length,
+        catId: action.payload.catId,
         name: action.payload.name,
         iconName: action.payload.iconName,
       };
+
       if (state.categoriesList.length > 0 && state.categoriesList.length < 20) {
         state.categoriesList = [...state.categoriesList, newCategory];
       } else if (state.categoriesList.length === 0) {

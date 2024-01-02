@@ -16,14 +16,14 @@ import COLORS_STYLE from "../../utils/styles/colors";
 import CustomButton from "../../utils/ui/CustomButton";
 const PlannedExpensesScreen = () => {
   const dispatch = useAppDispatch();
-  const [selectedCatId, setSelectedCatId] = useState(0);
+  const [selectedCatId, setSelectedCatId] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [value, setValue] = useState("");
   const plannedExpenses = useAppSelector(
     (state) => state.expenses.plannedExpenses
   );
-
-  const onPressHandler = (catId: number) => {
+  console.log("plannedExpenses", plannedExpenses);
+  const onPressHandler = (catId: string) => {
     setSelectedCatId(catId);
     setModalVisible(true);
   };

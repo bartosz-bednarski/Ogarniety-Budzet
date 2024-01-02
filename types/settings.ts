@@ -1,17 +1,17 @@
 export type CategoryItem = {
-  catId: number;
+  catId: string;
   iconName: any;
   name: string;
   // onPress: (item: CategoryItem) => void;
 };
 export type CategoryItemRowProps = {
-  catId: number;
+  catId: string;
   iconName: any; //powinien być string ale ionicons nie przyjmuje typu string jako argument do name
   name: string;
   // onPress: () => void;
 };
 export type PlannedExpenseCategoryItem = {
-  catId: number;
+  catId: string;
   iconName: any;
   name: string;
   value: number;

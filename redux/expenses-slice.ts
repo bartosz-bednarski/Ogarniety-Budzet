@@ -14,10 +14,10 @@ const expensesSlice = createSlice({
   name: "expenses",
   initialState: expensesInitialState,
   reducers: {
-    setExpense: (state) => {
+    setExpense: (state, action) => {
       state.categoriesExpenses = [
         ...state.categoriesExpenses,
-        { catId: state.categoriesExpenses.length, sum: 0 },
+        { catId: action.payload.catId, sum: 0 },
       ];
     },
     addExpense: (state, action) => {
@@ -64,7 +64,7 @@ const expensesSlice = createSlice({
       state.plannedExpenses = [
         ...state.plannedExpenses,
         {
-          catId: state.plannedExpenses.length,
+          catId: action.payload.catId,
           name: action.payload.name,
           iconName: action.payload.iconName,
           value: 0,
@@ -72,8 +72,11 @@ const expensesSlice = createSlice({
       ];
     },
     addPlannedExpense: (state, action) => {
-      state.plannedExpenses[action.payload.catId] = {
-        ...state.plannedExpenses[action.payload.catId],
+      const indexOfPlannedExpense = state.plannedExpenses.findIndex(
+        (item) => item.catId === action.payload.catId
+      );
+      state.plannedExpenses[indexOfPlannedExpense] = {
+        ...state.plannedExpenses[indexOfPlannedExpense],
         value: action.payload.value,
       };
     },
