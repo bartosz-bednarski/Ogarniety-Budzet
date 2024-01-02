@@ -33,9 +33,10 @@ const AddNewCategoryScreen: React.FC<{
     <AddEditCategory
       onSetCategoryIcon={onSetCategoryIcon}
       onSetInputText={onSetInputText}
-      onPressHandler={onPressHandler}
+      onCategoryEdit={onPressHandler}
       categoryIcon={categoryIcon}
       inputText={inputText}
+      newCategory={true}
     />
   );
 };

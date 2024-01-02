@@ -84,12 +84,25 @@ const expensesSlice = createSlice({
         return;
       }
     },
+    deleteAllExpensesFromCategory: (state, action) => {
+      state.plannedExpenses = state.plannedExpenses.filter(
+        (item) => item.catId !== action.payload.catId
+      );
+      state.categoriesExpenses = state.categoriesExpenses.filter(
+        (item) => item.catId !== action.payload.catId
+      );
+      state.lastExpenses = state.lastExpenses.filter(
+        (item) => item.catId !== action.payload.catId
+      );
+    },
   },
 });
 export const setExpense = expensesSlice.actions.setExpense;
 export const addExpense = expensesSlice.actions.addExpense;
 export const setPlannedExpense = expensesSlice.actions.setPlannedExpense;
 export const addPlannedExpense = expensesSlice.actions.addPlannedExpense;
+export const deleteAllExpensesFromCategory =
+  expensesSlice.actions.deleteAllExpensesFromCategory;
 export const updatePlannedExpenseCategory =
   expensesSlice.actions.updatePlannedExpenseCategory;
 export default expensesSlice.reducer;

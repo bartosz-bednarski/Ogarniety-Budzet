@@ -1,11 +1,8 @@
 import { View, Text, StyleSheet, FlatList } from "react-native";
 import { useAppSelector } from "../../redux/hooks";
-import { Ionicons } from "@expo/vector-icons";
 import CategoryItemRow from "../../components/settings/CategoryItemRow";
 import { CategoryItem } from "../../types/settings";
 import AddCategoryButton from "../../components/settings/AddCategoryButton";
-import { Navigation } from "../../types/global";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 const EditCategoriesScreen: React.FC<{ navigation: any }> = ({
   navigation,
 }) => {
@@ -49,6 +46,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    flexDirection: "row",
+    gap: 15,
   },
 });
 export default EditCategoriesScreen;

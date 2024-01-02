@@ -1,15 +1,14 @@
 import { Pressable, StyleSheet, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import COLORS_STYLE from "../../utils/styles/colors";
-const AddCategoryButton: React.FC<{ onPress: () => void }> = ({ onPress }) => {
+import { OnPressHandler } from "../../types/settings";
+const DeleteCategoryButton: React.FC<{ onPress: OnPressHandler }> = ({
+  onPress,
+}) => {
   return (
     <Pressable style={styles.container} onPress={onPress}>
-      <Ionicons
-        name="add-circle-outline"
-        size={30}
-        color={COLORS_STYLE.basicGold}
-      />
-      <Text style={styles.text}>Dodaj nową kategorie</Text>
+      <Ionicons name="trash" size={30} color="red" />
+      <Text style={styles.text}>Usuń kategorię</Text>
     </Pressable>
   );
 };
@@ -21,7 +20,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 10,
-    color: COLORS_STYLE.basicGold,
+    color: "red",
   },
 });
-export default AddCategoryButton;
+export default DeleteCategoryButton;

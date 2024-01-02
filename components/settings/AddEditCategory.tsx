@@ -6,19 +6,26 @@ import {
   TextInput,
   Pressable,
   Button,
+  Modal,
+  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useState } from "react";
 import { CATEGORY_ICONS } from "../../utils/categoryIcons";
 import { AddEditCategoryProps } from "../../types/settings";
 import COLORS_STYLE from "../../utils/styles/colors";
+import DeleteCategoryButton from "./DeleteCategoryButton";
 const AddEditCategory: React.FC<AddEditCategoryProps> = ({
   onSetCategoryIcon,
   onSetInputText,
-  onPressHandler,
+  onCategoryEdit,
+  onCategoryDelete,
   categoryIcon,
   inputText,
+  newCategory,
 }) => {
   const icons = CATEGORY_ICONS;
+  const [modalVisible, setModalVisible] = useState(false);
   const renderCategoryIconHandler = (item: any) => {
     return (
       <Pressable onPress={() => onSetCategoryIcon(item.item.iconName)}>
@@ -33,6 +40,30 @@ const AddEditCategory: React.FC<AddEditCategoryProps> = ({
   };
   return (
     <View style={styles.container}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.modalLayout}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalLabel}>
+              Usuwając tą kategorię usuwasz wszystkie dane z nią powiązane!
+            </Text>
+            <View style={styles.modalButtonsBox}>
+              <Button title="Potwierdzam" onPress={onCategoryDelete} />
+              <Button
+                title="Rezygnuję"
+                onPress={() => setModalVisible(false)}
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
       <View style={styles.presentDataBox}>
         <Ionicons
           name={categoryIcon}
@@ -59,7 +90,10 @@ const AddEditCategory: React.FC<AddEditCategoryProps> = ({
           value={inputText}
           maxLength={20}
         />
-        <Button title="Zatwierdź" onPress={onPressHandler} />
+        <Button title="Zatwierdź" onPress={onCategoryEdit} />
+        {!newCategory && (
+          <DeleteCategoryButton onPress={() => setModalVisible(true)} />
+        )}
       </View>
     </View>
   );
@@ -101,6 +135,37 @@ const styles = StyleSheet.create({
     color: "white",
     marginBottom: 20,
     borderRadius: 10,
+  },
+  modalLayout: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#0000006b",
+  },
+  modalView: {
+    margin: 20,
+    width: "80%",
+    backgroundColor: "#dddbdb",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalButtonsBox: {
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "space-between",
+  },
+  modalLabel: {
+    fontSize: 16,
+    marginBottom: 20,
   },
 });
 export default AddEditCategory;

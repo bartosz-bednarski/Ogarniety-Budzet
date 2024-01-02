@@ -51,11 +51,17 @@ const categoriesSlice = createSlice({
         return;
       }
     },
+    deleteCategory: (state, action) => {
+      state.categoriesList = state.categoriesList.filter(
+        (item) => item.catId !== action.payload.catId
+      );
+    },
   },
 });
 
 export const categoriesActions = categoriesSlice.actions;
 export const addCategory = categoriesSlice.actions.addCategory;
 export const editCategory = categoriesSlice.actions.editCategory;
+export const deleteCategory = categoriesSlice.actions.deleteCategory;
 export const selectCategories = (state: RootState) => state.categories;
 export default categoriesSlice.reducer;

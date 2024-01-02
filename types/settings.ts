@@ -23,7 +23,9 @@ export type OnPressHandler = () => void;
 export type AddEditCategoryProps = {
   onSetCategoryIcon: OnSetCategoryIcon;
   onSetInputText: OnSetInputText;
-  onPressHandler: OnPressHandler;
+  onCategoryEdit: OnPressHandler;
+  onCategoryDelete?: OnPressHandler;
   categoryIcon: any; //powinien być string ale ionicons nie przyjmuje typu string jako argument do name
   inputText: string;
+  newCategory: boolean;
 };
