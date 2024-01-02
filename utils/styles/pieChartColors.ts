@@ -1,0 +1,23 @@
+const pieChartColors = [
+  "#ed11dc",
+  "#5017ff",
+  "#15e79a",
+  "#f9c400",
+  "#e95e1b",
+  "#e53535",
+  "#a72e6b",
+  "#dc70ff",
+  "#e2d1e7",
+  "#67a4ff",
+  "#0d7181",
+  "#a6ff78",
+  "#d0f500",
+  "#ffea83",
+  "#f3cea8",
+  "#8f604e",
+  "#ff9c9c",
+  "#ffd9ea",
+  "#9fd7ff",
+  "#b0f3e4",
+];
+export default pieChartColors;

@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { PlannedExpenseCategoryItem } from "../types/settings";
 type ExpensesInitialState = {
-  lastExpenses: { catId: number; value: number; date: string }[];
+  lastExpenses: { catId: number; value: number; date: string; id: string }[];
   categoriesExpenses: { catId: number; sum: number }[];
   plannedExpenses: PlannedExpenseCategoryItem[];
 };
@@ -14,23 +14,27 @@ const expensesSlice = createSlice({
   name: "expenses",
   initialState: expensesInitialState,
   reducers: {
-    setExpense: (state) => {
+    setExpense: (state, action) => {
       state.categoriesExpenses = [
         ...state.categoriesExpenses,
-        { catId: state.categoriesExpenses.length, sum: 0 },
+        { catId: action.payload.catId, sum: 0 },
       ];
     },
     addExpense: (state, action) => {
       const day = new Date().getDate();
-      const month = new Date().getMonth();
+      const month = new Date().getMonth() + 1;
       const year = new Date().getFullYear();
-      const fullDate = `${day}.${month},${year}`;
+      const fullDate = `${day}.${month}.${year}`;
+      const randLetter = String.fromCharCode(
+        65 + Math.floor(Math.random() * 26)
+      );
       state.lastExpenses = [
         ...state.lastExpenses,
         {
           catId: action.payload.catId,
           value: action.payload.value,
           date: fullDate,
+          id: randLetter + Date.now(),
         },
       ];
       // Update do sum wydatków w poszczególnych kategoriach:
@@ -60,7 +64,7 @@ const expensesSlice = createSlice({
       state.plannedExpenses = [
         ...state.plannedExpenses,
         {
-          catId: state.plannedExpenses.length,
+          catId: action.payload.catId,
           name: action.payload.name,
           iconName: action.payload.iconName,
           value: 0,
@@ -68,8 +72,11 @@ const expensesSlice = createSlice({
       ];
     },
     addPlannedExpense: (state, action) => {
-      state.plannedExpenses[action.payload.catId] = {
-        ...state.plannedExpenses[action.payload.catId],
+      const indexOfPlannedExpense = state.plannedExpenses.findIndex(
+        (item) => item.catId === action.payload.catId
+      );
+      state.plannedExpenses[indexOfPlannedExpense] = {
+        ...state.plannedExpenses[indexOfPlannedExpense],
         value: action.payload.value,
       };
     },

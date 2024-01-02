@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import CategoryItemBox from "../components/addExpense/CategoryItemBox";
 import { useState } from "react";
 import { addExpense } from "../redux/expenses-slice";
+import CustomButton from "../utils/ui/CustomButton";
 const AddExpenseScreen = () => {
   const dispatch = useAppDispatch();
   const categories = useAppSelector((state) => state.categories.categoriesList);
@@ -52,7 +53,7 @@ const AddExpenseScreen = () => {
               onChangeText={(text) => setValue(text)}
               keyboardType="numeric"
             />
-            <Button title="Zatwierdź" onPress={submitHandler} />
+            <CustomButton title="Zatwierdź" onPress={submitHandler} />
           </View>
         </View>
       </Modal>

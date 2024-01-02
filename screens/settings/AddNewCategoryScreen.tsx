@@ -23,9 +23,23 @@ const AddNewCategoryScreen: React.FC<{
   };
   const onPressHandler: OnPressHandler = () => {
     if (inputText.length < 20) {
-      dispatch(addCategory({ name: inputText, iconName: categoryIcon }));
-      dispatch(setPlannedExpense({ name: inputText, iconName: categoryIcon }));
-      dispatch(setExpense());
+      const randomId = function (length = 6) {
+        return Math.random()
+          .toString(36)
+          .substring(2, length + 2);
+      };
+      const catId = randomId(4);
+      dispatch(
+        addCategory({ name: inputText, iconName: categoryIcon, catId: catId })
+      );
+      dispatch(
+        setPlannedExpense({
+          name: inputText,
+          iconName: categoryIcon,
+          catId: catId,
+        })
+      );
+      dispatch(setExpense({ catId: catId }));
       navigation.navigate("editCategories");
     }
   };

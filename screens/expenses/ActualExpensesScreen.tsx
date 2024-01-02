@@ -5,6 +5,8 @@ import PieChart from "react-native-pie-chart";
 import COLORS_STYLE from "../../utils/styles/colors";
 import CategoryPieChart from "../../components/expenses/CategoryPieChart";
 import { useEffect } from "react";
+import pieChartColors from "../../utils/styles/pieChartColors";
+import LastExpenseItemBox from "../../components/expenses/LastExpenseItemBox";
 // import PieChartComponent from "../components/PieChartComponent";
 
 const ActualExpensesScreen = () => {
@@ -15,12 +17,19 @@ const ActualExpensesScreen = () => {
   const plannedExpenses = useAppSelector(
     (state) => state.expenses.plannedExpenses
   );
-  const categoriesExpensesWithNames = categoriesExpenses.map((category) => ({
-    ...category,
-    color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
-    ...categories.find((item) => item.catId === category.catId),
-  }));
 
+  const categoriesExpensesWithNames = categoriesExpenses.map(
+    (category, index) => ({
+      ...category,
+      color: pieChartColors[index],
+      ...categories.find((item) => item.catId === category.catId),
+    })
+  );
+  const lastExpenses = useAppSelector((state) => state.expenses.lastExpenses);
+  const lastExpensesToShow = lastExpenses.map((item) => ({
+    ...item,
+    ...categories.find((cat) => cat.catId === item.catId),
+  }));
   let currentCategoryRealistationPieChartData = categoriesExpenses.map(
     (category) => ({
       ...category,
@@ -53,9 +62,10 @@ const ActualExpensesScreen = () => {
       })
     );
   }, [plannedExpenses, categoriesExpenses]);
-  console.log(currentCategoryRealistationPieChartData);
-  console.log("categoriesExpenses", categoriesExpenses);
-  console.log("plannedExpenses", plannedExpenses);
+  console.log("lastExp", lastExpensesToShow);
+  // console.log(currentCategoryRealistationPieChartData);
+  // console.log("categoriesExpenses", categoriesExpenses);
+  // console.log("plannedExpenses", plannedExpenses);
   // console.log("categoriesList", categories);
   // console.log("totalSum", sumOfAllExpenses);
   // console.log("categoriesExpensesWithNames", categoriesExpensesWithNames);
@@ -111,6 +121,17 @@ const ActualExpensesScreen = () => {
           />
         ))}
       </View>
+      <Text style={styles.label}>Lista ostatnich wydatków</Text>
+      <View style={styles.lastExpensesContainer}>
+        {lastExpensesToShow.map((item) => (
+          <LastExpenseItemBox
+            iconName={item.iconName}
+            price={item.value}
+            date={item.date}
+            key={item.id}
+          />
+        ))}
+      </View>
     </ScrollView>
   );
 };
@@ -160,6 +181,12 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     height: "auto",
     justifyContent: "center",
+  },
+  lastExpensesContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 50,
+    gap: 5,
   },
 });
 export default ActualExpensesScreen;

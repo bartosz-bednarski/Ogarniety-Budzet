@@ -13,16 +13,17 @@ import { useState } from "react";
 import CategoryItemBox from "../../components/expenses/CategoryItemBox";
 import { addPlannedExpense } from "../../redux/expenses-slice";
 import COLORS_STYLE from "../../utils/styles/colors";
+import CustomButton from "../../utils/ui/CustomButton";
 const PlannedExpensesScreen = () => {
   const dispatch = useAppDispatch();
-  const [selectedCatId, setSelectedCatId] = useState(0);
+  const [selectedCatId, setSelectedCatId] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [value, setValue] = useState("");
   const plannedExpenses = useAppSelector(
     (state) => state.expenses.plannedExpenses
   );
-
-  const onPressHandler = (catId: number) => {
+  console.log("plannedExpenses", plannedExpenses);
+  const onPressHandler = (catId: string) => {
     setSelectedCatId(catId);
     setModalVisible(true);
   };
@@ -43,7 +44,7 @@ const PlannedExpensesScreen = () => {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
+          Alert.alert("Wydatek nie został dodany!");
           setModalVisible(!modalVisible);
         }}
       >
@@ -56,7 +57,7 @@ const PlannedExpensesScreen = () => {
               onChangeText={(text) => setValue(text)}
               keyboardType="numeric"
             />
-            <Button title="Zatwierdź" onPress={submitHandler} />
+            <CustomButton title="Zatwierdź" onPress={submitHandler} />
           </View>
         </View>
       </Modal>
