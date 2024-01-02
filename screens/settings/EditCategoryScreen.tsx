@@ -12,14 +12,17 @@ import { CATEGORY_ICONS } from "../../utils/categoryIcons";
 import { Button } from "react-native";
 import { useState } from "react";
 import { useAppDispatch } from "../../redux/hooks";
-import { editCategory } from "../../redux/categories-slice";
+import { deleteCategory, editCategory } from "../../redux/categories-slice";
 import AddEditCategory from "../../components/settings/AddEditCategory";
 import {
   OnPressHandler,
   OnSetCategoryIcon,
   OnSetInputText,
 } from "../../types/settings";
-import { updatePlannedExpenseCategory } from "../../redux/expenses-slice";
+import {
+  deleteAllExpensesFromCategory,
+  updatePlannedExpenseCategory,
+} from "../../redux/expenses-slice";
 const EditCategoryScreen: React.FC<{
   route: any;
   navigation: any;
@@ -36,7 +39,7 @@ const EditCategoryScreen: React.FC<{
   const onSetInputText: OnSetInputText = (text) => {
     setInputText(text);
   };
-  const onPressHandler: OnPressHandler = () => {
+  const onCategoryEditHandler: OnPressHandler = () => {
     if (inputText.length < 20) {
       dispatch(
         editCategory({ catId: catId, name: inputText, iconName: categoryIcon })
@@ -51,13 +54,20 @@ const EditCategoryScreen: React.FC<{
       navigation.navigate("editCategories");
     }
   };
+  const onCategoryDeleteHandler: OnPressHandler = () => {
+    dispatch(deleteCategory({ catId: catId }));
+    dispatch(deleteAllExpensesFromCategory({ catId: catId }));
+    navigation.navigate("editCategories");
+  };
   return (
     <AddEditCategory
       onSetCategoryIcon={onSetCategoryIcon}
       onSetInputText={onSetInputText}
-      onPressHandler={onPressHandler}
+      onCategoryEdit={onCategoryEditHandler}
+      onCategoryDelete={onCategoryDeleteHandler}
       categoryIcon={categoryIcon}
       inputText={inputText}
+      newCategory={false}
     />
   );
 };

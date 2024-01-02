@@ -36,7 +36,9 @@ const ActualExpensesScreen = () => {
     .reduce((partialSum, a) => partialSum + a, 0);
 
   const globalRealistationPieChartData = [
-    Number(((sumOfAllExpenses / sumOfPlannedExpenses) * 100).toFixed(2)),
+    sumOfPlannedExpenses !== 0
+      ? Number(((sumOfAllExpenses / sumOfPlannedExpenses) * 100).toFixed(2))
+      : 1,
     100 - Number(((sumOfAllExpenses / sumOfPlannedExpenses) * 100).toFixed(2)) <
     0
       ? 0
@@ -101,11 +103,11 @@ const ActualExpensesScreen = () => {
       <View style={styles.categoryExpenseBox}>
         {currentCategoryRealistationPieChartData.map((item) => (
           <CategoryPieChart
-            plannedExpense={item.value}
+            plannedExpense={Number(item.value)}
             realExpense={item.sum}
             key={item.catId}
             iconName={item.iconName}
-            name={item.name}
+            name={String(item.name)}
           />
         ))}
       </View>
@@ -157,6 +159,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     height: "auto",
+    justifyContent: "center",
   },
 });
 export default ActualExpensesScreen;

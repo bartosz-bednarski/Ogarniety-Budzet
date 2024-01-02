@@ -28,7 +28,7 @@ const persistedCategoriesReducer = persistReducer(
 export const store = configureStore({
   reducer: {
     podsumowanie: persistedPodsumowanieReducer,
-    categories: categoriesSlice,
+    categories: persistedCategoriesReducer,
     expenses: expensesSlice,
   },
   middleware: (getDefaultMiddleware) =>
