@@ -56,7 +56,7 @@ const AddEditCategory: React.FC<AddEditCategoryProps> = ({
               Usuwając tą kategorię usuwasz wszystkie dane z nią powiązane!
             </Text>
             <View style={styles.modalButtonsBox}>
-              <CustomButton title="Potwierdzam" onPress={onCategoryDelete} />
+              <CustomButton title="Potwierdzam" onPress={onCategoryDelete!} />
               <CustomButton
                 title="Rezygnuję"
                 onPress={() => setModalVisible(false)}

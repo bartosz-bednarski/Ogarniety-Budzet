@@ -7,6 +7,7 @@ const EditCategoriesScreen: React.FC<{ navigation: any }> = ({
   navigation,
 }) => {
   const categories = useAppSelector((state) => state.categories.categoriesList);
+  console.log(categories.length);
   const navigateToaddNewCategoryHandler = () => {
     navigation.navigate("addNewCategory");
   };
@@ -28,9 +29,11 @@ const EditCategoriesScreen: React.FC<{ navigation: any }> = ({
           keyExtractor={(item) => item.catId.toString()}
         />
       </View>
-      <View style={styles.addCategoryBox}>
-        <AddCategoryButton onPress={navigateToaddNewCategoryHandler} />
-      </View>
+      {categories.length < 20 && (
+        <View style={styles.addCategoryBox}>
+          <AddCategoryButton onPress={navigateToaddNewCategoryHandler} />
+        </View>
+      )}
     </View>
   );
 };

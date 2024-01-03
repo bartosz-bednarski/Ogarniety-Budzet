@@ -9,3 +9,10 @@ export type LastExpenseItemBoxProps = {
   price: number;
   date: string;
 };
+export type CategoriesExpensesWithNames = {
+  catId: string;
+  iconName?: any;
+  name?: string | undefined;
+  color: string;
+  sum: number;
+}[];

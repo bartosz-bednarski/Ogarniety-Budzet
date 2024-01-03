@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   persistReducer,
@@ -17,21 +17,29 @@ const persistConfig = {
   key: "root",
   storage: AsyncStorage,
 };
-const persistedPodsumowanieReducer = persistReducer(
-  persistConfig,
-  podsumowanieSlice
-);
-const persistedCategoriesReducer = persistReducer(
-  persistConfig,
-  categoriesSlice
-);
-const persistedExpensesReducer = persistReducer(persistConfig, expensesSlice);
+const rootReducer = combineReducers({
+  podsumowanie: podsumowanieSlice,
+  categories: categoriesSlice,
+  expenses: expensesSlice,
+});
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+// const persistedPodsumowanieReducer = persistReducer(
+//   persistConfig,
+//   podsumowanieSlice
+// );
+// const persistedCategoriesReducer = persistReducer(
+//   persistConfig,
+//   categoriesSlice
+// );
+
+// const persistedExpensesReducer = persistReducer(persistConfig, expensesSlice);
 export const store = configureStore({
-  reducer: {
-    podsumowanie: persistedPodsumowanieReducer,
-    categories: persistedCategoriesReducer,
-    expenses: persistedExpensesReducer,
-  },
+  reducer: persistedReducer,
+  // reducer: {
+  //   podsumowanie: persistedPodsumowanieReducer,
+  //   categories: persistedCategoriesReducer,
+  //   expenses: persistedExpensesReducer,
+  // },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {

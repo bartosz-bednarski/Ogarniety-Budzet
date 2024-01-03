@@ -1,12 +1,14 @@
-import { Text, View, StyleSheet, ScrollView } from "react-native";
+import { Text, View, StyleSheet, ScrollView, Pressable } from "react-native";
 import { useAppSelector } from "../../redux/hooks";
 import { Ionicons } from "@expo/vector-icons";
 import PieChart from "react-native-pie-chart";
 import COLORS_STYLE from "../../utils/styles/colors";
 import CategoryPieChart from "../../components/expenses/CategoryPieChart";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import pieChartColors from "../../utils/styles/pieChartColors";
 import LastExpenseItemBox from "../../components/expenses/LastExpenseItemBox";
+import CategoryLegend from "../../components/expenses/CategoryLegend";
+import { CategoriesExpensesWithNames } from "../../types/expenses";
 // import PieChartComponent from "../components/PieChartComponent";
 
 const ActualExpensesScreen = () => {
@@ -18,13 +20,12 @@ const ActualExpensesScreen = () => {
     (state) => state.expenses.plannedExpenses
   );
 
-  const categoriesExpensesWithNames = categoriesExpenses.map(
-    (category, index) => ({
+  const categoriesExpensesWithNames: CategoriesExpensesWithNames =
+    categoriesExpenses.map((category, index) => ({
       ...category,
       color: pieChartColors[index],
       ...categories.find((item) => item.catId === category.catId),
-    })
-  );
+    }));
   const lastExpenses = useAppSelector((state) => state.expenses.lastExpenses);
   const lastExpensesToShow = lastExpenses.map((item) => ({
     ...item,
@@ -54,6 +55,7 @@ const ActualExpensesScreen = () => {
       : 100 -
         Number(((sumOfAllExpenses / sumOfPlannedExpenses) * 100).toFixed(2)),
   ];
+  const [showLegend, setShowLegend] = useState(false);
   useEffect(() => {
     currentCategoryRealistationPieChartData = categoriesExpenses.map(
       (category) => ({
@@ -62,39 +64,54 @@ const ActualExpensesScreen = () => {
       })
     );
   }, [plannedExpenses, categoriesExpenses]);
-  console.log("lastExp", lastExpensesToShow);
+  // console.log("lastExp", lastExpensesToShow);
   // console.log(currentCategoryRealistationPieChartData);
   // console.log("categoriesExpenses", categoriesExpenses);
   // console.log("plannedExpenses", plannedExpenses);
   // console.log("categoriesList", categories);
   // console.log("totalSum", sumOfAllExpenses);
-  // console.log("categoriesExpensesWithNames", categoriesExpensesWithNames);
+  console.log("categoriesExpensesWithNames", categoriesExpensesWithNames);
   // console.log(((sumOfAllExpenses / sumOfPlannedExpenses) * 100).toFixed(2));
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.sumOfExpenses}>Wydano {sumOfAllExpenses} PLN</Text>
       <Text style={styles.label}>Kategorie wydatków</Text>
-      <View style={styles.expensesCategories}>
-        {sumOfAllExpenses > 0 && (
-          <PieChart
-            widthAndHeight={200}
-            series={categoriesExpensesWithNames.map((item) => item.sum)}
-            sliceColor={categoriesExpensesWithNames.map((item) => item.color)}
-            coverRadius={0.45}
-            coverFill={COLORS_STYLE.tabGrey}
-          />
-        )}
-        <View style={styles.legend}>
-          {categoriesExpensesWithNames.map((item) => (
-            <Ionicons
-              name={item.iconName}
-              color={item.color}
-              size={24}
-              key={item.catId}
+      {sumOfAllExpenses > 0 && (
+        <Pressable
+          style={styles.expensesCategories}
+          onPress={() => setShowLegend(!showLegend)}
+        >
+          {showLegend && (
+            <CategoryLegend
+              categoriesExpensesWithNames={categoriesExpensesWithNames}
             />
-          ))}
-        </View>
-      </View>
+          )}
+          {!showLegend && (
+            <>
+              <PieChart
+                widthAndHeight={200}
+                series={categoriesExpensesWithNames.map((item) => item.sum)}
+                sliceColor={categoriesExpensesWithNames.map(
+                  (item) => item.color
+                )}
+                coverRadius={0.45}
+                coverFill={COLORS_STYLE.tabGrey}
+              />
+
+              <View style={styles.legend}>
+                {categoriesExpensesWithNames.map((item) => (
+                  <Ionicons
+                    name={item.iconName}
+                    color={item.color}
+                    size={24}
+                    key={item.catId}
+                  />
+                ))}
+              </View>
+            </>
+          )}
+        </Pressable>
+      )}
       <Text style={styles.label}>Realizacja założeń wydatków</Text>
       <View style={styles.globalRealistationPieChart}>
         {sumOfAllExpenses > 0 && (
@@ -142,6 +159,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     backgroundColor: COLORS_STYLE.backgroundBlack,
   },
+
   sumOfExpenses: {
     fontSize: 30,
     fontWeight: "600",
@@ -158,7 +176,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: COLORS_STYLE.tabGrey,
-    height: 250,
+    height: 300,
     width: "100%",
     padding: 10,
     borderRadius: 10,

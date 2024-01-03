@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { PlannedExpenseCategoryItem } from "../types/settings";
 type ExpensesInitialState = {
-  lastExpenses: { catId: number; value: number; date: string; id: string }[];
-  categoriesExpenses: { catId: number; sum: number }[];
+  lastExpenses: { catId: string; value: number; date: string; id: string }[];
+  categoriesExpenses: { catId: string; sum: number }[];
   plannedExpenses: PlannedExpenseCategoryItem[];
 };
 const expensesInitialState: ExpensesInitialState = {
