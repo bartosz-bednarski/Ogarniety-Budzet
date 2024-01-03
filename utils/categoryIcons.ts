@@ -29,4 +29,5 @@ export const CATEGORY_ICONS = [
   { iconName: "fitness-outline", id: 27 },
   { iconName: "home-outline", id: 28 },
   { iconName: "map-outline", id: 29 },
+  { iconName: "cash-outline", id: 30 },
 ];

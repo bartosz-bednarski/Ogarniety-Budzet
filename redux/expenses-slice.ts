@@ -82,8 +82,11 @@ const expensesSlice = createSlice({
     },
     updatePlannedExpenseCategory: (state, action) => {
       if (state.plannedExpenses.length > 0) {
-        state.plannedExpenses[action.payload.catId] = {
-          ...state.plannedExpenses[action.payload.catId],
+        const indexOfPlannedExpense = state.plannedExpenses.findIndex(
+          (item) => item.catId === action.payload.catId
+        );
+        state.plannedExpenses[indexOfPlannedExpense] = {
+          ...state.plannedExpenses[indexOfPlannedExpense],
           name: action.payload.name,
           iconName: action.payload.iconName,
         };

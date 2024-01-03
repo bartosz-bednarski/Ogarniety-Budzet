@@ -1,9 +1,12 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SettingsScreen from "../screens/settings/SettingsScreen";
-import EditCategoriesScreen from "../screens/settings/EditCategoriesScreen";
-import EditCategoryScreen from "../screens/settings/EditCategoryScreen";
-import AddNewCategoryScreen from "../screens/settings/AddNewCategoryScreen";
+import EditExpensesCategoryScreen from "../screens/settings/expenses/EditExpensesCategoryScreen";
+import AddNewExpensesCategoryScreen from "../screens/settings/expenses/AddNewExpensesCategoryScreen";
 import COLORS_STYLE from "../utils/styles/colors";
+import ExpensesCategoriesListScreen from "../screens/settings/expenses/ExpensesCategoriesListScreen";
+import IncomesCategoriesListScreen from "../screens/settings/incomes/IncomesCategoriesListScreen";
+import AddNewIncomesCategoryScreen from "../screens/settings/incomes/AddNewIncomesCategoryScreen";
+import EditIncomesCategoryScreen from "../screens/settings/incomes/EditIncomesCategoryScreen";
 const SettingsNavigator = () => {
   const Stack = createNativeStackNavigator();
   return (
@@ -21,20 +24,37 @@ const SettingsNavigator = () => {
         options={{ headerTitle: "Opcje" }}
       />
       <Stack.Screen
-        component={EditCategoriesScreen}
+        component={ExpensesCategoriesListScreen}
         name="editCategories"
         options={{ headerTitle: "Edytuj kategorie" }}
       />
       <Stack.Screen
-        component={EditCategoryScreen}
+        component={EditExpensesCategoryScreen}
         name="editCategory"
         options={({ route }) => {
           return { headerTitle: `Edytujesz ` };
         }}
       />
       <Stack.Screen
-        component={AddNewCategoryScreen}
+        component={AddNewExpensesCategoryScreen}
         name="addNewCategory"
+        options={{ headerTitle: "Dodajesz nową kategorie" }}
+      />
+      <Stack.Screen
+        component={IncomesCategoriesListScreen}
+        name="incomesCategoriesList"
+        options={{ headerTitle: "Dodajesz nową kategorie" }}
+      />
+      <Stack.Screen
+        component={EditIncomesCategoryScreen}
+        name="editIncomesCategory"
+        options={({ route }) => {
+          return { headerTitle: `Edytujesz ` };
+        }}
+      />
+      <Stack.Screen
+        component={AddNewIncomesCategoryScreen}
+        name="addNewIncomesCategory"
         options={{ headerTitle: "Dodajesz nową kategorie" }}
       />
     </Stack.Navigator>

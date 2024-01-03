@@ -1,29 +1,17 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  TextInput,
-  Pressable,
-} from "react-native";
-import { Navigate, Navigation, Route } from "../../types/global";
-import { Ionicons } from "@expo/vector-icons";
-import { CATEGORY_ICONS } from "../../utils/categoryIcons";
-import { Button } from "react-native";
 import { useState } from "react";
-import { useAppDispatch } from "../../redux/hooks";
-import { deleteCategory, editCategory } from "../../redux/categories-slice";
-import AddEditCategory from "../../components/settings/AddEditCategory";
+import { useAppDispatch } from "../../../redux/hooks";
+import AddEditCategory from "../../../components/settings/AddEditCategory";
 import {
   OnPressHandler,
   OnSetCategoryIcon,
   OnSetInputText,
-} from "../../types/settings";
+} from "../../../types/settings";
 import {
-  deleteAllExpensesFromCategory,
-  updatePlannedExpenseCategory,
-} from "../../redux/expenses-slice";
-const EditCategoryScreen: React.FC<{
+  deleteIncomesCategory,
+  editIncomesCategory,
+} from "../../../redux/incomesCategories-slice";
+import { deleteIncome } from "../../../redux/incomes-slice";
+const EditIncomesCategoryScreen: React.FC<{
   route: any;
   navigation: any;
 }> = ({ route, navigation }) => {
@@ -42,22 +30,20 @@ const EditCategoryScreen: React.FC<{
   const onCategoryEditHandler: OnPressHandler = () => {
     if (inputText.length < 20) {
       dispatch(
-        editCategory({ catId: catId, name: inputText, iconName: categoryIcon })
-      );
-      dispatch(
-        updatePlannedExpenseCategory({
+        editIncomesCategory({
           catId: catId,
           name: inputText,
           iconName: categoryIcon,
         })
       );
-      navigation.navigate("editCategories");
+
+      navigation.navigate("incomesCategoriesList");
     }
   };
   const onCategoryDeleteHandler: OnPressHandler = () => {
-    dispatch(deleteCategory({ catId: catId }));
-    dispatch(deleteAllExpensesFromCategory({ catId: catId }));
-    navigation.navigate("editCategories");
+    dispatch(deleteIncomesCategory({ catId: catId }));
+    dispatch(deleteIncome({ catId: catId }));
+    navigation.navigate("incomesCategoriesList");
   };
   return (
     <AddEditCategory
@@ -71,4 +57,4 @@ const EditCategoryScreen: React.FC<{
     />
   );
 };
-export default EditCategoryScreen;
+export default EditIncomesCategoryScreen;

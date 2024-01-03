@@ -21,7 +21,7 @@ const SettingsScreen: React.FC<{ navigation: Navigation }> = ({
           styles.listItemBox,
           pressed && styles.listItemBoxPressed,
         ]}
-        onPress={() => navigation.navigate("editCategories")}
+        onPress={() => navigation.navigate("incomesCategoriesList")}
       >
         <Text style={styles.listItemText}>Edytuj kategorie dochodów</Text>
       </Pressable>
