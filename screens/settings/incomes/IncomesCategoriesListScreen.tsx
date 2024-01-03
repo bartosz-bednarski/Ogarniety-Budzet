@@ -1,15 +1,16 @@
 import { View, Text, StyleSheet, FlatList } from "react-native";
-import { useAppSelector } from "../../redux/hooks";
-import CategoryItemRow from "../../components/settings/CategoryItemRow";
-import { CategoryItem } from "../../types/settings";
-import AddCategoryButton from "../../components/settings/AddCategoryButton";
-const EditCategoriesScreen: React.FC<{ navigation: any }> = ({
+import { useAppSelector } from "../../../redux/hooks";
+import CategoryItemRow from "../../../components/settings/CategoryItemRow";
+import { CategoryItem } from "../../../types/settings";
+import AddCategoryButton from "../../../components/settings/AddCategoryButton";
+const IncomesCategoriesListScreen: React.FC<{ navigation: any }> = ({
   navigation,
 }) => {
-  const categories = useAppSelector((state) => state.categories.categoriesList);
-  console.log(categories.length);
+  const categories = useAppSelector(
+    (state) => state.incomesCategories.categoriesList
+  );
   const navigateToaddNewCategoryHandler = () => {
-    navigation.navigate("addNewCategory");
+    navigation.navigate("addNewIncomesCategory");
   };
   const renderCategoryHandler = ({ item }: { item: CategoryItem }) => {
     return (
@@ -17,6 +18,13 @@ const EditCategoriesScreen: React.FC<{ navigation: any }> = ({
         catId={item.catId}
         iconName={item.iconName}
         name={item.name}
+        onPress={() =>
+          navigation.navigate("editIncomesCategory", {
+            name: item.name,
+            catId: item.catId,
+            iconName: item.iconName,
+          })
+        }
       />
     );
   };
@@ -53,4 +61,4 @@ const styles = StyleSheet.create({
     gap: 15,
   },
 });
-export default EditCategoriesScreen;
+export default IncomesCategoriesListScreen;

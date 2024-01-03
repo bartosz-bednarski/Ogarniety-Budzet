@@ -41,7 +41,7 @@ const AddExpenseScreen = () => {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
+          Alert.alert("Zmiany nie zostały wprowadzone!");
           setModalVisible(!modalVisible);
         }}
       >

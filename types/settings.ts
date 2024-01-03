@@ -8,6 +8,7 @@ export type CategoryItemRowProps = {
   catId: string;
   iconName: any; //powinien być string ale ionicons nie przyjmuje typu string jako argument do name
   name: string;
+  onPress: () => void;
   // onPress: () => void;
 };
 export type PlannedExpenseCategoryItem = {

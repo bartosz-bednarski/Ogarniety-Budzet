@@ -70,7 +70,7 @@ const ActualExpensesScreen = () => {
   // console.log("plannedExpenses", plannedExpenses);
   // console.log("categoriesList", categories);
   // console.log("totalSum", sumOfAllExpenses);
-  console.log("categoriesExpensesWithNames", categoriesExpensesWithNames);
+  // console.log("categoriesExpensesWithNames", categoriesExpensesWithNames);
   // console.log(((sumOfAllExpenses / sumOfPlannedExpenses) * 100).toFixed(2));
   return (
     <ScrollView style={styles.container}>

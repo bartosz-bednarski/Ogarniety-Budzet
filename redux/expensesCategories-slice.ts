@@ -2,16 +2,16 @@ import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 import { CategoryItem } from "../types/settings";
 
-type categoriesInitialStateType = {
+type ExpensesCategoriesInitialStateType = {
   categoriesList: CategoryItem[];
 };
-const categoriesInitialState: categoriesInitialStateType = {
+const expensesCategoriesInitialState: ExpensesCategoriesInitialStateType = {
   categoriesList: [],
 };
 
-const categoriesSlice = createSlice({
+const expensesCategoriesSlice = createSlice({
   name: "categories",
-  initialState: categoriesInitialState,
+  initialState: expensesCategoriesInitialState,
   reducers: {
     addCategory: (state, action) => {
       const newCategory = {
@@ -28,7 +28,10 @@ const categoriesSlice = createSlice({
     },
     editCategory: (state, action) => {
       if (state.categoriesList.length > 0) {
-        state.categoriesList[action.payload.catId] = action.payload;
+        const indexOfCategory = state.categoriesList.findIndex(
+          (item) => item.catId === action.payload.catId
+        );
+        state.categoriesList[indexOfCategory] = action.payload;
       } else {
         return;
       }
@@ -41,8 +44,8 @@ const categoriesSlice = createSlice({
   },
 });
 
-export const categoriesActions = categoriesSlice.actions;
-export const addCategory = categoriesSlice.actions.addCategory;
-export const editCategory = categoriesSlice.actions.editCategory;
-export const deleteCategory = categoriesSlice.actions.deleteCategory;
-export default categoriesSlice.reducer;
+export const categoriesActions = expensesCategoriesSlice.actions;
+export const addCategory = expensesCategoriesSlice.actions.addCategory;
+export const editCategory = expensesCategoriesSlice.actions.editCategory;
+export const deleteCategory = expensesCategoriesSlice.actions.deleteCategory;
+export default expensesCategoriesSlice.reducer;

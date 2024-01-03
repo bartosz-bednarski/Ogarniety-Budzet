@@ -7,19 +7,11 @@ const CategoryItemRow: React.FC<CategoryItemRowProps> = ({
   catId,
   iconName,
   name,
+  onPress,
 }) => {
   const navigation: Navigation = useNavigation();
   return (
-    <Pressable
-      style={styles.container}
-      onPress={() =>
-        navigation.navigate("editCategory", {
-          name: name,
-          catId: catId,
-          iconName: iconName,
-        })
-      }
-    >
+    <Pressable style={styles.container} onPress={onPress}>
       <Ionicons name={iconName} size={29} color="white" />
       <Text style={styles.catName}>{name}</Text>
     </Pressable>

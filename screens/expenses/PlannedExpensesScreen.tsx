@@ -6,7 +6,6 @@ import {
   Alert,
   TextInput,
   StyleSheet,
-  Button,
 } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { useState } from "react";
@@ -22,7 +21,7 @@ const PlannedExpensesScreen = () => {
   const plannedExpenses = useAppSelector(
     (state) => state.expenses.plannedExpenses
   );
-  console.log("plannedExpenses", plannedExpenses);
+  // console.log("plannedExpenses", plannedExpenses);
   const onPressHandler = (catId: string) => {
     setSelectedCatId(catId);
     setModalVisible(true);

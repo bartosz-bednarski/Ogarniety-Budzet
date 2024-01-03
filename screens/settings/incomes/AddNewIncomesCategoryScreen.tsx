@@ -1,14 +1,14 @@
-import AddEditCategory from "../../components/settings/AddEditCategory";
+import AddEditCategory from "../../../components/settings/AddEditCategory";
 import { useState } from "react";
 import {
   OnPressHandler,
   OnSetCategoryIcon,
   OnSetInputText,
-} from "../../types/settings";
-import { useAppDispatch } from "../../redux/hooks";
-import { addCategory } from "../../redux/categories-slice";
-import { setExpense, setPlannedExpense } from "../../redux/expenses-slice";
-const AddNewCategoryScreen: React.FC<{
+} from "../../../types/settings";
+import { useAppDispatch } from "../../../redux/hooks";
+import { addIncomesCategory } from "../../../redux/incomesCategories-slice";
+import { setIncome } from "../../../redux/incomes-slice";
+const AddNewIncomesCategoryScreen: React.FC<{
   route: any;
   navigation: any;
 }> = ({ route, navigation }) => {
@@ -28,19 +28,17 @@ const AddNewCategoryScreen: React.FC<{
           .toString(36)
           .substring(2, length + 2);
       };
-      const catId = randomId(4);
+      const catId = randomId(6);
       dispatch(
-        addCategory({ name: inputText, iconName: categoryIcon, catId: catId })
-      );
-      dispatch(
-        setPlannedExpense({
+        addIncomesCategory({
           name: inputText,
           iconName: categoryIcon,
           catId: catId,
         })
       );
-      dispatch(setExpense({ catId: catId }));
-      navigation.navigate("editCategories");
+      dispatch(setIncome({ catId: catId }));
+
+      navigation.navigate("incomesCategoriesList");
     }
   };
   return (
@@ -54,4 +52,4 @@ const AddNewCategoryScreen: React.FC<{
     />
   );
 };
-export default AddNewCategoryScreen;
+export default AddNewIncomesCategoryScreen;
