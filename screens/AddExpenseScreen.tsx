@@ -16,11 +16,12 @@ import CustomButton from "../utils/ui/CustomButton";
 const AddExpenseScreen = () => {
   const dispatch = useAppDispatch();
   const categories = useAppSelector((state) => state.categories.categoriesList);
+  console.log(categories);
   const expenses = useAppSelector((state) => state.expenses.categoriesExpenses);
-  const [selectedCatId, setSelectedCatId] = useState(0);
+  const [selectedCatId, setSelectedCatId] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [value, setValue] = useState("");
-  const onPressHandler = (catId: number) => {
+  const onPressHandler = (catId: string) => {
     setSelectedCatId(catId);
     console.log(expenses);
     setModalVisible(true);
@@ -57,39 +58,32 @@ const AddExpenseScreen = () => {
           </View>
         </View>
       </Modal>
-      <View style={styles.categoriesBox}>
-        <FlatList
-          data={categories}
-          renderItem={(item) => {
-            return (
-              <CategoryItemBox
-                category={item.item}
-                onPressHandler={() => onPressHandler(item.item.catId)}
-              />
-            );
-          }}
-          keyExtractor={(item) => item.catId.toString()}
-          contentContainerStyle={{
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "flex-end",
-          }}
-          numColumns={3}
-        />
-      </View>
+      <FlatList
+        scrollEnabled={true}
+        data={categories}
+        renderItem={(item) => {
+          return (
+            <CategoryItemBox
+              category={item.item}
+              onPressHandler={() => onPressHandler(item.item.catId)}
+            />
+          );
+        }}
+        keyExtractor={(item) => item.catId.toString()}
+        contentContainerStyle={{
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "flex-end",
+        }}
+        numColumns={3}
+      />
     </View>
   );
 };
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginVertical: 10,
     marginHorizontal: 10,
-  },
-  categoriesBox: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    width: "100%",
   },
   modalLayout: {
     flex: 1,
