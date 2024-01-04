@@ -1,12 +1,13 @@
 import { Pressable, Text, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { CategoryItem, PlannedExpenseCategoryItem } from "../../types/settings";
+import { CategoryItem, PlannedExpenseCategoryItem } from "../types/settings";
 import { View } from "react-native";
-import COLORS_STYLE from "../../utils/styles/colors";
-const CategoryItemBox: React.FC<{
-  category: PlannedExpenseCategoryItem;
-  onPressHandler: () => void;
-}> = ({ category, onPressHandler }) => {
+import COLORS_STYLE from "../utils/styles/colors";
+import { CategoryItemBoxProps } from "../types/utils";
+const CategoryItemBox: React.FC<CategoryItemBoxProps> = ({
+  category,
+  onPressHandler,
+}) => {
   return (
     <View style={styles.container}>
       <Pressable style={styles.box} onPress={onPressHandler}>
@@ -49,7 +50,8 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     textAlign: "center",
-    width: 70,
+    width: 90,
+    height: 40,
   },
 });
 export default CategoryItemBox;

@@ -1,9 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Ionicons } from "@expo/vector-icons";
-import ActualExpensesScreen from "../screens/expenses/ActualExpensesScreen";
-import { Pressable } from "react-native";
-import SettingsNavigator from "./SettingsNavigator";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import ActualExpensesScreen from "../../screens/expenses/ActualExpensesScreen";
 const ActualExpensesNavigator = () => {
   const Stack = createNativeStackNavigator();
   return (

@@ -1,9 +1,10 @@
 import { Pressable } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Ionicons } from "@expo/vector-icons";
-import IncomesScreen from "../screens/IncomesScreen";
+import IncomesScreen from "../screens/incomes/MonthIncomesScreen";
 import SettingsNavigator from "./SettingsNavigator";
 import COLORS_STYLE from "../utils/styles/colors";
+import IncomesTabNavigator from "./incomes/IncomesTabNavigator";
 const IncomesNavigator = () => {
   const Stack = createNativeStackNavigator();
   return (
@@ -13,7 +14,7 @@ const IncomesNavigator = () => {
       }}
     >
       <Stack.Screen
-        component={IncomesScreen}
+        component={IncomesTabNavigator}
         name="incomes"
         options={({ route, navigation }) => ({
           headerTintColor: COLORS_STYLE.basicGold,

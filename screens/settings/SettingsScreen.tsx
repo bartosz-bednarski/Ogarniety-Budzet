@@ -23,7 +23,7 @@ const SettingsScreen: React.FC<{ navigation: Navigation }> = ({
         ]}
         onPress={() => navigation.navigate("incomesCategoriesList")}
       >
-        <Text style={styles.listItemText}>Edytuj kategorie dochodów</Text>
+        <Text style={styles.listItemText}>Edytuj kategorie przychodów</Text>
       </Pressable>
     </View>
   );

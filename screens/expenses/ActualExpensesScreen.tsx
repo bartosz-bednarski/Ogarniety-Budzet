@@ -142,7 +142,7 @@ const ActualExpensesScreen = () => {
       <View style={styles.lastExpensesContainer}>
         {lastExpensesToShow.map((item) => (
           <LastExpenseItemBox
-            iconName={item.iconName}
+            iconName={item.iconName!}
             price={item.value}
             date={item.date}
             key={item.id}

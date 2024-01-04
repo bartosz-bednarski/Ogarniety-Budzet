@@ -1,6 +1,6 @@
 export type CategoryItem = {
   catId: string;
-  iconName: any;
+  iconName: string;
   name: string;
   // onPress: (item: CategoryItem) => void;
 };

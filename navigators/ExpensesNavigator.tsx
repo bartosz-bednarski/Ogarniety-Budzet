@@ -4,7 +4,7 @@ import ExpensesScreen from "../screens/expenses/ActualExpensesScreen";
 import { Pressable } from "react-native";
 import SettingsNavigator from "./SettingsNavigator";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import ExpensesTabNavigator from "./ExpensesTabNavigator";
+import ExpensesTabNavigator from "./expenses/ExpensesTabNavigator";
 import COLORS_STYLE from "../utils/styles/colors";
 const ExpensesNavigator = () => {
   const Stack = createNativeStackNavigator();

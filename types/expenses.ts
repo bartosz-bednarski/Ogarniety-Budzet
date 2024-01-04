@@ -11,8 +11,8 @@ export type LastExpenseItemBoxProps = {
 };
 export type CategoriesExpensesWithNames = {
   catId: string;
-  iconName?: any;
-  name?: string | undefined;
+  iconName?: string;
+  name?: string;
   color: string;
   sum: number;
 }[];
