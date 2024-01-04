@@ -27,23 +27,8 @@ const rootReducer = combineReducers({
   incomes: incomesSlice,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
-// const persistedPodsumowanieReducer = persistReducer(
-//   persistConfig,
-//   podsumowanieSlice
-// );
-// const persistedCategoriesReducer = persistReducer(
-//   persistConfig,
-//   categoriesSlice
-// );
-
-// const persistedExpensesReducer = persistReducer(persistConfig, expensesSlice);
 export const store = configureStore({
   reducer: persistedReducer,
-  // reducer: {
-  //   podsumowanie: persistedPodsumowanieReducer,
-  //   categories: persistedCategoriesReducer,
-  //   expenses: persistedExpensesReducer,
-  // },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
