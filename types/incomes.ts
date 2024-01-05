@@ -13,3 +13,13 @@ export type CategoriesItemBoxData = {
   name?: string | undefined;
   value: number;
 }[];
+
+export type MonthIncomesBoxProps = {
+  month: number;
+  sumOfAllIncomes: number;
+  categoriesIncomes: {
+    catId: string;
+    value: number;
+    stillExsists: boolean;
+  }[];
+};

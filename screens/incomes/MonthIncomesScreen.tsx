@@ -66,8 +66,8 @@ const MonthIncomesScreen = () => {
     }
     setModalVisible(!modalVisible);
   };
-  console.log(categories);
-  console.log(categoriesIncomesWithNames);
+  // console.log(categories);
+  // console.log(categoriesIncomesWithNames);
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.sumOfIncomes}>Suma {sumOfMonthIncomes} PLN</Text>
@@ -97,6 +97,7 @@ const MonthIncomesScreen = () => {
       <View style={styles.flatlistBox}>
         <FlatList
           data={categoriesItemBoxData}
+          scrollEnabled={true}
           renderItem={(item) => {
             return (
               <CategoryItemBox
@@ -106,7 +107,11 @@ const MonthIncomesScreen = () => {
             );
           }}
           horizontal={true}
-          contentContainerStyle={{ alignItems: "center", maxHeight: 160 }}
+          contentContainerStyle={{
+            alignItems: "center",
+            maxHeight: 160,
+            width: "100%",
+          }}
         />
       </View>
       <Text style={styles.label}>Zestawienie przychodów</Text>
@@ -207,7 +212,7 @@ const styles = StyleSheet.create({
   legend: {
     flexDirection: "row",
     flexWrap: "wrap",
-    marginTop: 10,
+    marginTop: 30,
     gap: 10,
     justifyContent: "center",
   },
