@@ -1,7 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { PlannedExpenseCategoryItem } from "../types/settings";
 type ExpensesInitialState = {
-  lastExpenses: { catId: string; value: number; date: string; id: string }[];
+  lastExpenses: {
+    catId: string;
+    value: number;
+    date: string;
+    dateString: string;
+    id: string;
+  }[];
   categoriesExpenses: { catId: string; sum: number }[];
   plannedExpenses: PlannedExpenseCategoryItem[];
 };
@@ -33,7 +39,8 @@ const expensesSlice = createSlice({
         {
           catId: action.payload.catId,
           value: action.payload.value,
-          date: fullDate,
+          dateString: fullDate,
+          date: new Date().toJSON(),
           id: randLetter + Date.now(),
         },
       ];

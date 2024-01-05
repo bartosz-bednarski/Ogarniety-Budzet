@@ -4,8 +4,34 @@ import AddExpenseScreen from "../screens/AddExpenseScreen";
 import { Pressable } from "react-native";
 import SettingsNavigator from "./SettingsNavigator";
 import COLORS_STYLE from "../utils/styles/colors";
+import { useAppSelector } from "../redux/hooks";
+import { useEffect } from "react";
 const AddExpenseNavigator = () => {
   const Stack = createNativeStackNavigator();
+  const categoriesIncomes = useAppSelector(
+    (state) => state.incomes.categoriesIncomes
+  );
+  //useEffect do sprawdzania czy miesiąc uległ zmianie, jeżeli tak to wprowadzenie zmian w reduxie w danych
+  useEffect(() => {
+    //Tak powinno być:
+    // const currentMonth = new Date().getMonth();
+
+    //Test
+    const currentMonth = 2;
+    const monthOfLatestIncome = new Date(categoriesIncomes[0].date).getMonth();
+    if (currentMonth > monthOfLatestIncome) {
+      console.log("zmiana miesiąca");
+    } else {
+      console.log("miesiąc zostaje");
+    }
+    console.log(
+      "CHECKING",
+      currentMonth,
+      monthOfLatestIncome,
+      categoriesIncomes[0].date
+    );
+  }, []);
+
   return (
     <Stack.Navigator
       screenOptions={{
