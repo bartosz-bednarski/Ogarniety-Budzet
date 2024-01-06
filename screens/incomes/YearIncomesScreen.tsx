@@ -8,30 +8,35 @@ import { MONTHS } from "../../utils/months";
 import MonthIncomesBox from "../../components/incomes/yearIncomes/MonthIncomesBox";
 const YearIncomesScreen = () => {
   const yearIncomes = useAppSelector((state) => state.incomes.yearIncomes);
+
   // console.log(yearIncomes);
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.yearChart}>
-        <PieChart
-          widthAndHeight={200}
-          series={yearIncomes.map((item) => item.sumOfAllIncomes)}
-          sliceColor={pieChartColors.slice(0, yearIncomes.length)}
-          coverRadius={0.45}
-          coverFill={COLORS_STYLE.backgroundBlack}
-        />
-        <View style={styles.yearChartLegend}>
-          {yearIncomes.map((item, index) => (
-            <Text style={{ color: pieChartColors[index] }}>
-              {MONTHS[item.month]}
-            </Text>
-          ))}
-        </View>
-      </View>
-      <View style={styles.monthIncomesBox}>
-        {yearIncomes.map((month) => (
-          <MonthIncomesBox monthIncomes={month} />
-        ))}
-      </View>
+      {yearIncomes.length > 0 && (
+        <>
+          <View style={styles.yearChart}>
+            <PieChart
+              widthAndHeight={200}
+              series={yearIncomes.map((item) => item.sumOfAllIncomes)}
+              sliceColor={pieChartColors.slice(0, yearIncomes.length)}
+              coverRadius={0.45}
+              coverFill={COLORS_STYLE.backgroundBlack}
+            />
+            <View style={styles.yearChartLegend}>
+              {yearIncomes.map((item, index) => (
+                <Text style={{ color: pieChartColors[index] }}>
+                  {MONTHS[item.month]}
+                </Text>
+              ))}
+            </View>
+          </View>
+          <View style={styles.monthIncomesBox}>
+            {yearIncomes.map((month) => (
+              <MonthIncomesBox monthIncomes={month} key={month.month} />
+            ))}
+          </View>
+        </>
+      )}
 
       {/* {yearIncomes.length > 0 &&
         yearIncomes.map((item) => (

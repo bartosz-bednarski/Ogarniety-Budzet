@@ -110,7 +110,6 @@ const MonthIncomesScreen = () => {
           contentContainerStyle={{
             alignItems: "center",
             maxHeight: 160,
-            width: "100%",
           }}
         />
       </View>

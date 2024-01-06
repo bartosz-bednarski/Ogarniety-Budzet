@@ -23,3 +23,16 @@ export type MonthIncomesBoxProps = {
     stillExsists: boolean;
   }[];
 };
+export type YearIncomesBoxProps = {
+  year: number;
+  sumOfAllIncomes: number;
+  months: {
+    month: number;
+    sumOfAllIncomes: number;
+    categoriesIncomes: {
+      catId: string;
+      value: number;
+      stillExsists: boolean;
+    }[];
+  }[];
+};
