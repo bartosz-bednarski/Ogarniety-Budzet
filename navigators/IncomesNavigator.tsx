@@ -7,13 +7,12 @@ import COLORS_STYLE from "../utils/styles/colors";
 import IncomesTabNavigator from "./incomes/IncomesTabNavigator";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { useEffect } from "react";
-import { updateMonth } from "../redux/incomes-slice";
+import { updateMonth, updateYear } from "../redux/incomes-slice";
 const IncomesNavigator = () => {
   const Stack = createNativeStackNavigator();
   const categoriesIncomes = useAppSelector(
     (state) => state.incomes.categoriesIncomes
   );
-  const yearIncomes = useAppSelector((state) => state.incomes.yearIncomes);
   const dispatch = useAppDispatch();
   //useEffect do sprawdzania czy miesiąc uległ zmianie, jeżeli tak to wprowadzenie zmian w reduxie w danych
   useEffect(() => {
@@ -23,23 +22,24 @@ const IncomesNavigator = () => {
       //if jest po to żeby kod się nie  wysypał jak nie ma zdefiniowanych żadnych wydatków
       //Tak powinno być:
       // const currentMonth = new Date().getMonth();
-      const currentMonth = 4;
+
+      let currentMonth = 0;
+      const yearOfLatestIncome = new Date(
+        categoriesIncomes[0].date
+      ).getFullYear();
       const monthOfLatestIncome = new Date(
         categoriesIncomes[0].date
       ).getMonth();
-      if (currentMonth > monthOfLatestIncome) {
+      // console.log("1234567897454", monthOfLatestIncome);
+      if (
+        currentMonth > monthOfLatestIncome ||
+        (currentMonth === 0 && monthOfLatestIncome === 11)
+      ) {
         dispatch(updateMonth());
-        console.log("zmiana miesiąca");
+        // console.log("zmiana miesiąca");
       } else {
         console.log("miesiąc zostaje");
       }
-      // console.log(
-      //   "CHECKING",
-      //   currentMonth,
-      //   monthOfLatestIncome,
-      //   categoriesIncomes
-      // );
-      console.log("year_incomes", yearIncomes);
     }
   }, []);
   return (
