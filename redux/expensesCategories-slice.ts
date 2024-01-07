@@ -13,7 +13,7 @@ const expensesCategoriesSlice = createSlice({
   name: "categories",
   initialState: expensesCategoriesInitialState,
   reducers: {
-    addCategory: (state, action) => {
+    addExpensesCategory: (state, action) => {
       const newCategory = {
         catId: action.payload.catId,
         name: action.payload.name,
@@ -26,7 +26,7 @@ const expensesCategoriesSlice = createSlice({
         state.categoriesList = [newCategory];
       }
     },
-    editCategory: (state, action) => {
+    editExpensesCategory: (state, action) => {
       if (state.categoriesList.length > 0) {
         const indexOfCategory = state.categoriesList.findIndex(
           (item) => item.catId === action.payload.catId
@@ -36,7 +36,7 @@ const expensesCategoriesSlice = createSlice({
         return;
       }
     },
-    deleteCategory: (state, action) => {
+    deleteExpensesCategory: (state, action) => {
       state.categoriesList = state.categoriesList.filter(
         (item) => item.catId !== action.payload.catId
       );
@@ -45,7 +45,10 @@ const expensesCategoriesSlice = createSlice({
 });
 
 export const categoriesActions = expensesCategoriesSlice.actions;
-export const addCategory = expensesCategoriesSlice.actions.addCategory;
-export const editCategory = expensesCategoriesSlice.actions.editCategory;
-export const deleteCategory = expensesCategoriesSlice.actions.deleteCategory;
+export const addExpensesCategory =
+  expensesCategoriesSlice.actions.addExpensesCategory;
+export const editExpensesCategory =
+  expensesCategoriesSlice.actions.editExpensesCategory;
+export const deleteExpensesCategory =
+  expensesCategoriesSlice.actions.deleteExpensesCategory;
 export default expensesCategoriesSlice.reducer;

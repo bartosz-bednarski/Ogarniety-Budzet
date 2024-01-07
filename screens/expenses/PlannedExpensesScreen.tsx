@@ -13,7 +13,11 @@ import CategoryItemBox from "../../components/CategoryItemBox";
 import { addPlannedExpense } from "../../redux/expenses-slice";
 import COLORS_STYLE from "../../utils/styles/colors";
 import CustomButton from "../../utils/ui/CustomButton";
-const PlannedExpensesScreen = () => {
+import { Navigation } from "../../types/global";
+import SumBox from "../../components/SumBox";
+const PlannedExpensesScreen: React.FC<{ navigation: Navigation }> = ({
+  navigation,
+}) => {
   const dispatch = useAppDispatch();
   const [selectedCatId, setSelectedCatId] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
@@ -38,65 +42,79 @@ const PlannedExpensesScreen = () => {
     .reduce((partialSum, a) => partialSum + a, 0);
   return (
     <View style={styles.container}>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert("Wydatek nie został dodany!");
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={styles.modalLayout}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalLabel}>Podaj kwotę</Text>
-            <TextInput
-              style={styles.textInput}
-              value={value}
-              onChangeText={(text) => setValue(text)}
-              keyboardType="numeric"
-            />
-            <CustomButton title="Zatwierdź" onPress={submitHandler} />
-          </View>
+      {plannedExpenses.length === 0 && (
+        <View style={styles.informationBox}>
+          <CustomButton
+            title="Dodaj kategorie wydatków"
+            onPress={() =>
+              navigation.navigate("settingsNavigator", {
+                screen: "editCategories",
+              })
+            }
+          />
         </View>
-      </Modal>
-      <Text style={styles.header}>
-        Zaplanowano do wydania {sumOfPlannedExpenses} PLN
-      </Text>
-      <FlatList
-        data={plannedExpenses}
-        renderItem={(item) => {
-          return (
-            <CategoryItemBox
-              category={item.item}
-              onPressHandler={() => onPressHandler(item.item.catId)}
-            />
-          );
-        }}
-        keyExtractor={(item) => item.catId.toString()}
-        contentContainerStyle={{
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "flex-end",
-        }}
-        numColumns={3}
-      />
+      )}
+      {plannedExpenses.length > 0 && (
+        <>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              Alert.alert("Wydatek nie został dodany!");
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <View style={styles.modalLayout}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalLabel}>Podaj kwotę</Text>
+                <TextInput
+                  style={styles.textInput}
+                  value={value}
+                  onChangeText={(text) => setValue(text)}
+                  keyboardType="numeric"
+                />
+                <CustomButton title="Zatwierdź" onPress={submitHandler} />
+              </View>
+            </View>
+          </Modal>
+          <SumBox sum={sumOfPlannedExpenses} />
+
+          <FlatList
+            data={plannedExpenses}
+            renderItem={(item) => {
+              return (
+                <CategoryItemBox
+                  category={item.item}
+                  onPressHandler={() => onPressHandler(item.item.catId)}
+                />
+              );
+            }}
+            keyExtractor={(item) => item.catId.toString()}
+            contentContainerStyle={{
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "flex-end",
+            }}
+            numColumns={3}
+          />
+        </>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  informationBox: {
+    alignItems: "center",
+    justifyContent: "center",
+    height: 400,
+  },
   container: {
     flex: 1,
     paddingVertical: 10,
     paddingHorizontal: 10,
     backgroundColor: COLORS_STYLE.backgroundBlack,
-  },
-  header: {
-    fontSize: 20,
-    fontWeight: "600",
-    color: "white",
-    marginVertical: 10,
   },
   categoriesBox: {
     flexDirection: "row",

@@ -6,14 +6,27 @@ import { useAppSelector } from "../../redux/hooks";
 import pieChartColors from "../../utils/styles/pieChartColors";
 import { MONTHS } from "../../utils/months";
 import MonthIncomesBox from "../../components/incomes/yearIncomes/MonthIncomesBox";
+import SumBox from "../../components/SumBox";
+
 const YearIncomesScreen = () => {
   const yearIncomes = useAppSelector((state) => state.incomes.yearIncomes);
-
+  const sumOfAllIncomes = yearIncomes
+    .map((item) => Number(item.sumOfAllIncomes))
+    .reduce((partialSum, a) => partialSum + a, 0);
   // console.log(yearIncomes);
   return (
     <ScrollView style={styles.container}>
+      {yearIncomes.length === 0 && (
+        <View style={styles.informationBox}>
+          <Text style={styles.informationText}>
+            Tutaj wyświetlane będą informacje o przychodach z poszczególnych
+            miesięcy
+          </Text>
+        </View>
+      )}
       {yearIncomes.length > 0 && (
         <>
+          <SumBox sum={sumOfAllIncomes} />
           <View style={styles.yearChart}>
             <PieChart
               widthAndHeight={200}
@@ -24,7 +37,7 @@ const YearIncomesScreen = () => {
             />
             <View style={styles.yearChartLegend}>
               {yearIncomes.map((item, index) => (
-                <Text style={{ color: pieChartColors[index] }}>
+                <Text style={{ color: pieChartColors[index] }} key={item.month}>
                   {MONTHS[item.month]}
                 </Text>
               ))}
@@ -37,39 +50,20 @@ const YearIncomesScreen = () => {
           </View>
         </>
       )}
-
-      {/* {yearIncomes.length > 0 &&
-        yearIncomes.map((item) => (
-          <View style={{ backgroundColor: "red", marginVertical: 30 }}>
-            <Text style={styles.text}>{item.month}</Text>
-            <Text style={styles.text}>{item.sumOfAllIncomes}</Text>
-            <View>
-              {item.categoriesIncomes.map((category) => {
-                if (category.stillExsists) {
-                  return (
-                    <>
-                      <Text style={styles.text}>{category.catId}</Text>
-                      <Text style={styles.text}>{category.value}</Text>
-                      <Text style={styles.text}>Istnieje</Text>
-                    </>
-                  );
-                } else {
-                  return (
-                    <>
-                      <Text style={styles.text}>{category.catId}</Text>
-                      <Text style={styles.text}>{category.value}</Text>
-                      <Text style={styles.text}>Nie istnieje</Text>
-                    </>
-                  );
-                }
-              })}
-            </View>
-          </View>
-        ))} */}
     </ScrollView>
   );
 };
 const styles = StyleSheet.create({
+  informationBox: {
+    alignItems: "center",
+    justifyContent: "center",
+    height: 400,
+  },
+  informationText: {
+    textAlign: "center",
+    fontSize: 24,
+    color: "white",
+  },
   container: {
     flex: 1,
     marginVertical: 10,

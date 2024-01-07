@@ -36,7 +36,7 @@ const incomesInitialState: IncomesInitialState = {
   yearIncomes: [],
   yearsIncomes: [],
 };
-const dateCheck = "2026-01-05T08:06:22.626Z";
+const dateCheck = "2026-02-08T08:06:22.626Z";
 const incomesSlice = createSlice({
   name: "incomes",
   initialState: incomesInitialState,

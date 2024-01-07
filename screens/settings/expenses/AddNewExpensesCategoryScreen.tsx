@@ -6,7 +6,7 @@ import {
   OnSetInputText,
 } from "../../../types/settings";
 import { useAppDispatch } from "../../../redux/hooks";
-import { addCategory } from "../../../redux/expensesCategories-slice";
+import { addExpensesCategory } from "../../../redux/expensesCategories-slice";
 import { setExpense, setPlannedExpense } from "../../../redux/expenses-slice";
 const AddNewExpensesCategoryScreen: React.FC<{
   route: any;
@@ -30,7 +30,11 @@ const AddNewExpensesCategoryScreen: React.FC<{
       };
       const catId = randomId(4);
       dispatch(
-        addCategory({ name: inputText, iconName: categoryIcon, catId: catId })
+        addExpensesCategory({
+          name: inputText,
+          iconName: categoryIcon,
+          catId: catId,
+        })
       );
       dispatch(
         setPlannedExpense({
