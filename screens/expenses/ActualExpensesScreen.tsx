@@ -9,9 +9,14 @@ import pieChartColors from "../../utils/styles/pieChartColors";
 import LastExpenseItemBox from "../../components/expenses/LastExpenseItemBox";
 import CategoryLegend from "../../components/expenses/CategoryLegend";
 import { CategoriesExpensesWithNames } from "../../types/expenses";
+import SumBox from "../../components/SumBox";
+import CustomButton from "../../utils/ui/CustomButton";
+import { Navigation } from "../../types/global";
 // import PieChartComponent from "../components/PieChartComponent";
 
-const ActualExpensesScreen = () => {
+const ActualExpensesScreen: React.FC<{ navigation: Navigation }> = ({
+  navigation,
+}) => {
   const categories = useAppSelector((state) => state.categories.categoriesList);
   const categoriesExpenses = useAppSelector(
     (state) => state.expenses.categoriesExpenses
@@ -74,8 +79,20 @@ const ActualExpensesScreen = () => {
   // console.log(((sumOfAllExpenses / sumOfPlannedExpenses) * 100).toFixed(2));
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.sumOfExpenses}>Wydano {sumOfAllExpenses} PLN</Text>
-      <Text style={styles.label}>Kategorie wydatków</Text>
+      <SumBox sum={sumOfAllExpenses} />
+      <Text style={styles.label}>Zestawienie wydatków</Text>
+      {sumOfAllExpenses === 0 && (
+        <View style={styles.informationBox}>
+          <CustomButton
+            title="Dodaj wydatek"
+            onPress={() =>
+              navigation.navigate("Dodaj wydatek", {
+                screen: "addExpense",
+              })
+            }
+          />
+        </View>
+      )}
       {sumOfAllExpenses > 0 && (
         <Pressable
           style={styles.expensesCategories}
@@ -112,18 +129,20 @@ const ActualExpensesScreen = () => {
           )}
         </Pressable>
       )}
-      <Text style={styles.label}>Realizacja założeń wydatków</Text>
-      <View style={styles.globalRealistationPieChart}>
-        {sumOfAllExpenses > 0 && (
-          <PieChart
-            widthAndHeight={200}
-            series={globalRealistationPieChartData}
-            sliceColor={["red", "green"]}
-            coverRadius={0.45}
-            coverFill={COLORS_STYLE.backgroundBlack}
-          />
-        )}
-      </View>
+      {sumOfAllExpenses > 0 && (
+        <>
+          <Text style={styles.label}>Realizacja założeń wydatków</Text>
+          <View style={styles.globalRealistationPieChart}>
+            <PieChart
+              widthAndHeight={200}
+              series={globalRealistationPieChartData}
+              sliceColor={["red", "green"]}
+              coverRadius={0.45}
+              coverFill={COLORS_STYLE.backgroundBlack}
+            />
+          </View>
+        </>
+      )}
       <Text style={styles.label}>
         Realizacja wydatków w poszczególnych kategoriach
       </Text>
@@ -138,21 +157,30 @@ const ActualExpensesScreen = () => {
           />
         ))}
       </View>
-      <Text style={styles.label}>Lista ostatnich wydatków</Text>
-      <View style={styles.lastExpensesContainer}>
-        {lastExpensesToShow.map((item) => (
-          <LastExpenseItemBox
-            iconName={item.iconName!}
-            price={item.value}
-            date={item.date}
-            key={item.id}
-          />
-        ))}
-      </View>
+      {lastExpensesToShow.length > 0 && (
+        <>
+          <Text style={styles.label}>Lista ostatnich wydatków</Text>
+          <View style={styles.lastExpensesContainer}>
+            {lastExpensesToShow.map((item) => (
+              <LastExpenseItemBox
+                iconName={item.iconName!}
+                price={item.value}
+                date={item.dateString}
+                key={item.id}
+              />
+            ))}
+          </View>
+        </>
+      )}
     </ScrollView>
   );
 };
 const styles = StyleSheet.create({
+  informationBox: {
+    alignItems: "center",
+    justifyContent: "center",
+    height: 100,
+  },
   container: {
     flex: 1,
     paddingVertical: 10,

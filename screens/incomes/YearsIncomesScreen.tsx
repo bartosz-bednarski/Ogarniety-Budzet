@@ -5,13 +5,25 @@ import pieChartColors from "../../utils/styles/pieChartColors";
 import COLORS_STYLE from "../../utils/styles/colors";
 import { useAppSelector } from "../../redux/hooks";
 import YearIncomesBox from "../../components/incomes/yearsIncomes/YearIncomesBox";
+import SumBox from "../../components/SumBox";
 const YearsIncomesScreen = () => {
   const yearsIncomes = useAppSelector((state) => state.incomes.yearsIncomes);
+  const sumOfAllIncomes = yearsIncomes
+    .map((item) => Number(item.sumOfAllIncomes))
+    .reduce((partialSum, a) => partialSum + a, 0);
   console.log("YEARS_INCOMES", yearsIncomes);
   return (
     <ScrollView style={styles.container}>
+      {yearsIncomes.length === 0 && (
+        <View style={styles.informationBox}>
+          <Text style={styles.informationText}>
+            Tutaj wyświetlane będą informacje o przychodach z poszczególnych lat
+          </Text>
+        </View>
+      )}
       {yearsIncomes.length > 0 && (
         <>
+          <SumBox sum={sumOfAllIncomes} />
           <View style={styles.yearChart}>
             <PieChart
               widthAndHeight={200}
@@ -22,7 +34,7 @@ const YearsIncomesScreen = () => {
             />
             <View style={styles.yearChartLegend}>
               {yearsIncomes.map((item, index) => (
-                <Text style={{ color: pieChartColors[index] }}>
+                <Text style={{ color: pieChartColors[index] }} key={item.year}>
                   {item.year}
                 </Text>
               ))}
@@ -68,6 +80,16 @@ const YearsIncomesScreen = () => {
   );
 };
 const styles = StyleSheet.create({
+  informationBox: {
+    alignItems: "center",
+    justifyContent: "center",
+    height: 400,
+  },
+  informationText: {
+    textAlign: "center",
+    fontSize: 24,
+    color: "white",
+  },
   container: {
     flex: 1,
     marginVertical: 10,

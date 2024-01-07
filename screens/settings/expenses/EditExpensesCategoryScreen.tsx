@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useAppDispatch } from "../../../redux/hooks";
 import {
-  deleteCategory,
-  editCategory,
+  deleteExpensesCategory,
+  editExpensesCategory,
 } from "../../../redux/expensesCategories-slice";
 import AddEditCategory from "../../../components/settings/AddEditCategory";
 import {
@@ -33,7 +33,11 @@ const EditExpensesCategoryScreen: React.FC<{
   const onCategoryEditHandler: OnPressHandler = () => {
     if (inputText.length < 20) {
       dispatch(
-        editCategory({ catId: catId, name: inputText, iconName: categoryIcon })
+        editExpensesCategory({
+          catId: catId,
+          name: inputText,
+          iconName: categoryIcon,
+        })
       );
       dispatch(
         updatePlannedExpenseCategory({
@@ -46,7 +50,7 @@ const EditExpensesCategoryScreen: React.FC<{
     }
   };
   const onCategoryDeleteHandler: OnPressHandler = () => {
-    dispatch(deleteCategory({ catId: catId }));
+    dispatch(deleteExpensesCategory({ catId: catId }));
     dispatch(deleteAllExpensesFromCategory({ catId: catId }));
     navigation.navigate("editCategories");
   };

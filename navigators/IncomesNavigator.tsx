@@ -23,10 +23,8 @@ const IncomesNavigator = () => {
       //Tak powinno być:
       // const currentMonth = new Date().getMonth();
 
-      let currentMonth = 0;
-      const yearOfLatestIncome = new Date(
-        categoriesIncomes[0].date
-      ).getFullYear();
+      let currentMonth = 1;
+
       const monthOfLatestIncome = new Date(
         categoriesIncomes[0].date
       ).getMonth();

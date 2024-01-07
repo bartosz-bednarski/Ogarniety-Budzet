@@ -13,7 +13,10 @@ import CategoryItemBox from "../components/addExpense/CategoryItemBox";
 import { useState } from "react";
 import { addExpense } from "../redux/expenses-slice";
 import CustomButton from "../utils/ui/CustomButton";
-const AddExpenseScreen = () => {
+import { Navigation } from "../types/global";
+const AddExpenseScreen: React.FC<{ navigation: Navigation }> = ({
+  navigation,
+}) => {
   const dispatch = useAppDispatch();
   const categories = useAppSelector((state) => state.categories.categoriesList);
   console.log(categories);
@@ -23,7 +26,6 @@ const AddExpenseScreen = () => {
   const [value, setValue] = useState("");
   const onPressHandler = (catId: string) => {
     setSelectedCatId(catId);
-    console.log(expenses);
     setModalVisible(true);
   };
   const submitHandler = () => {
@@ -36,6 +38,18 @@ const AddExpenseScreen = () => {
 
   return (
     <View style={styles.container}>
+      {categories.length === 0 && (
+        <View style={styles.informationBox}>
+          <CustomButton
+            title="Dodaj kategorie wydatków"
+            onPress={() =>
+              navigation.navigate("settingsNavigator", {
+                screen: "editCategories",
+              })
+            }
+          />
+        </View>
+      )}
       <Modal
         animationType="slide"
         transparent={true}
@@ -81,6 +95,11 @@ const AddExpenseScreen = () => {
   );
 };
 const styles = StyleSheet.create({
+  informationBox: {
+    alignItems: "center",
+    justifyContent: "center",
+    height: 400,
+  },
   container: {
     flex: 1,
     marginHorizontal: 10,

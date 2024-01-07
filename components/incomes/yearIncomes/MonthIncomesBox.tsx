@@ -12,7 +12,7 @@ const MonthIncomesBox: React.FC<{ monthIncomes: MonthIncomesBoxProps }> = ({
   const incomesCategories = useAppSelector(
     (state) => state.incomesCategories.categoriesList
   );
-  console.log(monthIncomes.categoriesIncomes);
+  // console.log(monthIncomes.categoriesIncomes);
   const legend = monthIncomes.categoriesIncomes.map((item, index) => {
     if (item.stillExsists) {
       const filteredCategories = incomesCategories.find(

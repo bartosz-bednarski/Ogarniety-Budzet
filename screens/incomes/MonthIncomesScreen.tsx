@@ -21,7 +21,11 @@ import {
   CategoriesItemBoxData,
 } from "../../types/incomes";
 import { updateIncome } from "../../redux/incomes-slice";
-const MonthIncomesScreen = () => {
+import SumBox from "../../components/SumBox";
+import { Navigation } from "../../types/global";
+const MonthIncomesScreen: React.FC<{ navigation: Navigation }> = ({
+  navigation,
+}) => {
   const dispatch = useAppDispatch();
   const categories = useAppSelector(
     (state) => state.incomesCategories.categoriesList
@@ -70,53 +74,71 @@ const MonthIncomesScreen = () => {
   // console.log(categoriesIncomesWithNames);
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.sumOfIncomes}>Suma {sumOfMonthIncomes} PLN</Text>
-      <Text style={styles.label}>Kategorie przychodów</Text>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert("Zmiany nie zostały wprowadzone!");
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={styles.modalLayout}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalLabel}>Podaj kwotę</Text>
-            <TextInput
-              style={styles.textInput}
-              value={value}
-              onChangeText={(text) => setValue(text)}
-              keyboardType="numeric"
-            />
-            <CustomButton title="Zatwierdź" onPress={submitHandler} />
-          </View>
+      {categories.length === 0 && (
+        <View style={styles.informationBox}>
+          <CustomButton
+            title="Dodaj kategorie przychodów"
+            onPress={() =>
+              navigation.navigate("settingsNavigator", {
+                screen: "addNewIncomesCategory",
+              })
+            }
+          />
         </View>
-      </Modal>
-      <View style={styles.flatlistBox}>
-        <FlatList
-          data={categoriesItemBoxData}
-          scrollEnabled={true}
-          renderItem={(item) => {
-            return (
-              <CategoryItemBox
-                category={item.item}
-                onPressHandler={() => onPressHandler(item.item.catId)}
-              />
-            );
-          }}
-          horizontal={true}
-          contentContainerStyle={{
-            alignItems: "center",
-            maxHeight: 160,
-          }}
-        />
-      </View>
-      <Text style={styles.label}>Zestawienie przychodów</Text>
-      <View style={styles.pieChartBox}>
-        {sumOfMonthIncomes > 0 && (
-          <>
+      )}
+
+      {categories.length > 0 && (
+        <>
+          <SumBox sum={sumOfMonthIncomes} />
+          <Text style={styles.label}>Kategorie przychodów</Text>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              Alert.alert("Zmiany nie zostały wprowadzone!");
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <View style={styles.modalLayout}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalLabel}>Podaj kwotę</Text>
+                <TextInput
+                  style={styles.textInput}
+                  value={value}
+                  onChangeText={(text) => setValue(text)}
+                  keyboardType="numeric"
+                />
+                <CustomButton title="Zatwierdź" onPress={submitHandler} />
+              </View>
+            </View>
+          </Modal>
+          <View style={styles.flatlistBox}>
+            <FlatList
+              data={categoriesItemBoxData}
+              scrollEnabled={true}
+              renderItem={(item) => {
+                return (
+                  <CategoryItemBox
+                    category={item.item}
+                    onPressHandler={() => onPressHandler(item.item.catId)}
+                  />
+                );
+              }}
+              horizontal={true}
+              contentContainerStyle={{
+                alignItems: "center",
+                maxHeight: 160,
+              }}
+            />
+          </View>
+        </>
+      )}
+
+      {sumOfMonthIncomes > 0 && (
+        <>
+          <Text style={styles.label}>Zestawienie przychodów</Text>
+          <View style={styles.pieChartBox}>
             <PieChart
               widthAndHeight={200}
               series={incomesPieChartData}
@@ -137,13 +159,23 @@ const MonthIncomesScreen = () => {
                 </View>
               ))}
             </View>
-          </>
-        )}
-      </View>
+          </View>
+        </>
+      )}
     </ScrollView>
   );
 };
 const styles = StyleSheet.create({
+  informationBox: {
+    alignItems: "center",
+    justifyContent: "center",
+    height: 400,
+  },
+  informationText: {
+    textAlign: "center",
+    fontSize: 24,
+    color: "white",
+  },
   container: {
     flex: 1,
     paddingVertical: 10,
@@ -214,6 +246,8 @@ const styles = StyleSheet.create({
     marginTop: 30,
     gap: 10,
     justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
   },
   legendItem: {
     flexDirection: "row",
