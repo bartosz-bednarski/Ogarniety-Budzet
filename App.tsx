@@ -6,7 +6,7 @@ import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { persistor, store } from "./redux/store";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
-import AddExpenseNavigator from "./navigators/AddExpenseNavigator";
+import PlanningNavigator from "./navigators/PlanningNavigator";
 import SummaryNavigator from "./navigators/SummaryNavigator";
 import ExpensesNavigator from "./navigators/ExpensesNavigator";
 import IncomesNavigator from "./navigators/IncomesNavigator";
@@ -54,15 +54,11 @@ export default function App() {
                 }}
               />
               <BottomTabs.Screen
-                component={AddExpenseNavigator}
-                name="Dodaj wydatek"
+                component={PlanningNavigator}
+                name="Planowanie"
                 options={{
                   tabBarIcon: ({ color, size }) => (
-                    <Ionicons
-                      name="add-circle-outline"
-                      color={color}
-                      size={size}
-                    />
+                    <Ionicons name="book" color={color} size={size} />
                   ),
                 }}
               />

@@ -1,11 +1,12 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Ionicons } from "@expo/vector-icons";
-import AddExpenseScreen from "../screens/AddExpenseScreen";
+import AddExpenseScreen from "../screens/expenses/AddExpenseScreen";
 import { Pressable } from "react-native";
 import SettingsNavigator from "./SettingsNavigator";
 import COLORS_STYLE from "../utils/styles/colors";
+import PlanningTabNavigator from "./planning/PlanningTabNavigator";
 
-const AddExpenseNavigator = () => {
+const PlanningNavigator = () => {
   const Stack = createNativeStackNavigator();
 
   return (
@@ -15,13 +16,13 @@ const AddExpenseNavigator = () => {
       }}
     >
       <Stack.Screen
-        component={AddExpenseScreen}
-        name="addExpense"
+        component={PlanningTabNavigator}
+        name="planning"
         options={({ route, navigation }) => ({
           headerTintColor: COLORS_STYLE.basicGold,
           headerPressColor: COLORS_STYLE.basicGold,
           headerPressOpacity: 1,
-          headerTitle: "Dodaj wydatek",
+          headerTitle: "Planowanie",
           headerTitleAlign: "center",
           headerRight: () => {
             return (
@@ -47,4 +48,4 @@ const AddExpenseNavigator = () => {
     </Stack.Navigator>
   );
 };
-export default AddExpenseNavigator;
+export default PlanningNavigator;
