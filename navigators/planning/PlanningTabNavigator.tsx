@@ -1,10 +1,9 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import COLORS_STYLE from "../../utils/styles/colors";
-import WeekExpensesScreen from "../../screens/expenses/WeekExpensesScreen";
-import MonthExpensesScreen from "../../screens/expenses/MonthExpensesScreen";
-import YearExpensesScreen from "../../screens/expenses/YearExpensesScreen";
+import PlannedExpensesScreen from "../../screens/planning/PlannedExpensesScreen";
+import PlannedIncomesScreen from "../../screens/planning/PlannedIncomesScreen copy";
 
-const ExpensesTabNavigator = () => {
+const PlanningTabNavigator = () => {
   const Tab = createMaterialTopTabNavigator();
   return (
     <Tab.Navigator
@@ -17,10 +16,10 @@ const ExpensesTabNavigator = () => {
       }}
     >
       <Tab.Screen
-        component={WeekExpensesScreen}
-        name="weekExpenses"
+        component={PlannedExpensesScreen}
+        name="plannedExpenses"
         options={{
-          tabBarLabel: "Tydzień",
+          tabBarLabel: "Wydatki",
           tabBarActiveTintColor: COLORS_STYLE.basicGold,
           tabBarInactiveTintColor: "grey",
           tabBarLabelStyle: {
@@ -33,26 +32,10 @@ const ExpensesTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        component={MonthExpensesScreen}
-        name="monthExpenses"
+        component={PlannedIncomesScreen}
+        name="plannedIncomes"
         options={{
-          tabBarLabel: "Miesiąc",
-          tabBarActiveTintColor: COLORS_STYLE.basicGold,
-          tabBarInactiveTintColor: "grey",
-          tabBarLabelStyle: {
-            borderColor: "grey",
-            borderRadius: 20,
-            borderWidth: 2,
-            paddingVertical: 5,
-            paddingHorizontal: 10,
-          },
-        }}
-      />
-      <Tab.Screen
-        component={YearExpensesScreen}
-        name="yearExpenses"
-        options={{
-          tabBarLabel: "Rok",
+          tabBarLabel: "Przychody",
           tabBarActiveTintColor: COLORS_STYLE.basicGold,
           tabBarInactiveTintColor: "grey",
           tabBarLabelStyle: {
@@ -67,4 +50,4 @@ const ExpensesTabNavigator = () => {
     </Tab.Navigator>
   );
 };
-export default ExpensesTabNavigator;
+export default PlanningTabNavigator;

@@ -8,12 +8,12 @@ import {
   Button,
   TextInput,
 } from "react-native";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import CategoryItemBox from "../components/addExpense/CategoryItemBox";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import CategoryItemBox from "../../components/expenses/CategoryItemBox";
 import { useState } from "react";
-import { addExpense } from "../redux/expenses-slice";
-import CustomButton from "../utils/ui/CustomButton";
-import { Navigation } from "../types/global";
+import { addExpense } from "../../redux/expenses-slice";
+import CustomButton from "../../utils/ui/CustomButton";
+import { Navigation } from "../../types/global";
 const AddExpenseScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {

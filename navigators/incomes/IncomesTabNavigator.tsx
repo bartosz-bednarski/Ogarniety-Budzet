@@ -1,10 +1,8 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import ActualExpensesNavigator from "../expenses/ActualExpensesNavigator";
-import PlannedExpensesNavigator from "../expenses/PlannedExpensesNavigator";
 import COLORS_STYLE from "../../utils/styles/colors";
-import MonthIncomesNavigator from "./MonthIncomesNavigator";
-import YearIncomesNavigator from "./YearIncomesNavigator";
-import YearsIncomesNavigator from "./YearsIncomesNavigator";
+import MonthIncomesScreen from "../../screens/incomes/MonthIncomesScreen";
+import YearIncomesScreen from "../../screens/incomes/YearIncomesScreen";
+import YearsIncomesScreen from "../../screens/incomes/YearsIncomesScreen";
 
 const IncomesTabNavigator = () => {
   const Tab = createMaterialTopTabNavigator();
@@ -19,8 +17,8 @@ const IncomesTabNavigator = () => {
       }}
     >
       <Tab.Screen
-        component={MonthIncomesNavigator}
-        name="monthIncomesTab"
+        component={MonthIncomesScreen}
+        name="monthIncomes"
         options={{
           tabBarLabel: "Miesiąc",
           tabBarActiveTintColor: COLORS_STYLE.basicGold,
@@ -35,8 +33,8 @@ const IncomesTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        component={YearIncomesNavigator}
-        name="yearIncomesTab"
+        component={YearIncomesScreen}
+        name="yearIncomes"
         options={{
           tabBarLabel: "Rok",
           tabBarActiveTintColor: COLORS_STYLE.basicGold,
@@ -51,8 +49,8 @@ const IncomesTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        component={YearsIncomesNavigator}
-        name="yearsIncomesTab"
+        component={YearsIncomesScreen}
+        name="yearsIncomes"
         options={{
           tabBarLabel: "Lata",
           tabBarActiveTintColor: COLORS_STYLE.basicGold,
