@@ -7,9 +7,57 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import ExpensesTabNavigator from "./expenses/ExpensesTabNavigator";
 import COLORS_STYLE from "../utils/styles/colors";
 import AddExpenseScreen from "../screens/expenses/AddExpenseScreen";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import {
+  updateMonthExpenses,
+  updateWeekExpenses,
+} from "../redux/expenses-slice";
 const ExpensesNavigator = () => {
   const Stack = createNativeStackNavigator();
-  const Tab = createMaterialTopTabNavigator();
+  const dispatch = useAppDispatch();
+  const weekExpenses = useAppSelector((state) => state.expenses.weekExpenses);
+  const weekExpensesUpdated = useAppSelector(
+    (state) => state.expenses.weekExpensesUpdated
+  );
+  const categoriesExpenses = useAppSelector(
+    (state) => state.expenses.monthExpenses
+  );
+  const yearsExpenses = useAppSelector((state) => state.expenses.yearsExpenses);
+  // console.log("YEARS_EXPENSES", yearsExpenses);
+  useEffect(() => {
+    //Test
+    // console.log(categoriesIncomes);
+    let currentDay = 3;
+    // console.log("$$$$$$$$$$$$$$$$$$$$$$$$$", categoriesExpenses);
+    if (weekExpenses.length > 0) {
+      // console.log("update?", weekExpensesUpdated);
+      if (currentDay === 1 && !weekExpensesUpdated) {
+        dispatch(updateWeekExpenses(true));
+      }
+      if (currentDay !== 1 && weekExpensesUpdated) {
+        dispatch(updateWeekExpenses(false));
+      }
+    }
+
+    if (categoriesExpenses.length > 0) {
+      let currentMonth = 1;
+      const monthOfLatestIncome = new Date(
+        categoriesExpenses[0].date
+      ).getMonth();
+      if (
+        currentMonth > monthOfLatestIncome ||
+        (currentMonth === 0 && monthOfLatestIncome === 11)
+      ) {
+        // console.log("mothofLatestIncome", monthOfLatestIncome);
+        dispatch(updateMonthExpenses());
+        dispatch(updateWeekExpenses("monthChange"));
+        // console.log("zmiana miesiąca");
+      } else {
+        console.log("miesiąc zostaje");
+      }
+    }
+  }, []);
   return (
     <Stack.Navigator
       screenOptions={{

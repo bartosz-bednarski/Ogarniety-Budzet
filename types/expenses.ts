@@ -16,3 +16,12 @@ export type CategoriesExpensesWithNames = {
   color: string;
   sum: number;
 }[];
+export type MonthExpensesBoxProps = {
+  month: number;
+  sumOfAllExpenses: number;
+  categoriesExpenses: {
+    catId: string;
+    sum: number;
+    stillExsists: boolean;
+  }[];
+};

@@ -9,7 +9,7 @@ const CategoryPieChart: React.FC<CategoryPieChartProps> = ({
   iconName,
   name,
 }) => {
-  console.log(realExpense, plannedExpense);
+  // console.log(realExpense, plannedExpense);
   const pieChartData = [
     plannedExpense !== 0
       ? Number(((realExpense / plannedExpense) * 100).toFixed(2))
@@ -18,7 +18,7 @@ const CategoryPieChart: React.FC<CategoryPieChartProps> = ({
       ? 0
       : 100 - Number(((realExpense / plannedExpense) * 100).toFixed(2)),
   ];
-  console.log("check", pieChartData);
+  // console.log("check", pieChartData);
   return (
     <View style={styles.container}>
       <View style={styles.pieChartBox}>

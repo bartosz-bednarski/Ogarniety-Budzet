@@ -1,31 +1,101 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { PlannedExpenseCategoryItem } from "../types/settings";
 type ExpensesInitialState = {
-  lastExpenses: {
+  weekExpenses: {
     catId: string;
     value: number;
     date: string;
     dateString: string;
     id: string;
   }[];
-  categoriesExpenses: { catId: string; sum: number }[];
+  weekCategoriesExpenses: { catId: string; sum: number }[];
+  monthExpenses: {
+    catId: string;
+    value: number;
+    date: string;
+    dateString: string;
+    id: string;
+  }[];
+  monthCategoriesExpenses: { catId: string; sum: number }[];
+  yearExpenses: {
+    month: number;
+    sumOfAllExpenses: number;
+    categoriesExpenses: {
+      catId: string;
+      sum: number;
+      stillExsists: boolean;
+    }[];
+  }[];
+  yearsExpenses: {
+    year: number;
+    sumOfAllExpenses: number;
+    months: {
+      month: number;
+      sumOfAllExpenses: number;
+      categoriesExpenses: {
+        catId: string;
+        sum: number;
+        stillExsists: boolean;
+      }[];
+    }[];
+  }[];
   plannedExpenses: PlannedExpenseCategoryItem[];
+  weekExpensesUpdated: boolean;
 };
 const expensesInitialState: ExpensesInitialState = {
-  lastExpenses: [],
-  categoriesExpenses: [],
+  weekExpenses: [],
+  weekCategoriesExpenses: [],
+  monthExpenses: [],
+  monthCategoriesExpenses: [],
+  yearExpenses: [],
+  yearsExpenses: [],
   plannedExpenses: [],
+  weekExpensesUpdated: false,
 };
+const dateCheck = "2025-02-10T08:06:22.626Z";
 const expensesSlice = createSlice({
   name: "expenses",
   initialState: expensesInitialState,
   reducers: {
     setExpense: (state, action) => {
-      state.categoriesExpenses = [
-        ...state.categoriesExpenses,
+      state.monthCategoriesExpenses = [
+        ...state.monthCategoriesExpenses,
         { catId: action.payload.catId, sum: 0 },
       ];
+      state.weekCategoriesExpenses = [
+        ...state.weekCategoriesExpenses,
+        { catId: action.payload.catId, sum: 0 },
+      ];
+
+      const day = new Date().getDate();
+      const month = new Date().getMonth() + 1;
+      const year = new Date().getFullYear();
+      const fullDate = `${day}.${month}.${year}`;
+      const randLetter = String.fromCharCode(
+        65 + Math.floor(Math.random() * 26)
+      );
+      state.weekExpenses = [
+        ...state.weekExpenses,
+        {
+          catId: action.payload.catId,
+          value: 0,
+          dateString: fullDate,
+          date: new Date().toJSON(),
+          id: randLetter + Date.now(),
+        },
+      ];
+      state.monthExpenses = [
+        ...state.monthExpenses,
+        {
+          catId: action.payload.catId,
+          value: 0,
+          dateString: fullDate,
+          date: new Date().toJSON(),
+          id: randLetter + Date.now(),
+        },
+      ];
     },
+
     addExpense: (state, action) => {
       const day = new Date().getDate();
       const month = new Date().getMonth() + 1;
@@ -34,13 +104,25 @@ const expensesSlice = createSlice({
       const randLetter = String.fromCharCode(
         65 + Math.floor(Math.random() * 26)
       );
-      state.lastExpenses = [
-        ...state.lastExpenses,
+      state.weekExpenses = [
+        ...state.weekExpenses,
         {
           catId: action.payload.catId,
           value: action.payload.value,
           dateString: fullDate,
-          date: new Date().toJSON(),
+          // date: new Date().toJSON(),
+          date: dateCheck,
+          id: randLetter + Date.now(),
+        },
+      ];
+      state.monthExpenses = [
+        ...state.monthExpenses,
+        {
+          catId: action.payload.catId,
+          value: action.payload.value,
+          dateString: fullDate,
+          // date: new Date().toJSON(),
+          date: dateCheck,
           id: randLetter + Date.now(),
         },
       ];
@@ -48,21 +130,47 @@ const expensesSlice = createSlice({
       // sprawdzenie czy catId dodanego wydatku istnieje?
       // znajdujemy index catId i dodajemy wartość do sumy:
       // tworzymy nowy object w array z wartoscią sum = action.payload.value
-      const catIdExists = state.categoriesExpenses
+      const catIdMonthExists = state.monthCategoriesExpenses
+        .map((category) => category.catId)
+        .includes(action.payload.catId);
+      const catIdWeekExists = state.weekCategoriesExpenses
         .map((category) => category.catId)
         .includes(action.payload.catId);
 
-      if (catIdExists) {
-        const categoryId = state.categoriesExpenses.find(
+      //tydzień
+      if (catIdWeekExists) {
+        const categoryIdWeek = state.weekCategoriesExpenses.find(
           (category) => category.catId === action.payload.catId
         );
-        const categoryIndex = state.categoriesExpenses.indexOf(categoryId!);
-        state.categoriesExpenses[categoryIndex].sum = state.categoriesExpenses[
-          categoryIndex
-        ].sum += Number(action.payload.value);
+        const categoryIndexWeek = state.weekCategoriesExpenses.indexOf(
+          categoryIdWeek!
+        );
+        state.weekCategoriesExpenses[categoryIndexWeek].sum =
+          state.weekCategoriesExpenses[categoryIndexWeek].sum += Number(
+            action.payload.value
+          );
       } else {
-        state.categoriesExpenses = [
-          ...state.categoriesExpenses,
+        state.weekCategoriesExpenses = [
+          ...state.weekCategoriesExpenses,
+          { catId: action.payload.catId, sum: Number(action.payload.value) },
+        ];
+      }
+
+      //miesiąc
+      if (catIdMonthExists) {
+        const categoryIdMonth = state.monthCategoriesExpenses.find(
+          (category) => category.catId === action.payload.catId
+        );
+        const categoryIndexMonth = state.monthCategoriesExpenses.indexOf(
+          categoryIdMonth!
+        );
+        state.monthCategoriesExpenses[categoryIndexMonth].sum =
+          state.monthCategoriesExpenses[categoryIndexMonth].sum += Number(
+            action.payload.value
+          );
+      } else {
+        state.monthCategoriesExpenses = [
+          ...state.monthCategoriesExpenses,
           { catId: action.payload.catId, sum: Number(action.payload.value) },
         ];
       }
@@ -105,12 +213,128 @@ const expensesSlice = createSlice({
       state.plannedExpenses = state.plannedExpenses.filter(
         (item) => item.catId !== action.payload.catId
       );
-      state.categoriesExpenses = state.categoriesExpenses.filter(
+      state.monthCategoriesExpenses = state.monthCategoriesExpenses.filter(
         (item) => item.catId !== action.payload.catId
       );
-      state.lastExpenses = state.lastExpenses.filter(
+      state.weekCategoriesExpenses = state.weekCategoriesExpenses.filter(
         (item) => item.catId !== action.payload.catId
       );
+      state.weekExpenses = state.weekExpenses.filter(
+        (item) => item.catId !== action.payload.catId
+      );
+      state.monthExpenses = state.monthExpenses.filter(
+        (item) => item.catId !== action.payload.catId
+      );
+    },
+    updateWeekExpenses: (state, action) => {
+      if (action.payload === "monthChange") {
+        state.weekExpenses = [];
+        state.weekCategoriesExpenses = [];
+        state.weekExpensesUpdated = false;
+      }
+      if (action.payload) {
+        state.weekExpenses = [];
+        state.weekCategoriesExpenses = [];
+        state.weekExpensesUpdated = action.payload;
+      }
+      if (!action.payload) {
+        state.weekExpensesUpdated = action.payload;
+      }
+    },
+    updateMonth: (state) => {
+      const day = new Date().getDate();
+      const month = new Date().getMonth() + 1;
+      const year = new Date().getFullYear();
+      const fullDate = `${day}.${month}.${year}`;
+      const monthToSet = new Date(state.monthExpenses[0].date).getMonth();
+      const randLetter = String.fromCharCode(
+        65 + Math.floor(Math.random() * 26)
+      );
+      const sumOfAllExpenses = state.monthCategoriesExpenses
+        .map((item) => Number(item.sum))
+        .reduce((partialSum, a) => partialSum + a, 0);
+      if (state.yearExpenses.length === 0) {
+        state.yearExpenses = [
+          {
+            month: monthToSet,
+            sumOfAllExpenses: sumOfAllExpenses,
+            categoriesExpenses: state.monthCategoriesExpenses.map((item) => ({
+              catId: item.catId,
+              sum: item.sum,
+              stillExsists: true,
+            })),
+          },
+        ];
+        state.monthExpenses = [];
+      } else if (state.yearExpenses.length > 0) {
+        state.yearExpenses = [
+          ...state.yearExpenses,
+          {
+            month: monthToSet,
+            sumOfAllExpenses: sumOfAllExpenses,
+            categoriesExpenses: state.monthCategoriesExpenses.map((item) => ({
+              catId: item.catId,
+              sum: item.sum,
+              stillExsists: true,
+            })),
+          },
+        ];
+        state.monthExpenses = [];
+      }
+      //wyzeruj wartości przychodów w tablicy z przychodami z aktualnego miesiąca
+      if (new Date(dateCheck).getMonth() === 0) {
+        // const yearToSet = new Date().getFullYear();
+        const yearToSet = new Date(dateCheck).getFullYear() - 1;
+        if (state.yearExpenses.length > 0) {
+          const sumOfAllExpenses = state.yearExpenses
+            .map((item) => Number(item.sumOfAllExpenses))
+            .reduce((partialSum, a) => partialSum + a, 0);
+          if (
+            state.yearsExpenses.length === 0 ||
+            state.yearsExpenses === undefined
+          ) {
+            state.yearsExpenses = [
+              {
+                year: yearToSet,
+                sumOfAllExpenses: sumOfAllExpenses,
+                months: state.yearExpenses,
+              },
+            ];
+          } else if (state.yearsExpenses.length > 0) {
+            state.yearsExpenses = [
+              ...state.yearsExpenses,
+              {
+                year: yearToSet,
+                sumOfAllExpenses: sumOfAllExpenses,
+                months: state.yearExpenses,
+              },
+            ];
+          }
+          state.monthCategoriesExpenses = state.monthCategoriesExpenses.map(
+            (item) => ({
+              catId: item.catId,
+              sum: 0,
+              // date: new Date().toJSON(),
+            })
+          );
+          const randLetter = String.fromCharCode(
+            65 + Math.floor(Math.random() * 26)
+          );
+          state.monthExpenses = [];
+          state.weekExpenses = [];
+          state.weekCategoriesExpenses = [];
+          //wyzeruj wartości przychodów w tablicy z przychodami z poprzedniego roku
+          state.yearExpenses = [];
+        }
+      } else {
+        state.monthCategoriesExpenses = state.monthCategoriesExpenses.map(
+          (item) => ({
+            catId: item.catId,
+            sum: 0,
+            // date: new Date().toJSON(),
+          })
+        );
+      }
     },
   },
 });
@@ -122,4 +346,6 @@ export const deleteAllExpensesFromCategory =
   expensesSlice.actions.deleteAllExpensesFromCategory;
 export const updatePlannedExpenseCategory =
   expensesSlice.actions.updatePlannedExpenseCategory;
+export const updateWeekExpenses = expensesSlice.actions.updateWeekExpenses;
+export const updateMonthExpenses = expensesSlice.actions.updateMonth;
 export default expensesSlice.reducer;

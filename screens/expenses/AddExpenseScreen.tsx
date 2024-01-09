@@ -19,8 +19,6 @@ const AddExpenseScreen: React.FC<{ navigation: Navigation }> = ({
 }) => {
   const dispatch = useAppDispatch();
   const categories = useAppSelector((state) => state.categories.categoriesList);
-  console.log(categories);
-  const expenses = useAppSelector((state) => state.expenses.categoriesExpenses);
   const [selectedCatId, setSelectedCatId] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [value, setValue] = useState("");
