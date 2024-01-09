@@ -6,12 +6,13 @@ import COLORS_STYLE from "../../utils/styles/colors";
 import { useAppSelector } from "../../redux/hooks";
 import YearIncomesBox from "../../components/incomes/yearsIncomes/YearIncomesBox";
 import SumBox from "../../components/SumBox";
+import GoldenFrame from "../../utils/ui/GoldenFrame";
 const YearsIncomesScreen = () => {
   const yearsIncomes = useAppSelector((state) => state.incomes.yearsIncomes);
   const sumOfAllIncomes = yearsIncomes
     .map((item) => Number(item.sumOfAllIncomes))
     .reduce((partialSum, a) => partialSum + a, 0);
-  console.log("YEARS_INCOMES", yearsIncomes);
+  // console.log("YEARS_INCOMES", yearsIncomes);
   return (
     <ScrollView style={styles.container}>
       {yearsIncomes.length === 0 && (
@@ -23,7 +24,7 @@ const YearsIncomesScreen = () => {
       )}
       {yearsIncomes.length > 0 && (
         <>
-          <SumBox sum={sumOfAllIncomes} />
+          <GoldenFrame name="SUMA" value={sumOfAllIncomes} />
           <View style={styles.yearChart}>
             <PieChart
               widthAndHeight={200}

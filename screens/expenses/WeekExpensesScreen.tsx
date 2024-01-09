@@ -13,6 +13,7 @@ import SumBox from "../../components/SumBox";
 import CustomButton from "../../utils/ui/CustomButton";
 import { Navigation } from "../../types/global";
 import AddCategoryButton from "../../components/expenses/AddCategoryButton";
+import GoldenFrame from "../../utils/ui/GoldenFrame";
 // import PieChartComponent from "../components/PieChartComponent";
 
 const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
@@ -82,7 +83,7 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   return (
     <View style={styles.container}>
       <ScrollView>
-        <SumBox sum={sumOfAllExpenses} />
+        <GoldenFrame name="SUMA" value={sumOfAllExpenses} />
         {sumOfAllExpenses === 0 && (
           <View style={styles.informationBox}>
             <CustomButton

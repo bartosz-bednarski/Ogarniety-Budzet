@@ -23,6 +23,7 @@ import {
 import { updateIncome } from "../../redux/incomes-slice";
 import SumBox from "../../components/SumBox";
 import { Navigation } from "../../types/global";
+import GoldenFrame from "../../utils/ui/GoldenFrame";
 const MonthIncomesScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {
@@ -89,7 +90,7 @@ const MonthIncomesScreen: React.FC<{ navigation: Navigation }> = ({
 
       {categories.length > 0 && (
         <>
-          <SumBox sum={sumOfMonthIncomes} />
+          <GoldenFrame name="SUMA" value={sumOfMonthIncomes} />
           <Text style={styles.label}>Kategorie przychodów</Text>
           <Modal
             animationType="slide"
