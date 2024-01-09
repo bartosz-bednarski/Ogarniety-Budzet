@@ -16,6 +16,7 @@ import AddCategoryButton from "../../components/expenses/AddCategoryButton";
 import MonthIncomesBox from "../../components/incomes/yearIncomes/MonthIncomesBox";
 import { MONTHS } from "../../utils/months";
 import MonthExpensesBox from "../../components/expenses/yearExpenses/MonthExpensesBox";
+import GoldenFrame from "../../utils/ui/GoldenFrame";
 MONTHS;
 // import PieChartComponent from "../components/PieChartComponent";
 
@@ -40,7 +41,7 @@ const YearExpensesScreen: React.FC<{ navigation: Navigation }> = ({
       )}
       {yearExpenses.length > 0 && (
         <>
-          <SumBox sum={sumOfAllExpenses} />
+          <GoldenFrame name="SUMA" value={sumOfAllExpenses} />
           <View style={styles.yearChart}>
             <PieChart
               widthAndHeight={200}

@@ -7,6 +7,7 @@ import pieChartColors from "../../utils/styles/pieChartColors";
 import { MONTHS } from "../../utils/months";
 import MonthIncomesBox from "../../components/incomes/yearIncomes/MonthIncomesBox";
 import SumBox from "../../components/SumBox";
+import GoldenFrame from "../../utils/ui/GoldenFrame";
 
 const YearIncomesScreen = () => {
   const yearIncomes = useAppSelector((state) => state.incomes.yearIncomes);
@@ -26,7 +27,7 @@ const YearIncomesScreen = () => {
       )}
       {yearIncomes.length > 0 && (
         <>
-          <SumBox sum={sumOfAllIncomes} />
+          <GoldenFrame name="SUMA" value={sumOfAllIncomes} />
           <View style={styles.yearChart}>
             <PieChart
               widthAndHeight={200}
