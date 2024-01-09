@@ -11,7 +11,7 @@ const AddCategoryButton: React.FC<{ onPress: () => void }> = ({ onPress }) => {
           size={30}
           color={COLORS_STYLE.basicGold}
         />
-        <Text style={styles.text}>Dodaj nową kategorie</Text>
+        <Text style={styles.text}>Dodaj nowy wydatek</Text>
       </Pressable>
     </View>
   );

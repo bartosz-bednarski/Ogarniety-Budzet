@@ -113,7 +113,7 @@ const incomesSlice = createSlice({
         .map((item) => Number(item.value))
         .reduce((partialSum, a) => partialSum + a, 0);
       //dodaj nowy miesiac z danymi z miesiaca do tablicy
-
+      //jezeli tablica z msc jest pusta dodajemy nowy miesiac, jezeli nie to robimy spread pozostalych i dodajemy nowy
       if (state.yearIncomes.length === 0) {
         state.yearIncomes = [
           {

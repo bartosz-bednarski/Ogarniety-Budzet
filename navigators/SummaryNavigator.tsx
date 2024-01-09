@@ -1,11 +1,17 @@
 import { Pressable } from "react-native";
-import SettingsNavigator from "./SettingsNavigator";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Ionicons } from "@expo/vector-icons";
-import SummaryScreen from "../screens/SummaryScreen";
+import IncomesScreen from "../screens/incomes/MonthIncomesScreen";
+import SettingsNavigator from "./SettingsNavigator";
 import COLORS_STYLE from "../utils/styles/colors";
+import IncomesTabNavigator from "./incomes/IncomesTabNavigator";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { useEffect } from "react";
+import { updateMonth, updateYear } from "../redux/incomes-slice";
+import SummaryTabNavigator from "./summary/SummaryTabNavigator";
 const SummaryNavigator = () => {
   const Stack = createNativeStackNavigator();
+
   return (
     <Stack.Navigator
       screenOptions={{
@@ -13,7 +19,7 @@ const SummaryNavigator = () => {
       }}
     >
       <Stack.Screen
-        component={SummaryScreen}
+        component={SummaryTabNavigator}
         name="summary"
         options={({ route, navigation }) => ({
           headerTintColor: COLORS_STYLE.basicGold,

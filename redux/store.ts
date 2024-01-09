@@ -12,9 +12,10 @@ import {
 } from "redux-persist";
 import podsumowanieSlice from "./podsumowanie-slice";
 import categoriesSlice from "./expensesCategories-slice";
-import expensesCategoriesSlice from "./expenses-slice";
+import expensesCategoriesSlice from "./expensesCategories-slice";
 import incomesCategoriesSlice from "./incomesCategories-slice";
 import incomesSlice from "./incomes-slice";
+import expensesSlice from "./expenses-slice";
 const persistConfig = {
   key: "root",
   storage: AsyncStorage,
@@ -22,7 +23,8 @@ const persistConfig = {
 const rootReducer = combineReducers({
   podsumowanie: podsumowanieSlice,
   categories: categoriesSlice,
-  expenses: expensesCategoriesSlice,
+  expensesCategories: expensesCategoriesSlice,
+  expenses: expensesSlice,
   incomesCategories: incomesCategoriesSlice,
   incomes: incomesSlice,
 });
