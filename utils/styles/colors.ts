@@ -4,6 +4,8 @@ const COLORS_STYLE = {
   tabGrey: "#3D3B3B",
   backgroundBlack: "#000000",
   yellow: "#D3BE00",
+  green: "#0FB734",
+  red: "#FF3D00",
 };
 
 export default COLORS_STYLE;

@@ -14,6 +14,8 @@ import CustomButton from "../../utils/ui/CustomButton";
 import { Navigation } from "../../types/global";
 import AddCategoryButton from "../../components/expenses/AddCategoryButton";
 import GoldenFrame from "../../utils/ui/GoldenFrame";
+import GreenFrame from "../../utils/ui/GreenFrame";
+import RedFrame from "../../utils/ui/RedFrame";
 // import PieChartComponent from "../components/PieChartComponent";
 
 const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
@@ -52,7 +54,7 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   const sumOfAllExpenses = categoriesExpenses
     .map((cat) => Number(cat.sum))
     .reduce((partialSum, a) => partialSum + a, 0);
-
+  const toSpend = sumOfPlannedExpenses - sumOfAllExpenses;
   const globalRealistationPieChartData = [
     sumOfPlannedExpenses !== 0
       ? Number(((sumOfAllExpenses / sumOfPlannedExpenses) * 100).toFixed(2))
@@ -84,6 +86,11 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
     <View style={styles.container}>
       <ScrollView>
         <GoldenFrame name="SUMA" value={sumOfAllExpenses} />
+        {toSpend > 0 ? (
+          <GreenFrame name="DO WYDANIA" value={toSpend} />
+        ) : (
+          <RedFrame name="DO WYDANIA" value={toSpend} />
+        )}
         {sumOfAllExpenses === 0 && (
           <View style={styles.informationBox}>
             <CustomButton
@@ -92,7 +99,6 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
             />
           </View>
         )}
-
         {sumOfAllExpenses > 0 && (
           <>
             <Text style={styles.label}>Zestawienie wydatków</Text>
@@ -114,7 +120,7 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
                       (item) => item.color
                     )}
                     coverRadius={0.45}
-                    coverFill={COLORS_STYLE.tabGrey}
+                    coverFill={COLORS_STYLE.backgroundBlack}
                   />
 
                   <View style={styles.legend}>
@@ -160,19 +166,22 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
             </View>
           </>
         )}
-
         {lastExpensesToShow.length > 0 && (
           <>
             <Text style={styles.label}>Lista ostatnich wydatków</Text>
             <View style={styles.lastExpensesContainer}>
-              {lastExpensesToShow.map((item) => (
-                <LastExpenseItemBox
-                  iconName={item.iconName!}
-                  price={item.value}
-                  date={item.dateString}
-                  key={item.id}
-                />
-              ))}
+              {lastExpensesToShow.map((item) => {
+                if (item.value !== 0) {
+                  return (
+                    <LastExpenseItemBox
+                      iconName={item.iconName!}
+                      price={item.value}
+                      date={item.dateString}
+                      key={item.id}
+                    />
+                  );
+                }
+              })}
             </View>
           </>
         )}
@@ -209,8 +218,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: COLORS_STYLE.tabGrey,
-    height: 300,
+    height: "auto",
     width: "100%",
     padding: 10,
     borderRadius: 10,

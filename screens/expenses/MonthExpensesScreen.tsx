@@ -113,7 +113,7 @@ const MonthExpensesScreen: React.FC<{ navigation: Navigation }> = ({
                       (item) => item.color
                     )}
                     coverRadius={0.45}
-                    coverFill={COLORS_STYLE.tabGrey}
+                    coverFill={COLORS_STYLE.backgroundBlack}
                   />
 
                   <View style={styles.legend}>
@@ -192,8 +192,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: COLORS_STYLE.tabGrey,
-    height: 300,
+    height: "auto",
     width: "100%",
     padding: 10,
     borderRadius: 10,
@@ -216,6 +215,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     height: "auto",
     justifyContent: "center",
+    paddingBottom: 30,
   },
   lastExpensesContainer: {
     justifyContent: "center",
