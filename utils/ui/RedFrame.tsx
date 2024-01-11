@@ -2,7 +2,7 @@ import { View, Text, StyleSheet } from "react-native";
 import COLORS_STYLE from "../styles/colors";
 import { numberWithSpaces } from "../numberWithSpaces";
 
-const GoldenFrame: React.FC<{ value: number; name: string }> = ({
+const RedFrame: React.FC<{ value: number; name: string }> = ({
   value,
   name,
 }) => {
@@ -10,8 +10,8 @@ const GoldenFrame: React.FC<{ value: number; name: string }> = ({
   return (
     <View style={styles.container}>
       <View style={styles.box}>
-        <Text style={styles.textWhite}>{name}</Text>
-        <Text style={styles.textGold}>{valueWithSpaces} PLN</Text>
+        <Text style={styles.textRed}>{name}</Text>
+        <Text style={styles.textRed}>{valueWithSpaces} PLN</Text>
       </View>
     </View>
   );
@@ -21,10 +21,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
-    marginVertical: 10,
+    marginVertical: 5,
   },
   box: {
-    borderColor: COLORS_STYLE.basicGold,
+    borderColor: COLORS_STYLE.red,
     borderWidth: 1,
     paddingHorizontal: 20,
     paddingVertical: 5,
@@ -33,18 +33,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "60%",
   },
-  textWhite: {
+
+  textRed: {
     fontSize: 16,
-    color: "white",
-    textAlign: "center",
-    fontWeight: "600",
-  },
-  textGold: {
-    fontSize: 16,
-    color: COLORS_STYLE.basicGold,
+    color: COLORS_STYLE.red,
     textAlign: "center",
     fontWeight: "600",
   },
 });
 
-export default GoldenFrame;
+export default RedFrame;

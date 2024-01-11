@@ -4,6 +4,7 @@ import GrayBox from "../../components/expenses/GrayBox";
 import { useAppSelector } from "../../redux/hooks";
 import PieChart from "react-native-pie-chart";
 import GoldenFrame from "../../utils/ui/GoldenFrame";
+import PiggyIcon from "../../utils/ui/PiggyIcon";
 const MonthSummaryScreen = () => {
   const expenses = useAppSelector(
     (state) => state.expenses.monthCategoriesExpenses
@@ -41,6 +42,7 @@ const MonthSummaryScreen = () => {
       </View>
       <GoldenFrame name="ZOSTAŁO" value={moneyLeft} />
       <Text style={styles.text}>Miesiąc</Text>
+      <PiggyIcon style={{ color: "red" }} />
     </View>
   );
 };
