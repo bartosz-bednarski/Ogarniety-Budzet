@@ -150,6 +150,9 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
                 coverFill={COLORS_STYLE.backgroundBlack}
               />
             </View>
+            <Text style={styles.whiteText}>
+              {sumOfAllExpenses} / {sumOfPlannedExpenses} PLN
+            </Text>
             <Text style={styles.label}>
               Realizacja wydatków w poszczególnych kategoriach
             </Text>
@@ -212,6 +215,13 @@ const styles = StyleSheet.create({
   label: {
     color: COLORS_STYLE.labelGrey,
     fontSize: 10,
+    marginVertical: 10,
+  },
+  whiteText: {
+    color: "white",
+    width: "100%",
+    textAlign: "center",
+    fontSize: 20,
     marginVertical: 10,
   },
   expensesCategories: {

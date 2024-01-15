@@ -1,9 +1,9 @@
 import { Pressable } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Ionicons } from "@expo/vector-icons";
-import PiggyBankScreen from "../screens/PiggyBankScreen";
 import SettingsNavigator from "./SettingsNavigator";
 import COLORS_STYLE from "../utils/styles/colors";
+import PiggyBankTabNavigator from "./piggyBank/PiggyBankTabNavigator";
 const PiggyBankNavigator = () => {
   const Stack = createNativeStackNavigator();
   return (
@@ -13,13 +13,13 @@ const PiggyBankNavigator = () => {
       }}
     >
       <Stack.Screen
-        component={PiggyBankScreen}
+        component={PiggyBankTabNavigator}
         name="piggyBank"
-        options={({ route, navigation }) => ({
+        options={({ navigation }) => ({
           headerTintColor: COLORS_STYLE.basicGold,
           headerPressColor: COLORS_STYLE.basicGold,
           headerPressOpacity: 1,
-          headerTitle: "Skarbonka",
+          headerTitle: "Oszczędności",
           headerTitleAlign: "center",
           headerRight: () => {
             return (
