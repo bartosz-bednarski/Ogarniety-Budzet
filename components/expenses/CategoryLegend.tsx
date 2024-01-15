@@ -9,7 +9,7 @@ const CategoryLegend: React.FC<{
     <View style={styles.container}>
       {categoriesExpensesWithNames.map((item) => {
         return (
-          <View style={styles.boxItem}>
+          <View style={styles.boxItem} key={item.catId}>
             <Text style={styles.value}>{item.sum} PLN</Text>
             <Ionicons name={item.iconName} color={item.color} size={20} />
             <Text style={styles.text}>{item.name}</Text>

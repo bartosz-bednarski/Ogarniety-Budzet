@@ -77,10 +77,10 @@ export default function App() {
               />
               <BottomTabs.Screen
                 component={PiggyBankNavigator}
-                name="Skarbonka"
+                name="Oszczędności"
                 options={{
                   tabBarIcon: ({ color, size }) => (
-                    <Ionicons name="gift" color={color} size={size} />
+                    <Ionicons name="wallet" color={color} size={size} />
                   ),
                 }}
               />
