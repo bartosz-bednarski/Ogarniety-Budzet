@@ -28,7 +28,7 @@ const ExpensesNavigator = () => {
   useEffect(() => {
     //Test
     // console.log(categoriesIncomes);
-    let currentDay = 3;
+    let currentDay = 10;
     // console.log("$$$$$$$$$$$$$$$$$$$$$$$$$", categoriesExpenses);
     if (weekExpenses.length > 0) {
       // console.log("update?", weekExpensesUpdated);

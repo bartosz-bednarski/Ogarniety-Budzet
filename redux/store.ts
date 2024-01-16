@@ -16,6 +16,7 @@ import expensesCategoriesSlice from "./expensesCategories-slice";
 import incomesCategoriesSlice from "./incomesCategories-slice";
 import incomesSlice from "./incomes-slice";
 import expensesSlice from "./expenses-slice";
+import piggyBankSlice from "./piggyBank-slice";
 const persistConfig = {
   key: "root",
   storage: AsyncStorage,
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
   expenses: expensesSlice,
   incomesCategories: incomesCategoriesSlice,
   incomes: incomesSlice,
+  piggyBank: piggyBankSlice,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 export const store = configureStore({

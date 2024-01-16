@@ -74,6 +74,7 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
       })
     );
   }, [plannedExpenses, categoriesExpenses]);
+  console.log(categoriesExpensesWithNames);
   // console.log("lastExp", lastExpensesToShow);
   // console.log(currentCategoryRealistationPieChartData);
   // console.log("categoriesExpenses", categoriesExpenses);
