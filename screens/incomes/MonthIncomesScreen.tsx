@@ -34,7 +34,9 @@ const MonthIncomesScreen: React.FC<{ navigation: Navigation }> = ({
   const categoriesIncomes = useAppSelector(
     (state) => state.incomes.categoriesIncomes
   );
-
+  const bankAccountStatus = useAppSelector(
+    (state) => state.piggyBank.bankAccountStatus
+  );
   const sumOfMonthIncomes = categoriesIncomes
     .map((item) => Number(item.value))
     .reduce((partialSum, a) => partialSum + a, 0);
@@ -87,8 +89,15 @@ const MonthIncomesScreen: React.FC<{ navigation: Navigation }> = ({
           />
         </View>
       )}
-
-      {categories.length > 0 && (
+      {bankAccountStatus === 0 && categoriesIncomes.length > 0 && (
+        <View style={styles.buttonBox}>
+          <CustomButton
+            title="Uzupełnij stan konta"
+            onPress={() => navigation.navigate("Oszczędności")}
+          />
+        </View>
+      )}
+      {categories.length > 0 && bankAccountStatus > 0 && (
         <>
           <GoldenFrame name="SUMA" value={sumOfMonthIncomes} />
           <Text style={styles.label}>Kategorie przychodów</Text>
@@ -176,6 +185,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 24,
     color: "white",
+  },
+  buttonBox: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: 10,
   },
   container: {
     flex: 1,

@@ -6,7 +6,13 @@ type IncomesCategoriesInitialStateType = {
 };
 
 const incomesCategoriesInitialState: IncomesCategoriesInitialStateType = {
-  categoriesList: [],
+  categoriesList: [
+    {
+      catId: "#DIFFINCOMES",
+      iconName: "star",
+      name: "Inne",
+    },
+  ],
 };
 
 const incomesCategoriesSlice = createSlice({
