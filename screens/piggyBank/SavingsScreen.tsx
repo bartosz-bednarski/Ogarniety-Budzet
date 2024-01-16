@@ -1,32 +1,17 @@
-import {
-  FlatList,
-  Text,
-  View,
-  Modal,
-  Alert,
-  TextInput,
-  StyleSheet,
-} from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import COLORS_STYLE from "../../utils/styles/colors";
 import { Navigation } from "../../types/global";
 import GoldenFrame from "../../utils/ui/GoldenFrame";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import CustomButton from "../../utils/ui/CustomButton";
 import { useState } from "react";
-import { setBankAccountStatus } from "../../redux/piggyBank-slice";
 import PieChart from "react-native-pie-chart";
 import { numberWithSpaces } from "../../utils/numberWithSpaces";
-import { setIncome, updateIncome } from "../../redux/incomes-slice";
-import {
-  addExpense,
-  addPlannedExpense,
-  setExpense,
-  setPlannedExpense,
-} from "../../redux/expenses-slice";
+
+import CustomModal from "../../components/piggyBank/savings/CustomModal";
 const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {
-  const dispatch = useAppDispatch();
   const bankAccountStatus = useAppSelector(
     (state) => state.piggyBank.bankAccountStatus
   );
@@ -39,6 +24,7 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
   const categoriesExpenses = useAppSelector(
     (state) => state.expenses.monthCategoriesExpenses
   );
+  const yearSavings = useAppSelector((state) => state.piggyBank.yearSavings);
   let monthIncomesSum;
   let bankAccountPlusIncomes;
   let monthExpensesSum;
@@ -65,59 +51,7 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
     totalBankAccount = bankAccountStatus;
   }
   const [modalVisible, setModalVisible] = useState(false);
-  const [bankAccountInput, setBankAccountInput] = useState("");
-  const [incomesInput, setIncomesInput] = useState("");
-  const submitHandler = () => {
-    if (
-      Number(bankAccountInput) > 0 &&
-      Number(incomesInput) === 0 &&
-      bankAccountInput.length > 0 &&
-      incomesInput.length > 0
-    ) {
-      dispatch(setBankAccountStatus(bankAccountInput));
-      setModalVisible(false);
-    } else if (
-      Number(bankAccountInput) > 0 &&
-      Number(incomesInput) > 0 &&
-      bankAccountInput.length > 0 &&
-      incomesInput.length > 0 &&
-      Number(incomesInput) > Number(bankAccountInput)
-    ) {
-      const difference = Number(incomesInput) - Number(bankAccountInput) + 1;
-      const income = Number(incomesInput);
-      dispatch(setBankAccountStatus(1));
-      dispatch(setIncome({ catId: "#DIFFINCOMES" }));
-      dispatch(
-        updateIncome({ catId: categoriesIncomes[0].catId, value: income })
-      );
-      // dispatch(setExpense("#DIFFEXPENSES"));
-      dispatch(
-        setPlannedExpense({
-          catId: "#DIFFEXPENSES",
-          iconName: "star",
-          name: "Inne",
-        })
-      );
-      dispatch(
-        addPlannedExpense({ catId: "#DIFFEXPENSES", value: difference })
-      );
-      dispatch(addExpense({ catId: "#DIFFEXPENSES", value: difference }));
-      setModalVisible(false);
-    } else if (
-      Number(bankAccountInput) > 0 &&
-      Number(incomesInput) > 0 &&
-      bankAccountInput.length > 0 &&
-      incomesInput.length > 0 &&
-      Number(bankAccountInput) > Number(incomesInput)
-    ) {
-      const difference = Number(bankAccountInput) - Number(incomesInput);
-      const income = Number(incomesInput);
-      dispatch(setBankAccountStatus(difference));
-      dispatch(setIncome({ catId: "#DIFFINCOMES" }));
-      dispatch(updateIncome({ catId: "#DIFFINCOMES", value: income }));
-      setModalVisible(false);
-    }
-  };
+
   console.log(bankAccountStatus);
   return (
     <View style={styles.container}>
@@ -145,47 +79,6 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
         <GoldenFrame name="STAN KONTA" value={totalBankAccount} />
       )}
 
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert("Dane nie zostały zapisane!");
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={styles.modalLayout}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalHeader}>Uzupełnij dane</Text>
-            <Text style={styles.modalLabel}>
-              Podaj swój stan konta na dzień dzisiejszy
-            </Text>
-            <TextInput
-              style={styles.textInput}
-              value={bankAccountInput}
-              onChangeText={(text) => setBankAccountInput(text)}
-              keyboardType="numeric"
-              maxLength={10}
-            />
-
-            <Text style={styles.modalLabel}>
-              Podaj kwotę przychodów uzyskanych w tym miesiącu
-            </Text>
-            <TextInput
-              style={styles.textInput}
-              value={incomesInput}
-              onChangeText={(text) => setIncomesInput(text)}
-              keyboardType="numeric"
-              maxLength={10}
-            />
-            <Text style={styles.modalInfo}>
-              Jeżeli nie uzyskałeś jeszcze przychodów w tym miesiącu wpisz 0. Po
-              ich otrzymaniu wprowadź kwotę w zakładce "Przychody".
-            </Text>
-            <CustomButton title="Zatwierdź" onPress={submitHandler} />
-          </View>
-        </View>
-      </Modal>
       {bankAccountStatus > 0 && (
         <>
           <Text style={styles.label}> Udziały w oszczędnościach</Text>
@@ -208,6 +101,11 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
           </View>
         </>
       )}
+      <Text style={styles.label}>Oszczędności w poszczególnych miesiącach</Text>
+      <CustomModal
+        modalVisible={modalVisible}
+        setModalVisible={(value) => setModalVisible(value)}
+      />
     </View>
   );
 };
@@ -228,57 +126,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginVertical: 10,
   },
-  modalLayout: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#0000006b",
-  },
-  modalView: {
-    margin: 20,
-    width: "90%",
-    backgroundColor: "#dddbdb",
-    borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  modalHeader: {
-    fontSize: 24,
-    marginBottom: 10,
-    fontWeight: "600",
-  },
-  modalLabel: {
-    fontSize: 12,
-    marginBottom: 10,
-    textAlign: "left",
-    width: "100%",
-    marginLeft: 5,
-  },
-  modalInfo: {
-    fontSize: 12,
-    marginBottom: 20,
-    textAlign: "center",
-  },
-  textInput: {
-    backgroundColor: "white",
-    borderColor: "black",
-    borderWidth: 1,
-    width: "100%",
-    borderRadius: 10,
-    height: 50,
-    paddingVertical: 5,
-    paddingHorizontal: 5,
-    color: "black",
-    marginBottom: 20,
-  },
+
   label: {
     color: COLORS_STYLE.labelGrey,
     fontSize: 10,
