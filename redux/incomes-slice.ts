@@ -36,7 +36,7 @@ const incomesInitialState: IncomesInitialState = {
   yearIncomes: [],
   yearsIncomes: [],
 };
-const dateCheck = "2024-02-10T08:06:22.626Z";
+const dateCheck = "2025-05-10T08:06:22.626Z";
 const incomesSlice = createSlice({
   name: "incomes",
   initialState: incomesInitialState,
@@ -192,33 +192,6 @@ const incomesSlice = createSlice({
         }));
       }
     },
-    updateYear: (state) => {
-      // const yearToSet = new Date().getFullYear() - 1;
-      // const sumOfAllIncomes = state.yearIncomes
-      //   .map((item) => Number(item.sumOfAllIncomes))
-      //   .reduce((partialSum, a) => partialSum + a, 0);
-      // if (state.yearsIncomes.length === 0 || state.yearIncomes === undefined) {
-      //   console.log("!!!!!!!!!!!!!!!!!!!!!!!!");
-      //   state.yearsIncomes = [
-      //     {
-      //       year: yearToSet,
-      //       sumOfAllIncomes: sumOfAllIncomes,
-      //       months: state.yearIncomes,
-      //     },
-      //   ];
-      // } else if (state.yearsIncomes.length > 0) {
-      //   state.yearsIncomes = [
-      //     ...state.yearsIncomes,
-      //     {
-      //       year: yearToSet,
-      //       sumOfAllIncomes: sumOfAllIncomes,
-      //       months: state.yearIncomes,
-      //     },
-      //   ];
-      // }
-      // //wyzeruj wartości przychodów w tablicy z przychodami z poprzedniego roku
-      // state.yearIncomes = [];
-    },
   },
 });
 
@@ -226,5 +199,4 @@ export const setIncome = incomesSlice.actions.setIncome;
 export const updateIncome = incomesSlice.actions.updateIncome;
 export const deleteIncome = incomesSlice.actions.deleteIncome;
 export const updateMonth = incomesSlice.actions.updateMonth;
-export const updateYear = incomesSlice.actions.updateYear;
 export default incomesSlice.reducer;

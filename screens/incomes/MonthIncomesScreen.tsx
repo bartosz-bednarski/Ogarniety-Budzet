@@ -77,19 +77,7 @@ const MonthIncomesScreen: React.FC<{ navigation: Navigation }> = ({
   // console.log(categoriesIncomesWithNames);
   return (
     <ScrollView style={styles.container}>
-      {categories.length === 0 && (
-        <View style={styles.informationBox}>
-          <CustomButton
-            title="Dodaj kategorie przychodów"
-            onPress={() =>
-              navigation.navigate("settingsNavigator", {
-                screen: "addNewIncomesCategory",
-              })
-            }
-          />
-        </View>
-      )}
-      {bankAccountStatus === 0 && categoriesIncomes.length > 0 && (
+      {bankAccountStatus === 0 && (
         <View style={styles.buttonBox}>
           <CustomButton
             title="Uzupełnij stan konta"

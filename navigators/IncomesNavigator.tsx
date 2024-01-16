@@ -7,24 +7,37 @@ import COLORS_STYLE from "../utils/styles/colors";
 import IncomesTabNavigator from "./incomes/IncomesTabNavigator";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { useEffect } from "react";
-import { updateMonth, updateYear } from "../redux/incomes-slice";
+import { updateMonth } from "../redux/incomes-slice";
+import { updateMonthPiggyBank } from "../redux/piggyBank-slice";
+import {
+  updateWeekExpenses,
+  updateMonthExpenses,
+} from "../redux/expenses-slice";
 const IncomesNavigator = () => {
   const Stack = createNativeStackNavigator();
   const categoriesIncomes = useAppSelector(
     (state) => state.incomes.categoriesIncomes
   );
   const dispatch = useAppDispatch();
-  //useEffect do sprawdzania czy miesiąc uległ zmianie, jeżeli tak to wprowadzenie zmian w reduxie w danych
-  useEffect(() => {
+  const weekExpenses = useAppSelector((state) => state.expenses.weekExpenses);
+  const weekExpensesUpdated = useAppSelector(
+    (state) => state.expenses.weekExpensesUpdated
+  );
+  const categoriesExpenses = useAppSelector(
+    (state) => state.expenses.monthExpenses
+  );
+  // const yearSavings = useAppSelector((state) => state.piggyBank.yearsSavings);
+  // console.log(yearSavings);
+  const dateChangeHandler = async () => {
     //Test
-    // console.log(categoriesIncomes);
+    let currentDay = 10;
+    let currentMonth = 4;
+
+    //INCOMES
     if (categoriesIncomes.length > 0) {
       //if jest po to żeby kod się nie  wysypał jak nie ma zdefiniowanych żadnych wydatków
       //Tak powinno być:
       // const currentMonth = new Date().getMonth();
-
-      let currentMonth = 1;
-
       const monthOfLatestIncome = new Date(
         categoriesIncomes[0].date
       ).getMonth();
@@ -33,12 +46,49 @@ const IncomesNavigator = () => {
         currentMonth > monthOfLatestIncome ||
         (currentMonth === 0 && monthOfLatestIncome === 11)
       ) {
+        const sumOfMonthIncomes = categoriesIncomes
+          .map((item) => Number(item.value))
+          .reduce((partialSum, a) => partialSum + a, 0);
+        const sumOfMonthExpenses = categoriesExpenses
+          .map((item) => Number(item.value))
+          .reduce((partialSum, a) => partialSum + a, 0);
+        const savings = Number(sumOfMonthIncomes) - Number(sumOfMonthExpenses);
+        console.log("SAVINGS", savings);
+        dispatch(
+          updateMonthPiggyBank({
+            month: monthOfLatestIncome,
+            savings: savings,
+          })
+        );
         dispatch(updateMonth());
-        // console.log("zmiana miesiąca");
-      } else {
-        console.log("miesiąc zostaje");
       }
     }
+
+    //EXPENSES
+    if (weekExpenses.length > 0) {
+      if (currentDay === 1 && !weekExpensesUpdated) {
+        dispatch(updateWeekExpenses(true));
+      }
+      if (currentDay !== 1 && weekExpensesUpdated) {
+        dispatch(updateWeekExpenses(false));
+      }
+    }
+    if (categoriesExpenses.length > 0) {
+      const monthOfLatestIncome = new Date(
+        categoriesExpenses[0].date
+      ).getMonth();
+      if (
+        currentMonth > monthOfLatestIncome ||
+        (currentMonth === 0 && monthOfLatestIncome === 11)
+      ) {
+        dispatch(updateMonthExpenses());
+        dispatch(updateWeekExpenses("monthChange"));
+      }
+    }
+  };
+  //useEffect do sprawdzania czy miesiąc uległ zmianie, jeżeli tak to wprowadzenie zmian w reduxie w danych
+  useEffect(() => {
+    dateChangeHandler();
   }, []);
   return (
     <Stack.Navigator

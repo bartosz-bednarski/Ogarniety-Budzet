@@ -52,7 +52,7 @@ const expensesInitialState: ExpensesInitialState = {
   plannedExpenses: [],
   weekExpensesUpdated: false,
 };
-const dateCheck = "2024-02-10T08:06:22.626Z";
+const dateCheck = "2025-05-10T08:06:22.626Z";
 const expensesSlice = createSlice({
   name: "expenses",
   initialState: expensesInitialState,

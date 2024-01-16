@@ -29,6 +29,9 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
     (state) => state.expenses.plannedExpenses
   );
   const weekExpenses = useAppSelector((state) => state.expenses.weekExpenses);
+  const bankAccountStatus = useAppSelector(
+    (state) => state.piggyBank.bankAccountStatus
+  );
   // console.log(weekExpenses);
   const categoriesExpensesWithNames: CategoriesExpensesWithNames =
     categoriesExpenses.map((category, index) => ({
@@ -85,112 +88,128 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   // console.log(((sumOfAllExpenses / sumOfPlannedExpenses) * 100).toFixed(2));
   return (
     <View style={styles.container}>
-      <ScrollView>
-        <GoldenFrame name="SUMA" value={sumOfAllExpenses} />
-        {toSpend > 0 ? (
-          <GreenFrame name="DO WYDANIA" value={toSpend} />
-        ) : (
-          <RedFrame name="DO WYDANIA" value={toSpend} />
-        )}
-        {sumOfAllExpenses === 0 && (
-          <View style={styles.informationBox}>
-            <CustomButton
-              title="Dodaj wydatek"
-              onPress={() => navigation.navigate("addExpense")}
-            />
-          </View>
-        )}
-        {sumOfAllExpenses > 0 && (
-          <>
-            <Text style={styles.label}>Zestawienie wydatków</Text>
-            <Pressable
-              style={styles.expensesCategories}
-              onPress={() => setShowLegend(!showLegend)}
-            >
-              {showLegend && (
-                <CategoryLegend
-                  categoriesExpensesWithNames={categoriesExpensesWithNames}
+      {bankAccountStatus === 0 && (
+        <View style={styles.buttonBox}>
+          <CustomButton
+            title="Uzupełnij stan konta"
+            onPress={() => navigation.navigate("Oszczędności")}
+          />
+        </View>
+      )}
+      {bankAccountStatus > 0 && (
+        <>
+          <ScrollView>
+            <GoldenFrame name="SUMA" value={sumOfAllExpenses} />
+            {toSpend > 0 ? (
+              <GreenFrame name="DO WYDANIA" value={toSpend} />
+            ) : (
+              <RedFrame name="DO WYDANIA" value={toSpend} />
+            )}
+            {sumOfAllExpenses === 0 && (
+              <View style={styles.informationBox}>
+                <CustomButton
+                  title="Dodaj wydatek"
+                  onPress={() => navigation.navigate("addExpense")}
                 />
-              )}
-              {!showLegend && (
-                <>
+              </View>
+            )}
+            {sumOfAllExpenses > 0 && (
+              <>
+                <Text style={styles.label}>Zestawienie wydatków</Text>
+                <Pressable
+                  style={styles.expensesCategories}
+                  onPress={() => setShowLegend(!showLegend)}
+                >
+                  {showLegend && (
+                    <CategoryLegend
+                      categoriesExpensesWithNames={categoriesExpensesWithNames}
+                    />
+                  )}
+                  {!showLegend && (
+                    <>
+                      <PieChart
+                        widthAndHeight={200}
+                        series={categoriesExpensesWithNames.map(
+                          (item) => item.sum
+                        )}
+                        sliceColor={categoriesExpensesWithNames.map(
+                          (item) => item.color
+                        )}
+                        coverRadius={0.45}
+                        coverFill={COLORS_STYLE.backgroundBlack}
+                      />
+
+                      <View style={styles.legend}>
+                        {categoriesExpensesWithNames.map((item) => (
+                          <Ionicons
+                            name={item.iconName}
+                            color={item.color}
+                            size={24}
+                            key={item.catId}
+                          />
+                        ))}
+                      </View>
+                    </>
+                  )}
+                </Pressable>
+              </>
+            )}
+            {sumOfAllExpenses > 0 && (
+              <>
+                <Text style={styles.label}>Realizacja założeń wydatków</Text>
+                <View style={styles.globalRealistationPieChart}>
                   <PieChart
                     widthAndHeight={200}
-                    series={categoriesExpensesWithNames.map((item) => item.sum)}
-                    sliceColor={categoriesExpensesWithNames.map(
-                      (item) => item.color
-                    )}
+                    series={globalRealistationPieChartData}
+                    sliceColor={["red", "green"]}
                     coverRadius={0.45}
                     coverFill={COLORS_STYLE.backgroundBlack}
                   />
-
-                  <View style={styles.legend}>
-                    {categoriesExpensesWithNames.map((item) => (
-                      <Ionicons
-                        name={item.iconName}
-                        color={item.color}
-                        size={24}
-                        key={item.catId}
-                      />
-                    ))}
-                  </View>
-                </>
-              )}
-            </Pressable>
-          </>
-        )}
-        {sumOfAllExpenses > 0 && (
-          <>
-            <Text style={styles.label}>Realizacja założeń wydatków</Text>
-            <View style={styles.globalRealistationPieChart}>
-              <PieChart
-                widthAndHeight={200}
-                series={globalRealistationPieChartData}
-                sliceColor={["red", "green"]}
-                coverRadius={0.45}
-                coverFill={COLORS_STYLE.backgroundBlack}
-              />
-            </View>
-            <Text style={styles.whiteText}>
-              {sumOfAllExpenses} / {sumOfPlannedExpenses} PLN
-            </Text>
-            <Text style={styles.label}>
-              Realizacja wydatków w poszczególnych kategoriach
-            </Text>
-            <View style={styles.categoryExpenseBox}>
-              {currentCategoryRealistationPieChartData.map((item) => (
-                <CategoryPieChart
-                  plannedExpense={Number(item.value)}
-                  realExpense={item.sum}
-                  key={item.catId}
-                  iconName={item.iconName}
-                  name={String(item.name)}
-                />
-              ))}
-            </View>
-          </>
-        )}
-        {lastExpensesToShow.length > 0 && (
-          <>
-            <Text style={styles.label}>Lista ostatnich wydatków</Text>
-            <View style={styles.lastExpensesContainer}>
-              {lastExpensesToShow.map((item) => {
-                if (item.value !== 0) {
-                  return (
-                    <LastExpenseItemBox
-                      iconName={item.iconName!}
-                      price={item.value}
-                      date={item.dateString}
-                      key={item.id}
+                </View>
+                <Text style={styles.whiteText}>
+                  {sumOfAllExpenses} / {sumOfPlannedExpenses} PLN
+                </Text>
+                <Text style={styles.label}>
+                  Realizacja wydatków w poszczególnych kategoriach
+                </Text>
+                <View style={styles.categoryExpenseBox}>
+                  {currentCategoryRealistationPieChartData.map((item) => (
+                    <CategoryPieChart
+                      plannedExpense={Number(item.value)}
+                      realExpense={item.sum}
+                      key={item.catId}
+                      iconName={item.iconName}
+                      name={String(item.name)}
                     />
-                  );
-                }
-              })}
-            </View>
-          </>
-        )}
-      </ScrollView>
-      <AddCategoryButton onPress={() => navigation.navigate("addExpense")} />
+                  ))}
+                </View>
+              </>
+            )}
+            {lastExpensesToShow.length > 0 && (
+              <>
+                <Text style={styles.label}>Lista ostatnich wydatków</Text>
+                <View style={styles.lastExpensesContainer}>
+                  {lastExpensesToShow.map((item) => {
+                    if (item.value !== 0) {
+                      return (
+                        <LastExpenseItemBox
+                          iconName={item.iconName!}
+                          price={item.value}
+                          date={item.dateString}
+                          key={item.id}
+                        />
+                      );
+                    }
+                  })}
+                </View>
+              </>
+            )}
+          </ScrollView>
+          <AddCategoryButton
+            onPress={() => navigation.navigate("addExpense")}
+          />
+        </>
+      )}
     </View>
   );
 };
@@ -206,7 +225,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     backgroundColor: COLORS_STYLE.backgroundBlack,
   },
-
+  buttonBox: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: 10,
+  },
   sumOfExpenses: {
     fontSize: 30,
     fontWeight: "600",
