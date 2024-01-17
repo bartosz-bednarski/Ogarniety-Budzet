@@ -9,6 +9,7 @@ import PieChart from "react-native-pie-chart";
 import { numberWithSpaces } from "../../utils/numberWithSpaces";
 
 import CustomModal from "../../components/piggyBank/savings/CustomModal";
+import SavingsInMonthsGreyFrame from "../../components/piggyBank/savings/SavingsInMonthsGreyFrame";
 const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {
@@ -25,6 +26,7 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
     (state) => state.expenses.monthCategoriesExpenses
   );
   const yearSavings = useAppSelector((state) => state.piggyBank.yearSavings);
+  console.log(yearSavings);
   let monthIncomesSum;
   let bankAccountPlusIncomes;
   let monthExpensesSum;
@@ -75,12 +77,10 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
           />
         </View>
       )}
-      {bankAccountStatus > 0 && (
-        <GoldenFrame name="STAN KONTA" value={totalBankAccount} />
-      )}
 
       {bankAccountStatus > 0 && (
         <>
+          <GoldenFrame name="STAN KONTA" value={totalBankAccount} />
           <Text style={styles.label}> Udziały w oszczędnościach</Text>
           <View style={styles.greyBoxContainer}>
             <PieChart
@@ -102,6 +102,7 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
         </>
       )}
       <Text style={styles.label}>Oszczędności w poszczególnych miesiącach</Text>
+      <SavingsInMonthsGreyFrame yearSavings={yearSavings} />
       <CustomModal
         modalVisible={modalVisible}
         setModalVisible={(value) => setModalVisible(value)}

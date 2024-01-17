@@ -31,7 +31,7 @@ const IncomesNavigator = () => {
   const dateChangeHandler = async () => {
     //Test
     let currentDay = 10;
-    let currentMonth = 4;
+    let currentMonth = 5;
 
     //INCOMES
     if (categoriesIncomes.length > 0) {

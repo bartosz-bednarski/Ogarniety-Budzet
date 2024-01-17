@@ -1,24 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { PiggyBankInitialState } from "../types/piggyBank";
 
-type MonthSavings = { month: string; savings: Number };
-type YearSavings = {
-  year: number;
-  sumOfSavings: number;
-  months: MonthSavings[];
-};
-type PiggyBankInitialState = {
-  bankAccountStatus: number;
-  finantialTargets: {}[];
-  yearSavings: MonthSavings[];
-  yearsSavings: YearSavings[];
-};
 const piggyBankInitialState: PiggyBankInitialState = {
   bankAccountStatus: 0,
-  finantialTargets: [{}],
+  finantialTargets: [],
   yearSavings: [],
   yearsSavings: [],
 };
-const dateCheck = "2025-05-10T08:06:22.626Z";
+const dateCheck = "2025-06-10T08:06:22.626Z";
 const piggyBankSlice = createSlice({
   name: "piggyBank",
   initialState: piggyBankInitialState,
@@ -82,9 +71,28 @@ const piggyBankSlice = createSlice({
         }
       }
     },
+    setFinantialTarget: (state, action) => {
+      state.finantialTargets = [
+        ...state.finantialTargets,
+        {
+          name: action.payload.name,
+          iconName: action.payload.iconName,
+          targetValue: Number(action.payload.targetValue),
+          id: action.payload.id,
+          incomes: [
+            {
+              dateMonth: new Date(dateCheck).getMonth(),
+              value: 0,
+              id: action.payload.incomeId,
+            },
+          ],
+        },
+      ];
+    },
   },
 });
 
 export const setBankAccountStatus = piggyBankSlice.actions.setBankAccountStatus;
 export const updateMonthPiggyBank = piggyBankSlice.actions.updateMonth;
+export const setFinantialTarget = piggyBankSlice.actions.setFinantialTarget;
 export default piggyBankSlice.reducer;
