@@ -13,6 +13,9 @@ import SavingsInMonthsGreyFrame from "../../components/piggyBank/savings/Savings
 const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {
+  const finantialTargets = useAppSelector(
+    (state) => state.piggyBank.finantialTargets
+  );
   const bankAccountStatus = useAppSelector(
     (state) => state.piggyBank.bankAccountStatus
   );
@@ -25,12 +28,28 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
   const categoriesExpenses = useAppSelector(
     (state) => state.expenses.monthCategoriesExpenses
   );
+  const realisedTargets = useAppSelector(
+    (state) => state.piggyBank.realisedTargets
+  );
   const yearSavings = useAppSelector((state) => state.piggyBank.yearSavings);
+  const monthsSavings = yearSavings.slice(0, 3);
   console.log(yearSavings);
   let monthIncomesSum;
   let bankAccountPlusIncomes;
   let monthExpensesSum;
   let totalBankAccount;
+  let sumOfRealisedTargets;
+  if (realisedTargets !== undefined) {
+    if (realisedTargets.length > 0) {
+      sumOfRealisedTargets = realisedTargets
+        .map((item) => item.targetValue)
+        .reduce((partialSum, a) => partialSum + a, 0);
+    } else {
+      sumOfRealisedTargets = 0;
+    }
+  } else {
+    sumOfRealisedTargets = 0;
+  }
   if (monthIncomes.length > 0 && categoriesExpenses.length > 0) {
     monthIncomesSum = monthIncomes
       .map((item) => Number(item.value))
@@ -40,7 +59,8 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
       .reduce((partialSum, a) => partialSum + a, 0);
     bankAccountPlusIncomes =
       Number(monthIncomesSum) + Number(bankAccountStatus);
-    totalBankAccount = bankAccountPlusIncomes - monthExpensesSum;
+    totalBankAccount =
+      bankAccountPlusIncomes - monthExpensesSum - sumOfRealisedTargets;
   } else if (monthIncomes.length > 0) {
     monthIncomesSum = monthIncomes
       .map((item) => Number(item.value))
@@ -48,13 +68,32 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
     bankAccountPlusIncomes = bankAccountStatus;
     bankAccountPlusIncomes =
       Number(monthIncomesSum) + Number(bankAccountStatus);
-    totalBankAccount = bankAccountPlusIncomes;
+    totalBankAccount = bankAccountPlusIncomes - sumOfRealisedTargets;
   } else {
-    totalBankAccount = bankAccountStatus;
+    totalBankAccount = bankAccountStatus - sumOfRealisedTargets;
   }
-  const [modalVisible, setModalVisible] = useState(false);
 
-  console.log(bankAccountStatus);
+  const targetsIncomesArray = finantialTargets.map((item) =>
+    item.incomes.map((value) => value.value)
+  );
+
+  const sumOfFinantialIncomes = targetsIncomesArray
+    .flat(1)
+    .reduce((partialSum, a) => partialSum + a, 0);
+  const [modalVisible, setModalVisible] = useState(false);
+  const freeSavings = totalBankAccount - sumOfFinantialIncomes;
+  const pieChartOneData = [
+    sumOfFinantialIncomes !== 0
+      ? Number(((sumOfFinantialIncomes / totalBankAccount) * 100).toFixed(2))
+      : 1,
+    100 -
+      Number(((sumOfFinantialIncomes / totalBankAccount) * 100).toFixed(2)) <
+    0
+      ? 0
+      : 100 -
+        Number(((sumOfFinantialIncomes / totalBankAccount) * 100).toFixed(2)),
+  ];
+  console.log(realisedTargets);
   return (
     <View style={styles.container}>
       {categoriesIncomes.length === 0 && (
@@ -85,24 +124,26 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
           <View style={styles.greyBoxContainer}>
             <PieChart
               widthAndHeight={120}
-              series={[totalBankAccount]}
-              sliceColor={[COLORS_STYLE.basicGold]}
+              series={pieChartOneData}
+              sliceColor={[COLORS_STYLE.basicGold, COLORS_STYLE.green]}
               coverRadius={0.65}
               coverFill={COLORS_STYLE.tabGrey}
             />
             <View style={styles.greyBoxDetails}>
               <Text style={styles.greyBoxLabel}>Wolne oszczędności</Text>
-              <Text style={styles.greyBoxGoldText}>
-                {numberWithSpaces(totalBankAccount)} PLN
+              <Text style={styles.greyBoxGreenText}>
+                {numberWithSpaces(freeSavings)} PLN
               </Text>
-              <Text style={styles.greyBoxLabel}>Cele finnsowe</Text>
-              <Text style={styles.greyBoxYellowText}>2 000 PLN</Text>
+              <Text style={styles.greyBoxLabel}>Cele finansowe</Text>
+              <Text style={styles.greyBoxGoldText}>
+                {numberWithSpaces(sumOfFinantialIncomes)} PLN
+              </Text>
             </View>
           </View>
         </>
       )}
       <Text style={styles.label}>Oszczędności w poszczególnych miesiącach</Text>
-      <SavingsInMonthsGreyFrame yearSavings={yearSavings} />
+      <SavingsInMonthsGreyFrame yearSavings={monthsSavings} />
       <CustomModal
         modalVisible={modalVisible}
         setModalVisible={(value) => setModalVisible(value)}
@@ -155,8 +196,8 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 15,
   },
-  greyBoxYellowText: {
-    color: "yellow",
+  greyBoxGreenText: {
+    color: COLORS_STYLE.green,
     fontSize: 16,
     marginTop: 5,
     marginBottom: 15,

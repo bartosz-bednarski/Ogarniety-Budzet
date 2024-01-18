@@ -9,10 +9,10 @@ const SavingsInMonthsGreyFrame: React.FC<{ yearSavings: MonthSavings[] }> = ({
   yearSavings,
 }) => {
   const reversed = yearSavings.reverse();
-  const data = reversed.slice(0, 3);
+  const data = yearSavings.slice(0, 3);
   return (
     <View style={styles.container}>
-      {data.map((item) => (
+      {yearSavings.map((item) => (
         <View style={styles.box} key={item.month}>
           <View style={styles.pieChartBox}>
             <PieChart

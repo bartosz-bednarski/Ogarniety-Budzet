@@ -19,37 +19,20 @@ import TargetGoldFrame from "../../components/piggyBank/actualTargets/TargetGold
 const ActualTargetsScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {
-  const monthIncomes = useAppSelector(
-    (state) => state.incomes.categoriesIncomes
-  );
-  const yearIncomes = useAppSelector((state) => state.incomes.yearIncomes);
-  const yearsIncomes = useAppSelector((state) => state.incomes.yearsIncomes);
   const finantialTargets = useAppSelector(
     (state) => state.piggyBank.finantialTargets
   );
-  const sumOfMonthIncomes =
-    monthIncomes.length > 0
-      ? monthIncomes
-          .map((item) => Number(item.value))
-          .reduce((partialSum, a) => partialSum + a, 0)
-      : 0;
-  const sumOfYearIncomes =
-    yearIncomes.length > 0
-      ? yearIncomes
-          .map((item) => Number(item.sumOfAllIncomes))
-          .reduce((partialSum, a) => partialSum + a, 0)
-      : 0;
-  const sumOfYearsIncomes =
-    yearsIncomes.length > 0
-      ? yearIncomes
-          .map((item) => Number(item.sumOfAllIncomes))
-          .reduce((partialSum, a) => partialSum + a, 0)
-      : 0;
-  console.log(sumOfMonthIncomes, sumOfYearIncomes, sumOfYearsIncomes);
-  console.log("finantialTargets", finantialTargets);
+
+  const targetsIncomesArray = finantialTargets.map((item) =>
+    item.incomes.map((value) => value.value)
+  );
+
+  const sumOfFinantialIncomes = targetsIncomesArray
+    .flat(1)
+    .reduce((partialSum, a) => partialSum + a, 0);
   return (
     <View style={styles.container}>
-      <GoldenFrame name="ZAOSZCZĘDZONO" value={10000} />
+      <GoldenFrame name="ZAOSZCZĘDZONO" value={sumOfFinantialIncomes} />
       {finantialTargets.map((item) => (
         <TargetGoldFrame
           name={item.name}

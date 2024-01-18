@@ -18,6 +18,7 @@ import { addValueToFinantialTarget } from "../../../redux/piggyBank-slice";
 import ModalAddValue from "./ModalAddValue";
 import ModalEditValue from "./ModalEditValue";
 import ModalDeleteTarget from "./ModalDeleteTarget";
+import ModalRealisedTarget from "./ModalRealisedTarget";
 const TargetGoldFrame: React.FC<FinantialTarget> = ({
   name,
   iconName,
@@ -29,6 +30,8 @@ const TargetGoldFrame: React.FC<FinantialTarget> = ({
   const [addValueModalVisible, setAddValueModalVisible] = useState(false);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [deleteTargetModalVisible, setDeleteTargetModalVisible] =
+    useState(false);
+  const [realisedTargetModalVisible, setRealisedTargetModalVisible] =
     useState(false);
   const sumOfIncomes = incomes
     .map((item) => item.value)
@@ -74,17 +77,37 @@ const TargetGoldFrame: React.FC<FinantialTarget> = ({
             </View>
           </View>
           <View style={styles.goldenBoxBottom}>
-            <Pressable
-              style={styles.button}
-              onPress={() => setAddValueModalVisible(true)}
-            >
-              <Ionicons
-                name="add-circle-outline"
-                size={24}
-                color={COLORS_STYLE.basicGold}
-              />
-              <Text style={styles.buttonText}>Wpłać</Text>
-            </Pressable>
+            {sumOfIncomes >= targetValue && (
+              <Pressable
+                style={styles.button}
+                onPress={() => setRealisedTargetModalVisible(true)}
+              >
+                <Ionicons
+                  name="checkmark"
+                  size={24}
+                  color={COLORS_STYLE.green}
+                />
+                <Text
+                  style={[styles.buttonText, { color: COLORS_STYLE.green }]}
+                >
+                  Kupiono
+                </Text>
+              </Pressable>
+            )}
+            {sumOfIncomes < targetValue && (
+              <Pressable
+                style={styles.button}
+                onPress={() => setAddValueModalVisible(true)}
+              >
+                <Ionicons
+                  name="add-circle-outline"
+                  size={24}
+                  color={COLORS_STYLE.basicGold}
+                />
+                <Text style={styles.buttonText}>Wpłać</Text>
+              </Pressable>
+            )}
+
             <Pressable
               style={styles.button}
               onPress={() => setEditModalVisible(true)}
@@ -123,6 +146,16 @@ const TargetGoldFrame: React.FC<FinantialTarget> = ({
           setDeleteTargetModalVisible(status)
         }
         id={id}
+      />
+      <ModalRealisedTarget
+        realisedTargetModalVisible={realisedTargetModalVisible}
+        setRealisedTargetModalVisible={(status) =>
+          setRealisedTargetModalVisible(status)
+        }
+        id={id}
+        name={name}
+        iconName={iconName}
+        targetValue={targetValue}
       />
     </>
   );

@@ -6,6 +6,7 @@ const piggyBankInitialState: PiggyBankInitialState = {
   finantialTargets: [],
   yearSavings: [],
   yearsSavings: [],
+  realisedTargets: [],
 };
 const dateCheck = "2025-06-10T08:06:22.626Z";
 const piggyBankSlice = createSlice({
@@ -121,6 +122,36 @@ const piggyBankSlice = createSlice({
         (item) => item.id !== action.payload.id
       );
     },
+    setTargetRealised: (state, action) => {
+      if (state.realisedTargets === undefined) {
+        state.realisedTargets = [
+          {
+            name: action.payload.name,
+            iconName: action.payload.iconName,
+            targetValue: Number(action.payload.targetValue),
+            id: action.payload.id,
+            dateMonth: new Date(dateCheck).getMonth(),
+          },
+        ];
+        state.finantialTargets = state.finantialTargets.filter(
+          (item) => item.id !== action.payload.id
+        );
+      } else {
+        state.realisedTargets = [
+          ...state.realisedTargets,
+          {
+            name: action.payload.name,
+            iconName: action.payload.iconName,
+            targetValue: Number(action.payload.targetValue),
+            id: action.payload.id,
+            dateMonth: new Date(dateCheck).getMonth(),
+          },
+        ];
+        state.finantialTargets = state.finantialTargets.filter(
+          (item) => item.id !== action.payload.id
+        );
+      }
+    },
   },
 });
 
@@ -133,4 +164,5 @@ export const editFinantialTargetValue =
   piggyBankSlice.actions.editFinantialTargetValue;
 export const deleteFinantialTarget =
   piggyBankSlice.actions.deleteFinantialTarget;
+export const setTargetRealised = piggyBankSlice.actions.setTargetRealised;
 export default piggyBankSlice.reducer;
