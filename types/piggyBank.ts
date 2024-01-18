@@ -21,6 +21,23 @@ export type FinantialTarget = {
     id: string;
   }[];
 };
+export type ModalAddValueProps = {
+  targetValue: number;
+  sumOfIncomes: number;
+  id: string;
+  setAddValueModalVisible: (status: boolean) => void;
+  addValueModalVisible: boolean;
+};
+export type ModalEditValueProps = {
+  setEditModalVisible: (status: boolean) => void;
+  editModalVisible: boolean;
+  id: string;
+};
+export type ModalDeleteTargetProps = {
+  setDeleteTargetModalVisible: (status: boolean) => void;
+  deleteTargetModalVisible: boolean;
+  id: string;
+};
 export type AddTargetFormProps = {
   onSetTargetIcon: (icon: string) => void;
   onSetTargetName: (name: string) => void;

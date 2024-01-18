@@ -89,10 +89,48 @@ const piggyBankSlice = createSlice({
         },
       ];
     },
+    addValueToFinantialTarget: (state, action) => {
+      const indexOfTarget = state.finantialTargets.findIndex(
+        (item) => item.id === action.payload.id
+      );
+      // state.finantialTargets[indexOfTarget].incomes = [
+      //   {
+      //     dateMonth: new Date(dateCheck).getMonth(),
+      //     value: 0,
+      //     id: action.payload.incomeId,
+      //   },
+      // ];
+      state.finantialTargets[indexOfTarget].incomes = [
+        ...state.finantialTargets[indexOfTarget].incomes,
+        {
+          dateMonth: new Date(dateCheck).getMonth(),
+          value: Number(action.payload.value),
+          id: action.payload.incomeId,
+        },
+      ];
+    },
+    editFinantialTargetValue: (state, action) => {
+      const indexOfTarget = state.finantialTargets.findIndex(
+        (item) => item.id === action.payload.id
+      );
+      state.finantialTargets[indexOfTarget].targetValue =
+        action.payload.targetValue;
+    },
+    deleteFinantialTarget: (state, action) => {
+      state.finantialTargets = state.finantialTargets.filter(
+        (item) => item.id !== action.payload.id
+      );
+    },
   },
 });
 
 export const setBankAccountStatus = piggyBankSlice.actions.setBankAccountStatus;
 export const updateMonthPiggyBank = piggyBankSlice.actions.updateMonth;
 export const setFinantialTarget = piggyBankSlice.actions.setFinantialTarget;
+export const addValueToFinantialTarget =
+  piggyBankSlice.actions.addValueToFinantialTarget;
+export const editFinantialTargetValue =
+  piggyBankSlice.actions.editFinantialTargetValue;
+export const deleteFinantialTarget =
+  piggyBankSlice.actions.deleteFinantialTarget;
 export default piggyBankSlice.reducer;

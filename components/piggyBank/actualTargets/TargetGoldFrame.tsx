@@ -1,8 +1,23 @@
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  Modal,
+  Alert,
+  TextInput,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import COLORS_STYLE from "../../../utils/styles/colors";
 import PieChart from "react-native-pie-chart";
 import { FinantialTarget } from "../../../types/piggyBank";
+import { useEffect, useState } from "react";
+import CustomButton from "../../../utils/ui/CustomButton";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { addValueToFinantialTarget } from "../../../redux/piggyBank-slice";
+import ModalAddValue from "./ModalAddValue";
+import ModalEditValue from "./ModalEditValue";
+import ModalDeleteTarget from "./ModalDeleteTarget";
 const TargetGoldFrame: React.FC<FinantialTarget> = ({
   name,
   iconName,
@@ -10,6 +25,11 @@ const TargetGoldFrame: React.FC<FinantialTarget> = ({
   incomes,
   targetValue,
 }) => {
+  const dispatch = useAppDispatch();
+  const [addValueModalVisible, setAddValueModalVisible] = useState(false);
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [deleteTargetModalVisible, setDeleteTargetModalVisible] =
+    useState(false);
   const sumOfIncomes = incomes
     .map((item) => item.value)
     .reduce((partialSum, a) => partialSum + a, 0);
@@ -21,52 +41,90 @@ const TargetGoldFrame: React.FC<FinantialTarget> = ({
       ? 0
       : 100 - Number(((sumOfIncomes / targetValue) * 100).toFixed(2)),
   ];
-  return (
-    <View style={styles.goldenContainer}>
-      <View style={styles.goldenBox}>
-        <View style={styles.goldenBoxTop}>
-          <View style={styles.pieChartBox}>
-            <PieChart
-              widthAndHeight={120}
-              series={pieChartData}
-              sliceColor={["green", "red"]}
-              coverRadius={0.65}
-              coverFill={COLORS_STYLE.backgroundBlack}
-            />
-            <Ionicons
-              name={iconName}
-              size={50}
-              color={COLORS_STYLE.basicGold}
-              style={styles.icon}
-            />
-          </View>
 
-          <View style={styles.goldenBoxDetails}>
-            <Text style={styles.goldenText}>{name}</Text>
-            <Text style={styles.percText}>
-              {(sumOfIncomes / targetValue) * 100} %
-            </Text>
-            <Text style={styles.targetText}>
-              {sumOfIncomes}/{targetValue} PLN
-            </Text>
+  return (
+    <>
+      <View style={styles.goldenContainer}>
+        <View style={styles.goldenBox}>
+          <View style={styles.goldenBoxTop}>
+            <View style={styles.pieChartBox}>
+              <PieChart
+                widthAndHeight={120}
+                series={pieChartData}
+                sliceColor={["green", "red"]}
+                coverRadius={0.65}
+                coverFill={COLORS_STYLE.backgroundBlack}
+              />
+              <Ionicons
+                name={iconName}
+                size={50}
+                color={COLORS_STYLE.basicGold}
+                style={styles.icon}
+              />
+            </View>
+
+            <View style={styles.goldenBoxDetails}>
+              <Text style={styles.goldenText}>{name}</Text>
+              <Text style={styles.percText}>
+                {((sumOfIncomes / targetValue) * 100).toFixed(2)} %
+              </Text>
+              <Text style={styles.targetText}>
+                {sumOfIncomes}/{targetValue} PLN
+              </Text>
+            </View>
           </View>
-        </View>
-        <View style={styles.goldenBoxBottom}>
-          <Pressable style={styles.button}>
-            <Ionicons
-              name="add-circle-outline"
-              size={24}
-              color={COLORS_STYLE.basicGold}
-            />
-            <Text style={styles.buttonText}>Wpłać kwotę</Text>
-          </Pressable>
-          <Pressable style={styles.button}>
-            <Ionicons name="cog" size={24} color={COLORS_STYLE.basicGold} />
-            <Text style={styles.buttonText}>Edytuj</Text>
-          </Pressable>
+          <View style={styles.goldenBoxBottom}>
+            <Pressable
+              style={styles.button}
+              onPress={() => setAddValueModalVisible(true)}
+            >
+              <Ionicons
+                name="add-circle-outline"
+                size={24}
+                color={COLORS_STYLE.basicGold}
+              />
+              <Text style={styles.buttonText}>Wpłać</Text>
+            </Pressable>
+            <Pressable
+              style={styles.button}
+              onPress={() => setEditModalVisible(true)}
+            >
+              <Ionicons name="cog" size={24} color={COLORS_STYLE.basicGold} />
+              <Text style={styles.buttonText}>Edytuj</Text>
+            </Pressable>
+            <Pressable
+              style={styles.button}
+              onPress={() => setDeleteTargetModalVisible(true)}
+            >
+              <Ionicons name="trash" size={24} color={COLORS_STYLE.red} />
+              <Text style={[styles.buttonText, { color: COLORS_STYLE.red }]}>
+                Usuń
+              </Text>
+            </Pressable>
+          </View>
         </View>
       </View>
-    </View>
+
+      <ModalAddValue
+        targetValue={targetValue}
+        sumOfIncomes={sumOfIncomes}
+        id={id}
+        setAddValueModalVisible={(status) => setAddValueModalVisible(status)}
+        addValueModalVisible={addValueModalVisible}
+      />
+      <ModalEditValue
+        editModalVisible={editModalVisible}
+        setEditModalVisible={(status) => setEditModalVisible(status)}
+        id={id}
+      />
+      <ModalDeleteTarget
+        deleteTargetModalVisible={deleteTargetModalVisible}
+        setDeleteTargetModalVisible={(status) =>
+          setDeleteTargetModalVisible(status)
+        }
+        id={id}
+      />
+    </>
   );
 };
 const styles = StyleSheet.create({
@@ -144,6 +202,57 @@ const styles = StyleSheet.create({
   buttonText: {
     color: COLORS_STYLE.basicGold,
     fontSize: 12,
+  },
+  modalLayout: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#0000006b",
+  },
+  modalView: {
+    margin: 20,
+    width: "80%",
+    backgroundColor: "#dddbdb",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalLabel: {
+    fontSize: 16,
+    marginBottom: 20,
+  },
+  modalError: {
+    fontSize: 12,
+    color: "red",
+    marginBottom: 10,
+  },
+  textInput: {
+    backgroundColor: "white",
+    borderColor: "black",
+    borderWidth: 1,
+    width: "100%",
+    borderRadius: 10,
+    height: 50,
+    paddingVertical: 5,
+    paddingHorizontal: 5,
+    color: "black",
+    marginBottom: 10,
+  },
+  deleteCustomButton: {
+    flexDirection: "row",
+    gap: 5,
+  },
+  deleteCustomButtonText: {
+    color: COLORS_STYLE.red,
+    fontSize: 16,
   },
 });
 export default TargetGoldFrame;
