@@ -9,6 +9,14 @@ export type PiggyBankInitialState = {
   finantialTargets: FinantialTarget[];
   yearSavings: MonthSavings[];
   yearsSavings: YearSavings[];
+  realisedTargets: RealisedTarget[];
+};
+export type RealisedTarget = {
+  name: string;
+  iconName: string;
+  targetValue: number;
+  id: string;
+  dateMonth: number;
 };
 export type FinantialTarget = {
   name: string;
@@ -37,6 +45,14 @@ export type ModalDeleteTargetProps = {
   setDeleteTargetModalVisible: (status: boolean) => void;
   deleteTargetModalVisible: boolean;
   id: string;
+};
+export type ModalRealisedTargetProps = {
+  setRealisedTargetModalVisible: (status: boolean) => void;
+  realisedTargetModalVisible: boolean;
+  id: string;
+  name: string;
+  iconName: string;
+  targetValue: number;
 };
 export type AddTargetFormProps = {
   onSetTargetIcon: (icon: string) => void;
