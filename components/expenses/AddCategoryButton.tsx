@@ -19,7 +19,7 @@ const AddCategoryButton: React.FC<{ onPress: () => void }> = ({ onPress }) => {
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    width: "110%",
+    width: "100%",
     backgroundColor: COLORS_STYLE.backgroundBlack,
     bottom: 0,
     left: 0,

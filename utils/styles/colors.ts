@@ -6,6 +6,7 @@ const COLORS_STYLE = {
   yellow: "#D3BE00",
   green: "#0FB734",
   red: "#FF3D00",
+  lightGrey: "#D9D9D9",
 };
 
 export default COLORS_STYLE;
