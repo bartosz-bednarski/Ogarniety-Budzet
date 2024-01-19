@@ -7,15 +7,15 @@ import CategoryPieChart from "../../components/expenses/CategoryPieChart";
 import { useEffect, useState } from "react";
 import pieChartColors from "../../utils/styles/pieChartColors";
 import LastExpenseItemBox from "../../components/expenses/LastExpenseItemBox";
-import CategoryLegend from "../../components/expenses/CategoryLegend";
 import { CategoriesExpensesWithNames } from "../../types/expenses";
-import SumBox from "../../components/SumBox";
 import CustomButton from "../../utils/ui/CustomButton";
 import { Navigation } from "../../types/global";
 import AddCategoryButton from "../../components/expenses/AddCategoryButton";
-import GoldenFrame from "../../utils/ui/GoldenFrame";
-import GreenFrame from "../../utils/ui/GreenFrame";
-import RedFrame from "../../utils/ui/RedFrame";
+import FrameSmall from "../../components/expenses/weekExpenses/FrameSmall";
+import PieChartWithFrames from "../../components/expenses/PieChartWithFrames";
+import Strip from "../../components/expenses/Strip";
+import StripsColumn from "../../components/expenses/StripsColumn";
+import PieChartRealisation from "../../components/expenses/PieChartRealisation";
 // import PieChartComponent from "../components/PieChartComponent";
 
 const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
@@ -44,12 +44,10 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
     ...item,
     ...categories.find((cat) => cat.catId === item.catId),
   }));
-  let currentCategoryRealistationPieChartData = categoriesExpenses.map(
-    (category) => ({
-      ...category,
-      ...plannedExpenses.find((item) => item.catId === category.catId),
-    })
-  );
+  let stripsColumnData = categoriesExpenses.map((category) => ({
+    ...category,
+    ...plannedExpenses.find((item) => item.catId === category.catId),
+  }));
 
   const sumOfPlannedExpenses = plannedExpenses
     .map((item) => Number(item.value))
@@ -58,105 +56,62 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
     .map((cat) => Number(cat.sum))
     .reduce((partialSum, a) => partialSum + a, 0);
   const toSpend = sumOfPlannedExpenses - sumOfAllExpenses;
-  const globalRealistationPieChartData = [
-    sumOfPlannedExpenses !== 0
-      ? Number(((sumOfAllExpenses / sumOfPlannedExpenses) * 100).toFixed(2))
-      : 1,
-    100 - Number(((sumOfAllExpenses / sumOfPlannedExpenses) * 100).toFixed(2)) <
-    0
-      ? 0
-      : 100 -
-        Number(((sumOfAllExpenses / sumOfPlannedExpenses) * 100).toFixed(2)),
-  ];
-  const [showLegend, setShowLegend] = useState(false);
+  // const globalRealistationPieChartData = [
+  //   sumOfPlannedExpenses !== 0
+  //     ? Number(((sumOfAllExpenses / sumOfPlannedExpenses) * 100).toFixed(2))
+  //     : 1,
+  //   100 - Number(((sumOfAllExpenses / sumOfPlannedExpenses) * 100).toFixed(2)) <
+  //   0
+  //     ? 0
+  //     : 100 -
+  //       Number(((sumOfAllExpenses / sumOfPlannedExpenses) * 100).toFixed(2)),
+  // ];
+  console.log(stripsColumnData);
   useEffect(() => {
-    currentCategoryRealistationPieChartData = categoriesExpenses.map(
-      (category) => ({
-        ...category,
-        ...plannedExpenses.find((item) => item.catId === category.catId),
-      })
-    );
+    stripsColumnData = categoriesExpenses.map((category) => ({
+      ...category,
+      ...plannedExpenses.find((item) => item.catId === category.catId),
+    }));
   }, [plannedExpenses, categoriesExpenses]);
-  console.log(categoriesExpensesWithNames);
-  // console.log("lastExp", lastExpensesToShow);
-  // console.log(currentCategoryRealistationPieChartData);
-  // console.log("categoriesExpenses", categoriesExpenses);
-  // console.log("plannedExpenses", plannedExpenses);
-  // console.log("categoriesList", categories);
-  // console.log("totalSum", sumOfAllExpenses);
-  // console.log("categoriesExpensesWithNames", categoriesExpensesWithNames);
-  // console.log(((sumOfAllExpenses / sumOfPlannedExpenses) * 100).toFixed(2));
   return (
-    <View style={styles.container}>
-      {bankAccountStatus === 0 && (
-        <View style={styles.buttonBox}>
-          <CustomButton
-            title="Uzupełnij stan konta"
-            onPress={() => navigation.navigate("Oszczędności")}
-          />
-        </View>
-      )}
-      {bankAccountStatus > 0 && (
-        <>
-          <ScrollView>
-            <GoldenFrame name="SUMA" value={sumOfAllExpenses} />
-            {toSpend > 0 ? (
-              <GreenFrame name="DO WYDANIA" value={toSpend} />
-            ) : (
-              <RedFrame name="DO WYDANIA" value={toSpend} />
-            )}
-            {sumOfAllExpenses === 0 && (
-              <View style={styles.informationBox}>
-                <CustomButton
-                  title="Dodaj wydatek"
-                  onPress={() => navigation.navigate("addExpense")}
-                />
-              </View>
-            )}
-            {sumOfAllExpenses > 0 && (
-              <>
-                <Text style={styles.label}>Zestawienie wydatków</Text>
-                <Pressable
-                  style={styles.expensesCategories}
-                  onPress={() => setShowLegend(!showLegend)}
-                >
-                  {showLegend && (
-                    <CategoryLegend
-                      categoriesExpensesWithNames={categoriesExpensesWithNames}
-                    />
-                  )}
-                  {!showLegend && (
-                    <>
-                      <PieChart
-                        widthAndHeight={200}
-                        series={categoriesExpensesWithNames.map(
-                          (item) => item.sum
-                        )}
-                        sliceColor={categoriesExpensesWithNames.map(
-                          (item) => item.color
-                        )}
-                        coverRadius={0.45}
-                        coverFill={COLORS_STYLE.backgroundBlack}
-                      />
-
-                      <View style={styles.legend}>
-                        {categoriesExpensesWithNames.map((item) => (
-                          <Ionicons
-                            name={item.iconName}
-                            color={item.color}
-                            size={24}
-                            key={item.catId}
-                          />
-                        ))}
-                      </View>
-                    </>
-                  )}
-                </Pressable>
-              </>
-            )}
-            {sumOfAllExpenses > 0 && (
-              <>
-                <Text style={styles.label}>Realizacja założeń wydatków</Text>
+    <>
+      <View style={styles.container}>
+        {bankAccountStatus === 0 && (
+          <View style={styles.buttonBox}>
+            <CustomButton
+              title="Uzupełnij stan konta"
+              onPress={() => navigation.navigate("Oszczędności")}
+            />
+          </View>
+        )}
+        {bankAccountStatus > 0 && (
+          <>
+            <ScrollView>
+              {sumOfAllExpenses === 0 && (
+                <View style={styles.informationBox}>
+                  <CustomButton
+                    title="Dodaj wydatek"
+                    onPress={() => navigation.navigate("addExpense")}
+                  />
+                </View>
+              )}
+              {sumOfAllExpenses > 0 && (
+                <>
+                  <PieChartWithFrames
+                    categoriesExpensesWithNames={categoriesExpensesWithNames}
+                    sumOfAllExpenses={sumOfAllExpenses}
+                    toSpend={toSpend}
+                  />
+                  <Text style={styles.label}>
+                    Realizacja wydatków w poszczególnych kategoriach
+                  </Text>
+                  <StripsColumn data={stripsColumnData} />
+                  <Text style={styles.label}>Realizacja założeń wydatków</Text>
+                  <PieChartRealisation
+                    realExpenses={sumOfAllExpenses}
+                    plannedExpenses={sumOfPlannedExpenses}
+                  />
+                  {/* <Text style={styles.label}>Realizacja założeń wydatków</Text>
                 <View style={styles.globalRealistationPieChart}>
                   <PieChart
                     widthAndHeight={200}
@@ -169,23 +124,10 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
                 <Text style={styles.whiteText}>
                   {sumOfAllExpenses} / {sumOfPlannedExpenses} PLN
                 </Text>
-                <Text style={styles.label}>
-                  Realizacja wydatków w poszczególnych kategoriach
-                </Text>
-                <View style={styles.categoryExpenseBox}>
-                  {currentCategoryRealistationPieChartData.map((item) => (
-                    <CategoryPieChart
-                      plannedExpense={Number(item.value)}
-                      realExpense={item.sum}
-                      key={item.catId}
-                      iconName={item.iconName}
-                      name={String(item.name)}
-                    />
-                  ))}
-                </View>
-              </>
-            )}
-            {lastExpensesToShow.length > 0 && (
+                */}
+                </>
+              )}
+              {/* {lastExpensesToShow.length > 0 && (
               <>
                 <Text style={styles.label}>Lista ostatnich wydatków</Text>
                 <View style={styles.lastExpensesContainer}>
@@ -203,14 +145,13 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
                   })}
                 </View>
               </>
-            )}
-          </ScrollView>
-          <AddCategoryButton
-            onPress={() => navigation.navigate("addExpense")}
-          />
-        </>
-      )}
-    </View>
+            )} */}
+            </ScrollView>
+          </>
+        )}
+      </View>
+      <AddCategoryButton onPress={() => navigation.navigate("addExpense")} />
+    </>
   );
 };
 const styles = StyleSheet.create({
@@ -221,7 +162,8 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingVertical: 10,
+    paddingTop: 10,
+    paddingBottom: 70,
     paddingHorizontal: 20,
     backgroundColor: COLORS_STYLE.backgroundBlack,
   },
@@ -249,15 +191,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginVertical: 10,
   },
-  expensesCategories: {
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    height: "auto",
-    width: "100%",
-    padding: 10,
-    borderRadius: 10,
-  },
+
   globalRealistationPieChart: {
     alignItems: "center",
     justifyContent: "center",
