@@ -11,7 +11,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import PieChart from "react-native-pie-chart";
 import pieChartColors from "../../utils/styles/pieChartColors";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import COLORS_STYLE from "../../utils/styles/colors";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import CategoryItemBox from "../../components/CategoryItemBox";
@@ -21,9 +21,11 @@ import {
   CategoriesItemBoxData,
 } from "../../types/incomes";
 import { updateIncome } from "../../redux/incomes-slice";
-import SumBox from "../../components/SumBox";
 import { Navigation } from "../../types/global";
 import GoldenFrame from "../../utils/ui/GoldenFrame";
+import PieChartWithFrames from "../../components/incomes/PieChartWithFrames";
+import StripsColumn from "../../components/expenses/StripsColumn";
+import CircleColorButton from "../../utils/ui/CircleColorButton";
 const MonthIncomesScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {
@@ -40,10 +42,11 @@ const MonthIncomesScreen: React.FC<{ navigation: Navigation }> = ({
   const sumOfMonthIncomes = categoriesIncomes
     .map((item) => Number(item.value))
     .reduce((partialSum, a) => partialSum + a, 0);
-  const categoriesItemBoxData: CategoriesItemBoxData = categoriesIncomes.map(
-    (category) => ({
+  const circleColorButtonData: CategoriesItemBoxData = categoriesIncomes.map(
+    (category, index) => ({
       catId: category.catId,
       value: category.value,
+      color: index,
       ...categories.find((item) => item.catId === category.catId),
     })
   );
@@ -53,12 +56,13 @@ const MonthIncomesScreen: React.FC<{ navigation: Navigation }> = ({
       color: pieChartColors[index],
       ...categories.find((item) => item.catId === category.catId),
     }));
-  const incomesPieChartData = categoriesIncomesWithNames.map(
-    (item) => item.value
-  );
-  const incomesPieChartColors = categoriesIncomesWithNames.map(
-    (item) => item.color
-  );
+  const stripsColumnData = categoriesIncomesWithNames.map((item) => ({
+    catId: item.catId,
+    iconName: item.iconName,
+    name: item.name,
+    value: item.value,
+    sum: item.value,
+  }));
   const [selectedCatId, setSelectedCatId] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [value, setValue] = useState("");
@@ -85,10 +89,33 @@ const MonthIncomesScreen: React.FC<{ navigation: Navigation }> = ({
           />
         </View>
       )}
+
+      {sumOfMonthIncomes > 0 && (
+        <>
+          <Text style={styles.label}>Zestawienie przychodów</Text>
+          <PieChartWithFrames
+            categoriesIncomesWithNames={categoriesIncomesWithNames}
+            sumOfAllIncomes={sumOfMonthIncomes}
+          />
+          <StripsColumn data={stripsColumnData} />
+        </>
+      )}
       {categories.length > 0 && bankAccountStatus > 0 && (
         <>
-          <GoldenFrame name="SUMA" value={sumOfMonthIncomes} />
           <Text style={styles.label}>Kategorie przychodów</Text>
+
+          <View style={styles.flatlistBox}>
+            {circleColorButtonData.map((item, index) => (
+              <CircleColorButton
+                key={item.catId}
+                iconName={item.iconName}
+                value={item.value}
+                color={index}
+                catId={item.catId}
+                onPressHandler={() => onPressHandler(item.catId)}
+              />
+            ))}
+          </View>
           <Modal
             animationType="slide"
             transparent={true}
@@ -111,53 +138,6 @@ const MonthIncomesScreen: React.FC<{ navigation: Navigation }> = ({
               </View>
             </View>
           </Modal>
-          <View style={styles.flatlistBox}>
-            <FlatList
-              data={categoriesItemBoxData}
-              scrollEnabled={true}
-              renderItem={(item) => {
-                return (
-                  <CategoryItemBox
-                    category={item.item}
-                    onPressHandler={() => onPressHandler(item.item.catId)}
-                  />
-                );
-              }}
-              horizontal={true}
-              contentContainerStyle={{
-                alignItems: "center",
-                maxHeight: 160,
-              }}
-            />
-          </View>
-        </>
-      )}
-
-      {sumOfMonthIncomes > 0 && (
-        <>
-          <Text style={styles.label}>Zestawienie przychodów</Text>
-          <View style={styles.pieChartBox}>
-            <PieChart
-              widthAndHeight={200}
-              series={incomesPieChartData}
-              sliceColor={incomesPieChartColors}
-              coverRadius={0.45}
-              coverFill={COLORS_STYLE.backgroundBlack}
-            />
-            <View style={styles.legend}>
-              {categoriesIncomesWithNames.map((item) => (
-                <View style={styles.legendItem} key={item.catId}>
-                  <Ionicons
-                    name={item.iconName}
-                    color={item.color}
-                    size={24}
-                    key={item.catId}
-                  />
-                  <Text style={{ color: item.color }}>{item.name}</Text>
-                </View>
-              ))}
-            </View>
-          </View>
         </>
       )}
     </ScrollView>
@@ -187,7 +167,8 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS_STYLE.backgroundBlack,
   },
   flatlistBox: {
-    height: 160,
+    flexDirection: "row",
+    flexWrap: "wrap",
   },
   sumOfIncomes: {
     fontSize: 30,
@@ -237,26 +218,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     color: "black",
     marginBottom: 20,
-  },
-  pieChartBox: {
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
-    height: 300,
-  },
-  legend: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    marginTop: 30,
-    gap: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100%",
-  },
-  legendItem: {
-    flexDirection: "row",
-    width: "30%",
-    gap: 5,
   },
 });
 export default MonthIncomesScreen;

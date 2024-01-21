@@ -4,10 +4,12 @@ export type CategoryPieChartProps = {
   iconName: string;
   name: string;
 };
-export type LastExpenseItemBoxProps = {
+export type SingleExpenseProps = {
   iconName: string;
   price: number;
   date: string;
+  name: string | undefined;
+  color: number;
 };
 export type CategoriesExpensesWithNames = {
   catId: string;

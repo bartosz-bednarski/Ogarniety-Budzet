@@ -1,8 +1,11 @@
 import { Pressable, StyleSheet, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import COLORS_STYLE from "../../utils/styles/colors";
+import COLORS_STYLE from "../styles/colors";
 import { View } from "react-native";
-const AddCategoryButton: React.FC<{ onPress: () => void }> = ({ onPress }) => {
+const AddCircleButton: React.FC<{ onPress: () => void; name: string }> = ({
+  onPress,
+  name,
+}) => {
   return (
     <View style={styles.container}>
       <Pressable onPress={onPress} style={styles.box}>
@@ -11,18 +14,15 @@ const AddCategoryButton: React.FC<{ onPress: () => void }> = ({ onPress }) => {
           size={30}
           color={COLORS_STYLE.basicGold}
         />
-        <Text style={styles.text}>Dodaj nowy wydatek</Text>
+        <Text style={styles.text}>{name}</Text>
       </Pressable>
     </View>
   );
 };
 const styles = StyleSheet.create({
   container: {
-    position: "absolute",
     width: "100%",
     backgroundColor: COLORS_STYLE.backgroundBlack,
-    bottom: 0,
-    left: 0,
     alignItems: "center",
     justifyContent: "center",
     marginHorizontal: "auto",
@@ -39,4 +39,4 @@ const styles = StyleSheet.create({
     color: COLORS_STYLE.basicGold,
   },
 });
-export default AddCategoryButton;
+export default AddCircleButton;

@@ -5,7 +5,6 @@ import pieChartColors from "../../utils/styles/pieChartColors";
 import COLORS_STYLE from "../../utils/styles/colors";
 import { useAppSelector } from "../../redux/hooks";
 import YearIncomesBox from "../../components/incomes/yearsIncomes/YearIncomesBox";
-import SumBox from "../../components/SumBox";
 import GoldenFrame from "../../utils/ui/GoldenFrame";
 const YearsIncomesScreen = () => {
   const yearsIncomes = useAppSelector((state) => state.incomes.yearsIncomes);

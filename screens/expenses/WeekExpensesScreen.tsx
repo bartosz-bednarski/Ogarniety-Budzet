@@ -3,19 +3,19 @@ import { useAppSelector } from "../../redux/hooks";
 import { Ionicons } from "@expo/vector-icons";
 import PieChart from "react-native-pie-chart";
 import COLORS_STYLE from "../../utils/styles/colors";
-import CategoryPieChart from "../../components/expenses/CategoryPieChart";
 import { useEffect, useState } from "react";
 import pieChartColors from "../../utils/styles/pieChartColors";
-import LastExpenseItemBox from "../../components/expenses/LastExpenseItemBox";
+import SingleExpense from "../../components/expenses/SingleExpense";
 import { CategoriesExpensesWithNames } from "../../types/expenses";
 import CustomButton from "../../utils/ui/CustomButton";
 import { Navigation } from "../../types/global";
 import AddCategoryButton from "../../components/expenses/AddCategoryButton";
-import FrameSmall from "../../components/expenses/weekExpenses/FrameSmall";
+import FrameSmall from "../../utils/ui/FrameUnderlineSmall";
 import PieChartWithFrames from "../../components/expenses/PieChartWithFrames";
 import Strip from "../../components/expenses/Strip";
 import StripsColumn from "../../components/expenses/StripsColumn";
 import PieChartRealisation from "../../components/expenses/PieChartRealisation";
+import AddCircleButton from "../../utils/ui/AddCircleButton";
 // import PieChartComponent from "../components/PieChartComponent";
 
 const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
@@ -43,6 +43,7 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   const lastExpensesToShow = lastExpenses.map((item) => ({
     ...item,
     ...categories.find((cat) => cat.catId === item.catId),
+    iconColorNumber: categories.findIndex((cat) => cat.catId === item.catId),
   }));
   let stripsColumnData = categoriesExpenses.map((category) => ({
     ...category,
@@ -56,17 +57,7 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
     .map((cat) => Number(cat.sum))
     .reduce((partialSum, a) => partialSum + a, 0);
   const toSpend = sumOfPlannedExpenses - sumOfAllExpenses;
-  // const globalRealistationPieChartData = [
-  //   sumOfPlannedExpenses !== 0
-  //     ? Number(((sumOfAllExpenses / sumOfPlannedExpenses) * 100).toFixed(2))
-  //     : 1,
-  //   100 - Number(((sumOfAllExpenses / sumOfPlannedExpenses) * 100).toFixed(2)) <
-  //   0
-  //     ? 0
-  //     : 100 -
-  //       Number(((sumOfAllExpenses / sumOfPlannedExpenses) * 100).toFixed(2)),
-  // ];
-  console.log(stripsColumnData);
+  console.log(lastExpensesToShow);
   useEffect(() => {
     stripsColumnData = categoriesExpenses.map((category) => ({
       ...category,
@@ -85,72 +76,61 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
           </View>
         )}
         {bankAccountStatus > 0 && (
-          <>
-            <ScrollView>
-              {sumOfAllExpenses === 0 && (
-                <View style={styles.informationBox}>
-                  <CustomButton
-                    title="Dodaj wydatek"
-                    onPress={() => navigation.navigate("addExpense")}
-                  />
-                </View>
-              )}
-              {sumOfAllExpenses > 0 && (
-                <>
-                  <PieChartWithFrames
-                    categoriesExpensesWithNames={categoriesExpensesWithNames}
-                    sumOfAllExpenses={sumOfAllExpenses}
-                    toSpend={toSpend}
-                  />
-                  <Text style={styles.label}>
-                    Realizacja wydatków w poszczególnych kategoriach
-                  </Text>
-                  <StripsColumn data={stripsColumnData} />
-                  <Text style={styles.label}>Realizacja założeń wydatków</Text>
-                  <PieChartRealisation
-                    realExpenses={sumOfAllExpenses}
-                    plannedExpenses={sumOfPlannedExpenses}
-                  />
-                  {/* <Text style={styles.label}>Realizacja założeń wydatków</Text>
-                <View style={styles.globalRealistationPieChart}>
-                  <PieChart
-                    widthAndHeight={200}
-                    series={globalRealistationPieChartData}
-                    sliceColor={["red", "green"]}
-                    coverRadius={0.45}
-                    coverFill={COLORS_STYLE.backgroundBlack}
-                  />
-                </View>
-                <Text style={styles.whiteText}>
-                  {sumOfAllExpenses} / {sumOfPlannedExpenses} PLN
+          <ScrollView style={styles.scrollView}>
+            {sumOfAllExpenses === 0 && (
+              <View style={styles.informationBox}>
+                <CustomButton
+                  title="Dodaj wydatek"
+                  onPress={() => navigation.navigate("addExpense")}
+                />
+              </View>
+            )}
+            {sumOfAllExpenses > 0 && (
+              <>
+                <PieChartWithFrames
+                  categoriesExpensesWithNames={categoriesExpensesWithNames}
+                  sumOfAllExpenses={sumOfAllExpenses}
+                  toSpend={toSpend}
+                />
+                <Text style={styles.label}>
+                  Realizacja wydatków w poszczególnych kategoriach
                 </Text>
-                */}
-                </>
-              )}
-              {/* {lastExpensesToShow.length > 0 && (
+                <StripsColumn data={stripsColumnData} />
+                <Text style={styles.label}>Realizacja założeń wydatków</Text>
+                <PieChartRealisation
+                  realExpenses={sumOfAllExpenses}
+                  plannedExpenses={sumOfPlannedExpenses}
+                />
+              </>
+            )}
+            {lastExpensesToShow.length > 0 && (
               <>
                 <Text style={styles.label}>Lista ostatnich wydatków</Text>
                 <View style={styles.lastExpensesContainer}>
                   {lastExpensesToShow.map((item) => {
                     if (item.value !== 0) {
                       return (
-                        <LastExpenseItemBox
+                        <SingleExpense
                           iconName={item.iconName!}
                           price={item.value}
                           date={item.dateString}
                           key={item.id}
+                          color={item.iconColorNumber}
+                          name={item.name}
                         />
                       );
                     }
                   })}
                 </View>
               </>
-            )} */}
-            </ScrollView>
-          </>
+            )}
+          </ScrollView>
         )}
+        <AddCircleButton
+          onPress={() => navigation.navigate("addExpense")}
+          name="Dodaj wydatek"
+        />
       </View>
-      <AddCategoryButton onPress={() => navigation.navigate("addExpense")} />
     </>
   );
 };
@@ -162,10 +142,12 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingTop: 10,
-    paddingBottom: 70,
+    paddingVertical: 10,
     paddingHorizontal: 20,
     backgroundColor: COLORS_STYLE.backgroundBlack,
+  },
+  scrollView: {
+    flex: 9,
   },
   buttonBox: {
     width: "100%",
