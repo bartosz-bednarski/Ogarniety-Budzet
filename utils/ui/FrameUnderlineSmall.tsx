@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet } from "react-native";
-import COLORS_STYLE from "../../../utils/styles/colors";
-import { numberWithSpaces } from "../../../utils/numberWithSpaces";
-const FrameSmall: React.FC<{
+import COLORS_STYLE from "../styles/colors";
+import { numberWithSpaces } from "../numberWithSpaces";
+const FrameUnderlineSmall: React.FC<{
   mainColor: string;
   textUp: string;
   textDown: number;
@@ -33,4 +33,4 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 });
-export default FrameSmall;
+export default FrameUnderlineSmall;

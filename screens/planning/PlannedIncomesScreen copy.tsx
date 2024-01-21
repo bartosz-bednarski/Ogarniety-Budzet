@@ -14,7 +14,6 @@ import { addPlannedExpense } from "../../redux/expenses-slice";
 import COLORS_STYLE from "../../utils/styles/colors";
 import CustomButton from "../../utils/ui/CustomButton";
 import { Navigation } from "../../types/global";
-import SumBox from "../../components/SumBox";
 const PlannedIncomesScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {

@@ -1,6 +1,6 @@
 import { View, StyleSheet, Text } from "react-native";
 import PieChart from "react-native-pie-chart";
-import FrameSmall from "./weekExpenses/FrameSmall";
+import FrameSmall from "../../utils/ui/FrameUnderlineSmall";
 import COLORS_STYLE from "../../utils/styles/colors";
 const PieChartRealisation: React.FC<{
   realExpenses: number;

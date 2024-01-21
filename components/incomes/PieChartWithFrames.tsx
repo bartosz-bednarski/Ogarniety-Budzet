@@ -3,40 +3,27 @@ import PieChart from "react-native-pie-chart";
 import FrameUnderlineSmall from "../../utils/ui/FrameUnderlineSmall";
 import COLORS_STYLE from "../../utils/styles/colors";
 import { CategoriesExpensesWithNames } from "../../types/expenses";
+import { CategoriesIncomesWithNames } from "../../types/incomes";
 
 const PieChartWithFrames: React.FC<{
-  categoriesExpensesWithNames: CategoriesExpensesWithNames;
-  sumOfAllExpenses: number;
-  toSpend: number;
-}> = ({ categoriesExpensesWithNames, sumOfAllExpenses, toSpend }) => {
+  categoriesIncomesWithNames: CategoriesIncomesWithNames;
+  sumOfAllIncomes: number;
+}> = ({ categoriesIncomesWithNames, sumOfAllIncomes }) => {
   return (
     <View style={styles.expensesCategories}>
       <PieChart
         widthAndHeight={120}
-        series={categoriesExpensesWithNames.map((item) => item.sum)}
-        sliceColor={categoriesExpensesWithNames.map((item) => item.color)}
+        series={categoriesIncomesWithNames.map((item) => item.value)}
+        sliceColor={categoriesIncomesWithNames.map((item) => item.color)}
         coverRadius={0.65}
         coverFill={COLORS_STYLE.backgroundBlack}
       />
       <View style={styles.topFramesBox}>
         <FrameUnderlineSmall
           textUp="SUMA"
-          textDown={sumOfAllExpenses}
+          textDown={sumOfAllIncomes}
           mainColor={COLORS_STYLE.basicGold}
         />
-        {toSpend > 0 ? (
-          <FrameUnderlineSmall
-            textUp="DO WYDANIA"
-            textDown={toSpend}
-            mainColor={COLORS_STYLE.green}
-          />
-        ) : (
-          <FrameUnderlineSmall
-            textUp="DO WYDANIA"
-            textDown={toSpend}
-            mainColor={COLORS_STYLE.red}
-          />
-        )}
       </View>
     </View>
   );
@@ -44,13 +31,14 @@ const PieChartWithFrames: React.FC<{
 const styles = StyleSheet.create({
   topFramesBox: {
     flexDirection: "column",
-    justifyContent: "center",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
     gap: 15,
     width: "55%",
   },
   expensesCategories: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
     justifyContent: "space-between",
     height: "auto",
     width: "100%",

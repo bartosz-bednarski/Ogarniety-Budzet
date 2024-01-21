@@ -14,7 +14,7 @@ import { addPlannedExpense } from "../../redux/expenses-slice";
 import COLORS_STYLE from "../../utils/styles/colors";
 import CustomButton from "../../utils/ui/CustomButton";
 import { Navigation } from "../../types/global";
-import SumBox from "../../components/SumBox";
+import GoldenFrame from "../../utils/ui/GoldenFrame";
 const PlannedExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {
@@ -78,7 +78,7 @@ const PlannedExpensesScreen: React.FC<{ navigation: Navigation }> = ({
               </View>
             </View>
           </Modal>
-          <SumBox sum={sumOfPlannedExpenses} />
+          <GoldenFrame name="SUMA" value={sumOfPlannedExpenses} />
 
           <FlatList
             data={plannedExpenses}
