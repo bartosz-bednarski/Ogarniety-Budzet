@@ -31,7 +31,7 @@ const PlanningTabNavigator = () => {
           },
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         component={PlannedIncomesScreen}
         name="plannedIncomes"
         options={{
@@ -46,7 +46,7 @@ const PlanningTabNavigator = () => {
             paddingHorizontal: 10,
           },
         }}
-      />
+      /> */}
     </Tab.Navigator>
   );
 };

@@ -2,7 +2,7 @@ import { Pressable, Text, StyleSheet, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import COLORS_STYLE from "../styles/colors";
 import pieChartColors from "../styles/pieChartColors";
-const CircleColorButton: React.FC<{
+const CircleNumberColorButton: React.FC<{
   iconName: string | undefined;
   value: number;
   color: number;
@@ -50,4 +50,4 @@ const styles = StyleSheet.create({
     height: 40,
   },
 });
-export default CircleColorButton;
+export default CircleNumberColorButton;

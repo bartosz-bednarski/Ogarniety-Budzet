@@ -9,7 +9,6 @@ import SingleExpense from "../../components/expenses/SingleExpense";
 import { CategoriesExpensesWithNames } from "../../types/expenses";
 import CustomButton from "../../utils/ui/CustomButton";
 import { Navigation } from "../../types/global";
-import AddCategoryButton from "../../components/expenses/AddCategoryButton";
 import FrameSmall from "../../utils/ui/FrameUnderlineSmall";
 import PieChartWithFrames from "../../components/expenses/PieChartWithFrames";
 import Strip from "../../components/expenses/Strip";

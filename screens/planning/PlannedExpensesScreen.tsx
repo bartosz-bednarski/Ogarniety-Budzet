@@ -6,6 +6,7 @@ import {
   Alert,
   TextInput,
   StyleSheet,
+  ScrollView,
 } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { useState } from "react";
@@ -15,6 +16,9 @@ import COLORS_STYLE from "../../utils/styles/colors";
 import CustomButton from "../../utils/ui/CustomButton";
 import { Navigation } from "../../types/global";
 import GoldenFrame from "../../utils/ui/GoldenFrame";
+import CircleNumberColorButton from "../../utils/ui/CircleNumberColorButton";
+import CircleStringColorButton from "../../utils/ui/CircleStringColorButton";
+import StripsColumn from "../../components/expenses/StripsColumn";
 const PlannedExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {
@@ -25,7 +29,7 @@ const PlannedExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   const plannedExpenses = useAppSelector(
     (state) => state.expenses.plannedExpenses
   );
-  // console.log("plannedExpenses", plannedExpenses);
+  console.log("plannedExpenses", plannedExpenses);
   const onPressHandler = (catId: string) => {
     setSelectedCatId(catId);
     setModalVisible(true);
@@ -40,66 +44,83 @@ const PlannedExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   const sumOfPlannedExpenses = plannedExpenses
     .map((item) => Number(item.value))
     .reduce((partialSum, a) => partialSum + a, 0);
+  const stripsColumnData = plannedExpenses.map((item) => ({
+    catId: item.catId,
+    iconName: item.iconName,
+    name: item.name,
+    value: sumOfPlannedExpenses,
+    sum: Number(item.value),
+  }));
   return (
     <View style={styles.container}>
-      {plannedExpenses.length === 0 && (
-        <View style={styles.informationBox}>
-          <CustomButton
-            title="Dodaj kategorie wydatków"
-            onPress={() =>
-              navigation.navigate("settingsNavigator", {
-                screen: "editCategories",
-              })
-            }
-          />
-        </View>
-      )}
-      {plannedExpenses.length > 0 && (
-        <>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              Alert.alert("Wydatek nie został dodany!");
-              setModalVisible(!modalVisible);
-            }}
-          >
-            <View style={styles.modalLayout}>
-              <View style={styles.modalView}>
-                <Text style={styles.modalLabel}>Podaj kwotę</Text>
-                <TextInput
-                  style={styles.textInput}
-                  value={value}
-                  onChangeText={(text) => setValue(text)}
-                  keyboardType="numeric"
-                />
-                <CustomButton title="Zatwierdź" onPress={submitHandler} />
+      <ScrollView style={styles.scrollView}>
+        {plannedExpenses.length === 0 && (
+          <View style={styles.informationBox}>
+            <CustomButton
+              title="Dodaj kategorie wydatków"
+              onPress={() =>
+                navigation.navigate("settingsNavigator", {
+                  screen: "editCategories",
+                })
+              }
+            />
+          </View>
+        )}
+        {plannedExpenses.length > 0 && (
+          <>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => {
+                Alert.alert("Wydatek nie został dodany!");
+                setModalVisible(!modalVisible);
+              }}
+            >
+              <View style={styles.modalLayout}>
+                <View style={styles.modalView}>
+                  <Text style={styles.modalLabel}>Podaj kwotę</Text>
+                  <TextInput
+                    style={styles.textInput}
+                    value={value}
+                    onChangeText={(text) => setValue(text)}
+                    keyboardType="numeric"
+                  />
+                  <CustomButton title="Zatwierdź" onPress={submitHandler} />
+                </View>
               </View>
-            </View>
-          </Modal>
-          <GoldenFrame name="SUMA" value={sumOfPlannedExpenses} />
-
-          <FlatList
-            data={plannedExpenses}
-            renderItem={(item) => {
-              return (
-                <CategoryItemBox
-                  category={item.item}
-                  onPressHandler={() => onPressHandler(item.item.catId)}
+            </Modal>
+            <GoldenFrame name="SUMA" value={sumOfPlannedExpenses} />
+            <Text style={styles.label}>Edytuj zaplanowane wydatki</Text>
+            <View style={styles.flatlistBox}>
+              {plannedExpenses.map((item, index) => (
+                <CircleNumberColorButton
+                  key={item.catId}
+                  iconName={item.iconName}
+                  catId={item.catId}
+                  value={item.value}
+                  color={index}
+                  onPressHandler={() => onPressHandler(item.catId)}
                 />
-              );
-            }}
-            keyExtractor={(item) => item.catId.toString()}
-            contentContainerStyle={{
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "flex-end",
-            }}
-            numColumns={3}
-          />
-        </>
-      )}
+              ))}
+
+              <CircleStringColorButton
+                iconName="add"
+                catId="addNewExpenseCategoy"
+                name="Dodaj nową kategorię"
+                color={20}
+                onPressHandler={() =>
+                  navigation.navigate("settingsNavigator", {
+                    screen: "addNewCategory",
+                  })
+                }
+              />
+            </View>
+            <Text style={styles.label}>Udziały zaplanowanych wydatków</Text>
+            <StripsColumn data={stripsColumnData} />
+          </>
+        )}
+      </ScrollView>
     </View>
   );
 };
@@ -113,8 +134,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingVertical: 10,
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
     backgroundColor: COLORS_STYLE.backgroundBlack,
+  },
+  scrollView: {
+    flex: 1,
   },
   categoriesBox: {
     flexDirection: "row",
@@ -158,6 +182,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     color: "black",
     marginBottom: 20,
+  },
+  label: {
+    color: COLORS_STYLE.labelGrey,
+    fontSize: 10,
+    marginVertical: 10,
+  },
+  flatlistBox: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
   },
 });
 export default PlannedExpensesScreen;

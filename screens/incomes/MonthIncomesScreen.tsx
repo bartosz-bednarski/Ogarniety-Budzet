@@ -25,7 +25,8 @@ import { Navigation } from "../../types/global";
 import GoldenFrame from "../../utils/ui/GoldenFrame";
 import PieChartWithFrames from "../../components/incomes/PieChartWithFrames";
 import StripsColumn from "../../components/expenses/StripsColumn";
-import CircleColorButton from "../../utils/ui/CircleColorButton";
+import CircleNumberColorButton from "../../utils/ui/CircleNumberColorButton";
+import CircleStringColorButton from "../../utils/ui/CircleStringColorButton";
 const MonthIncomesScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {
@@ -106,7 +107,7 @@ const MonthIncomesScreen: React.FC<{ navigation: Navigation }> = ({
 
           <View style={styles.flatlistBox}>
             {circleColorButtonData.map((item, index) => (
-              <CircleColorButton
+              <CircleNumberColorButton
                 key={item.catId}
                 iconName={item.iconName}
                 value={item.value}
@@ -115,6 +116,17 @@ const MonthIncomesScreen: React.FC<{ navigation: Navigation }> = ({
                 onPressHandler={() => onPressHandler(item.catId)}
               />
             ))}
+            <CircleStringColorButton
+              iconName="add"
+              name="Dodaj nową Kategorie"
+              color={20}
+              catId="addNewIncomesCategory"
+              onPressHandler={() =>
+                navigation.navigate("settingsNavigator", {
+                  screen: "addNewIncomesCategory",
+                })
+              }
+            />
           </View>
           <Modal
             animationType="slide"

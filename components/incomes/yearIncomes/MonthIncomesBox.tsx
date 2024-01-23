@@ -34,7 +34,7 @@ const MonthIncomesBox: React.FC<{ monthIncomes: MonthIncomesBoxProps }> = ({
   });
   console.log(legend);
   return (
-    <View style={styles.mainContainer}>
+    <View style={styles.container}>
       <Text style={styles.monthName}>{MONTHS[monthIncomes.month]}</Text>
       <View style={styles.mainBox}>
         <View style={styles.chartBox}>
@@ -48,19 +48,11 @@ const MonthIncomesBox: React.FC<{ monthIncomes: MonthIncomesBoxProps }> = ({
               monthIncomes.categoriesIncomes.length
             )}
             coverRadius={0.45}
-            coverFill={COLORS_STYLE.backgroundBlack}
+            coverFill={COLORS_STYLE.tabGrey}
           />
         </View>
         <View style={styles.detailsBox}>
           <Text style={styles.value}>{monthIncomes.sumOfAllIncomes} PLN</Text>
-          <View style={styles.legendBox}>
-            {legend.map((item) => (
-              <View style={styles.legendItem} key={item?.iconName}>
-                <Ionicons name={item?.iconName} size={24} color={item?.color} />
-                <Text style={{ color: item?.color }}>{item?.name}</Text>
-              </View>
-            ))}
-          </View>
         </View>
       </View>
     </View>
@@ -68,7 +60,7 @@ const MonthIncomesBox: React.FC<{ monthIncomes: MonthIncomesBoxProps }> = ({
 };
 
 const styles = StyleSheet.create({
-  mainContainer: {
+  container: {
     width: "100%",
     gap: 5,
   },
