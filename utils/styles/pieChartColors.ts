@@ -19,5 +19,6 @@ const pieChartColors = [
   "#ffd9ea",
   "#9fd7ff",
   "#b0f3e4",
+  "#0FB734",
 ];
 export default pieChartColors;

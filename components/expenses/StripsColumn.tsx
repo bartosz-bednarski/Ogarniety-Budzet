@@ -30,6 +30,7 @@ const StripsColumn: React.FC<{
 };
 const styles = StyleSheet.create({
   stripsContainer: {
+    width: "100%",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",

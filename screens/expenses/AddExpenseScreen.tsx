@@ -7,13 +7,14 @@ import {
   Alert,
   Button,
   TextInput,
+  ScrollView,
 } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import CategoryItemBox from "../../components/expenses/CategoryItemBox";
 import { useState } from "react";
 import { addExpense } from "../../redux/expenses-slice";
 import CustomButton from "../../utils/ui/CustomButton";
 import { Navigation } from "../../types/global";
+import CircleStringColorButton from "../../utils/ui/CircleStringColorButton";
 const AddExpenseScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {
@@ -35,7 +36,7 @@ const AddExpenseScreen: React.FC<{ navigation: Navigation }> = ({
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       {categories.length === 0 && (
         <View style={styles.informationBox}>
           <CustomButton
@@ -70,15 +71,44 @@ const AddExpenseScreen: React.FC<{ navigation: Navigation }> = ({
           </View>
         </View>
       </Modal>
-      <FlatList
+      <View style={styles.flatlistBox}>
+        {categories.map((item, index) => (
+          <CircleStringColorButton
+            iconName={item.iconName}
+            catId={item.catId}
+            name={item.name}
+            color={index}
+            onPressHandler={() => onPressHandler(item.catId)}
+          />
+        ))}
+        <CircleStringColorButton
+          iconName="add"
+          catId="addNewExpenseCategoy"
+          name="Dodaj nową kategorię"
+          color={20}
+          onPressHandler={() =>
+            navigation.navigate("settingsNavigator", {
+              screen: "addNewCategory",
+            })
+          }
+        />
+      </View>
+      {/* <FlatList
         scrollEnabled={true}
         data={categories}
         renderItem={(item) => {
           return (
-            <CategoryItemBox
-              category={item.item}
+            <CircleColorButton
+              iconName={item.item.iconName}
+              catId={item.item.catId}
+              value={item.item.name}
+              color={item.index}
               onPressHandler={() => onPressHandler(item.item.catId)}
             />
+            // <CategoryItemBox
+            //   category={item.item}
+            //   onPressHandler={() => onPressHandler(item.item.catId)}
+            // />
           );
         }}
         keyExtractor={(item) => item.catId.toString()}
@@ -88,8 +118,8 @@ const AddExpenseScreen: React.FC<{ navigation: Navigation }> = ({
           justifyContent: "flex-end",
         }}
         numColumns={3}
-      />
-    </View>
+      /> */}
+    </ScrollView>
   );
 };
 const styles = StyleSheet.create({
@@ -98,6 +128,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: 400,
   },
+
   container: {
     flex: 1,
     marginHorizontal: 10,
@@ -139,6 +170,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     color: "black",
     marginBottom: 20,
+  },
+  flatlistBox: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
   },
 });
 export default AddExpenseScreen;

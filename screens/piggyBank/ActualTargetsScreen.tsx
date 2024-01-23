@@ -7,6 +7,7 @@ import {
   TextInput,
   StyleSheet,
   Pressable,
+  ScrollView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import COLORS_STYLE from "../../utils/styles/colors";
@@ -16,6 +17,7 @@ import GoldenFrame from "../../utils/ui/GoldenFrame";
 import PieChart from "react-native-pie-chart";
 import AddTargetButton from "../../components/piggyBank/actualTargets/AddTargetButton";
 import TargetGoldFrame from "../../components/piggyBank/actualTargets/TargetGoldFrame";
+import AddCircleButton from "../../utils/ui/AddCircleButton";
 const ActualTargetsScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {
@@ -32,20 +34,23 @@ const ActualTargetsScreen: React.FC<{ navigation: Navigation }> = ({
     .reduce((partialSum, a) => partialSum + a, 0);
   return (
     <View style={styles.container}>
-      <GoldenFrame name="ZAOSZCZĘDZONO" value={sumOfFinantialIncomes} />
-      {finantialTargets.map((item) => (
-        <TargetGoldFrame
-          name={item.name}
-          iconName={item.iconName}
-          id={item.id}
-          incomes={item.incomes}
-          targetValue={item.targetValue}
-          key={item.id}
-        />
-      ))}
-
-      <Text style={styles.text}>Aktualne</Text>
-      <AddTargetButton onPress={() => navigation.navigate("addTarget")} />
+      <ScrollView style={styles.scrollView}>
+        <GoldenFrame name="ZAOSZCZĘDZONO" value={sumOfFinantialIncomes} />
+        {finantialTargets.map((item) => (
+          <TargetGoldFrame
+            name={item.name}
+            iconName={item.iconName}
+            id={item.id}
+            incomes={item.incomes}
+            targetValue={item.targetValue}
+            key={item.id}
+          />
+        ))}
+      </ScrollView>
+      <AddCircleButton
+        name="Dodaj cel"
+        onPress={() => navigation.navigate("addTarget")}
+      />
     </View>
   );
 };
@@ -56,6 +61,9 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 10,
     backgroundColor: COLORS_STYLE.backgroundBlack,
+  },
+  scrollView: {
+    flex: 9,
   },
   text: {
     color: "white",
