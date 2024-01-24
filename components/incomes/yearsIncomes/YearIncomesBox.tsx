@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Pressable } from "react-native";
 import COLORS_STYLE from "../../../utils/styles/colors";
 import {
   MonthIncomesBoxProps,
@@ -9,12 +9,20 @@ import PieChart from "react-native-pie-chart";
 import pieChartColors from "../../../utils/styles/pieChartColors";
 import { useAppSelector } from "../../../redux/hooks";
 import { Ionicons } from "@expo/vector-icons";
+import { useState } from "react";
+import { numberWithSpaces } from "../../../utils/numberWithSpaces";
+import StripsColumn from "../../expenses/StripsColumn";
 const YearIncomesBox: React.FC<{ yearIncomes: YearIncomesBoxProps }> = ({
   yearIncomes,
 }) => {
-  const incomesCategories = useAppSelector(
-    (state) => state.incomesCategories.categoriesList
-  );
+  const [showDropdown, setShowDropdown] = useState(false);
+  const stripsColumnsData: any[] = yearIncomes.months.map((item) => ({
+    catId: item.month,
+    iconName: "calendar-outline",
+    name: MONTHS[item.month],
+    value: yearIncomes.sumOfAllIncomes,
+    sum: item.sumOfAllIncomes,
+  }));
   // console.log(yearIncomes.categoriesIncomes);
   // const legend = yearIncomes.categoriesIncomes.map((item, index) => {
   //   if (item.stillExsists) {
@@ -37,45 +45,53 @@ const YearIncomesBox: React.FC<{ yearIncomes: YearIncomesBoxProps }> = ({
   // });
   // console.log(legend);
   return (
-    <View style={styles.mainContainer}>
+    <View style={styles.container}>
       <Text style={styles.monthName}>{yearIncomes.year}</Text>
-      <View style={styles.mainBox}>
-        <View style={styles.chartBox}>
-          <PieChart
-            widthAndHeight={120}
-            series={yearIncomes.months.map((month) =>
-              month.sumOfAllIncomes === 0 ? 1 : month.sumOfAllIncomes
-            )}
-            sliceColor={pieChartColors.slice(0, yearIncomes.months.length)}
-            coverRadius={0.45}
-            coverFill={COLORS_STYLE.backgroundBlack}
+      <Pressable
+        style={styles.box}
+        onPress={() => setShowDropdown(!showDropdown)}
+      >
+        <View style={styles.mainBox}>
+          <View style={styles.chartBox}>
+            <PieChart
+              widthAndHeight={120}
+              series={yearIncomes.months.map((month) =>
+                month.sumOfAllIncomes === 0 ? 1 : month.sumOfAllIncomes
+              )}
+              sliceColor={pieChartColors.slice(0, yearIncomes.months.length)}
+              coverRadius={0.45}
+              coverFill={COLORS_STYLE.backgroundBlack}
+            />
+          </View>
+          <Text style={styles.value}>
+            {numberWithSpaces(yearIncomes.sumOfAllIncomes)} PLN
+          </Text>
+        </View>
+        <View style={styles.dropdownButton}>
+          <Ionicons
+            name={showDropdown ? "caret-up" : "caret-down"}
+            color={COLORS_STYLE.basicGold}
+            size={20}
           />
         </View>
-        <View style={styles.detailsBox}>
-          <Text style={styles.value}>{yearIncomes.sumOfAllIncomes} PLN</Text>
-          <View style={styles.legendBox}>
-            {yearIncomes.months.map((item, index) => {
-              if (item.sumOfAllIncomes > 1) {
-                return (
-                  <View style={styles.legendItem} key={item?.month}>
-                    <Text style={{ color: pieChartColors[index] }}>
-                      {MONTHS[item.month]}
-                    </Text>
-                  </View>
-                );
-              }
-            })}
-          </View>
-        </View>
-      </View>
+        {showDropdown && <StripsColumn data={stripsColumnsData} />}
+      </Pressable>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  mainContainer: {
+  container: {
     width: "100%",
     gap: 5,
+  },
+  box: {
+    paddingHorizontal: 15,
+    paddingTop: 20,
+    paddingBottom: 15,
+    borderRadius: 15,
+    width: "100%",
+    backgroundColor: COLORS_STYLE.tabGrey,
   },
   monthName: {
     fontSize: 20,
@@ -83,30 +99,27 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   mainBox: {
-    width: "100%",
-    backgroundColor: COLORS_STYLE.tabGrey,
     flexDirection: "row",
-    paddingHorizontal: 15,
-    paddingVertical: 15,
+    justifyContent: "space-between",
+    alignItems: "center",
     gap: 20,
-    borderRadius: 15,
   },
   chartBox: {
     width: "40%",
     justifyContent: "center",
     alignItems: "center",
   },
-  detailsBox: {
-    flexDirection: "column",
-    width: "50%",
-    gap: 10,
-    alignItems: "center",
+  dropdownButton: {
+    marginVertical: 5,
+    height: 20,
+    width: "100%",
     justifyContent: "center",
+    alignItems: "center",
   },
   value: {
+    width: "60%",
     fontSize: 30,
     textAlign: "center",
-    width: "100%",
     color: COLORS_STYLE.basicGold,
   },
   legendBox: {

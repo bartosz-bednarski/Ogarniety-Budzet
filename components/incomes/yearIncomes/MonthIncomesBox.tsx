@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import COLORS_STYLE from "../../../utils/styles/colors";
 import { MonthIncomesBoxProps } from "../../../types/incomes";
 import { MONTHS } from "../../../utils/months";
@@ -6,55 +6,83 @@ import PieChart from "react-native-pie-chart";
 import pieChartColors from "../../../utils/styles/pieChartColors";
 import { useAppSelector } from "../../../redux/hooks";
 import { Ionicons } from "@expo/vector-icons";
+import StripsColumn from "../../expenses/StripsColumn";
+import { useState } from "react";
+import { numberWithSpaces } from "../../../utils/numberWithSpaces";
 const MonthIncomesBox: React.FC<{ monthIncomes: MonthIncomesBoxProps }> = ({
   monthIncomes,
 }) => {
   const incomesCategories = useAppSelector(
     (state) => state.incomesCategories.categoriesList
   );
+  const [showDropdown, setShowDropdown] = useState(false);
   // console.log(monthIncomes.categoriesIncomes);
-  const legend = monthIncomes.categoriesIncomes.map((item, index) => {
-    if (item.stillExsists) {
-      const filteredCategories = incomesCategories.find(
-        (category) => category.catId === item.catId
-      );
-      return {
-        ...filteredCategories,
-        value: item.value,
-        color: pieChartColors[index],
-      };
-    } else if (!item.stillExsists) {
-      return {
-        name: "Inne",
-        iconName: "star",
-        color: pieChartColors[index],
-        value: item.value,
-      };
-    }
-  });
-  console.log(legend);
+  const legend: any[] =
+    // {
+    //   catId: string;
+    //   iconName: string;
+    //   name: string | undefined;
+    //   value: number | undefined;
+    //   sum: number;
+    // }
+    monthIncomes.categoriesIncomes.map((item, index) => {
+      if (item.stillExsists) {
+        const filteredCategories = incomesCategories.find(
+          (category) => category.catId === item.catId
+        );
+        return {
+          catId: filteredCategories!.catId,
+          iconName: filteredCategories!.iconName,
+          name: filteredCategories?.name,
+          value: monthIncomes?.sumOfAllIncomes,
+          sum: item.value,
+          // color: pieChartColors[index],
+        };
+      } else if (!item.stillExsists) {
+        return {
+          name: "Inne",
+          iconName: "star",
+          // color: pieChartColors[index],
+          value: monthIncomes.sumOfAllIncomes,
+          sum: item.value,
+        };
+      }
+    });
   return (
     <View style={styles.container}>
       <Text style={styles.monthName}>{MONTHS[monthIncomes.month]}</Text>
-      <View style={styles.mainBox}>
-        <View style={styles.chartBox}>
-          <PieChart
-            widthAndHeight={120}
-            series={monthIncomes.categoriesIncomes.map((category) =>
-              category.value === 0 ? 1 : category.value
-            )}
-            sliceColor={pieChartColors.slice(
-              0,
-              monthIncomes.categoriesIncomes.length
-            )}
-            coverRadius={0.45}
-            coverFill={COLORS_STYLE.tabGrey}
+      <Pressable
+        style={styles.box}
+        onPress={() => setShowDropdown(!showDropdown)}
+      >
+        <View style={styles.mainBox}>
+          <View style={styles.chartBox}>
+            <PieChart
+              widthAndHeight={120}
+              series={monthIncomes.categoriesIncomes.map((category) =>
+                category.value === 0 ? 1 : category.value
+              )}
+              sliceColor={pieChartColors.slice(
+                0,
+                monthIncomes.categoriesIncomes.length
+              )}
+              coverRadius={0.45}
+              coverFill={COLORS_STYLE.tabGrey}
+            />
+          </View>
+          <Text style={styles.value}>
+            {numberWithSpaces(monthIncomes.sumOfAllIncomes)} PLN
+          </Text>
+        </View>
+        <View style={styles.dropdownButton}>
+          <Ionicons
+            name={showDropdown ? "caret-up" : "caret-down"}
+            color={COLORS_STYLE.basicGold}
+            size={20}
           />
         </View>
-        <View style={styles.detailsBox}>
-          <Text style={styles.value}>{monthIncomes.sumOfAllIncomes} PLN</Text>
-        </View>
-      </View>
+        {showDropdown && <StripsColumn data={legend} />}
+      </Pressable>
     </View>
   );
 };
@@ -64,36 +92,41 @@ const styles = StyleSheet.create({
     width: "100%",
     gap: 5,
   },
+  box: {
+    paddingHorizontal: 15,
+    paddingTop: 20,
+    paddingBottom: 15,
+    borderRadius: 15,
+    width: "100%",
+    backgroundColor: COLORS_STYLE.tabGrey,
+  },
   monthName: {
     fontSize: 20,
     color: "white",
     marginLeft: 5,
   },
   mainBox: {
-    width: "100%",
-    backgroundColor: COLORS_STYLE.tabGrey,
     flexDirection: "row",
-    paddingHorizontal: 15,
-    paddingVertical: 15,
+    justifyContent: "space-between",
+    alignItems: "center",
     gap: 20,
-    borderRadius: 15,
   },
   chartBox: {
     width: "40%",
     justifyContent: "center",
     alignItems: "center",
   },
-  detailsBox: {
-    flexDirection: "column",
-    width: "50%",
-    gap: 10,
-    alignItems: "center",
+  dropdownButton: {
+    marginVertical: 5,
+    height: 20,
+    width: "100%",
     justifyContent: "center",
+    alignItems: "center",
   },
   value: {
+    width: "50%",
     fontSize: 30,
     textAlign: "center",
-    width: "100%",
     color: COLORS_STYLE.basicGold,
   },
   legendBox: {
