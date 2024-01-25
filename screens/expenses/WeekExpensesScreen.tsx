@@ -125,10 +125,12 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
             )}
           </ScrollView>
         )}
-        <AddCircleButton
-          onPress={() => navigation.navigate("addExpense")}
-          name="Dodaj wydatek"
-        />
+        {bankAccountStatus > 0 && (
+          <AddCircleButton
+            onPress={() => navigation.navigate("addExpense")}
+            name="Dodaj wydatek"
+          />
+        )}
       </View>
     </>
   );

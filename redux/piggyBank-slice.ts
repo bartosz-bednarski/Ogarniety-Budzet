@@ -1,14 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { PiggyBankInitialState } from "../types/piggyBank";
-
+const dateCheck = "2025-06-25T08:06:22.626Z";
 const piggyBankInitialState: PiggyBankInitialState = {
   bankAccountStatus: 0,
   finantialTargets: [],
   yearSavings: [],
   yearsSavings: [],
   realisedTargets: [],
+  curentYear: new Date(dateCheck).getFullYear(),
 };
-const dateCheck = "2025-06-10T08:06:22.626Z";
+
 const piggyBankSlice = createSlice({
   name: "piggyBank",
   initialState: piggyBankInitialState,
@@ -37,7 +38,7 @@ const piggyBankSlice = createSlice({
         ];
       }
       //wyzeruj wartości przychodów w tablicy z przychodami z aktualnego miesiąca
-      if (new Date(dateCheck).getMonth() === 0) {
+      if (new Date(dateCheck).getFullYear() > state.curentYear) {
         // const yearToSet = new Date().getFullYear();
         const yearToSet = new Date(dateCheck).getFullYear() - 1;
         if (state.yearSavings.length > 0) {
@@ -152,6 +153,9 @@ const piggyBankSlice = createSlice({
         );
       }
     },
+    setCurrentYear: (state) => {
+      state.curentYear = new Date(dateCheck).getFullYear();
+    },
   },
 });
 
@@ -165,4 +169,5 @@ export const editFinantialTargetValue =
 export const deleteFinantialTarget =
   piggyBankSlice.actions.deleteFinantialTarget;
 export const setTargetRealised = piggyBankSlice.actions.setTargetRealised;
+export const setCurrentYearPiggyBank = piggyBankSlice.actions.setCurrentYear;
 export default piggyBankSlice.reducer;

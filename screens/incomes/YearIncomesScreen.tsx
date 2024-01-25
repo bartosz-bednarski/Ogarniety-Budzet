@@ -14,6 +14,10 @@ const YearIncomesScreen = () => {
     .map((item) => Number(item.sumOfAllIncomes))
     .reduce((partialSum, a) => partialSum + a, 0);
   // console.log(yearIncomes);
+  console.log(
+    "66666666666666tututu",
+    yearIncomes.map((item) => item.sumOfAllIncomes)
+  );
   return (
     <ScrollView style={styles.container}>
       {yearIncomes.length === 0 && (
@@ -30,7 +34,9 @@ const YearIncomesScreen = () => {
           <View style={styles.yearChart}>
             <PieChart
               widthAndHeight={200}
-              series={yearIncomes.map((item) => item.sumOfAllIncomes)}
+              series={yearIncomes.map((item) =>
+                item.sumOfAllIncomes === 0 ? 1 : item.sumOfAllIncomes
+              )}
               sliceColor={pieChartColors.slice(0, yearIncomes.length)}
               coverRadius={0.45}
               coverFill={COLORS_STYLE.backgroundBlack}

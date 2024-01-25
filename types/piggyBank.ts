@@ -10,6 +10,7 @@ export type PiggyBankInitialState = {
   yearSavings: MonthSavings[];
   yearsSavings: YearSavings[];
   realisedTargets: RealisedTarget[];
+  curentYear: number;
 };
 export type RealisedTarget = {
   name: string;

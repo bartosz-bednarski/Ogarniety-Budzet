@@ -96,7 +96,7 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
   console.log(realisedTargets);
   return (
     <View style={styles.container}>
-      {categoriesIncomes.length === 0 && (
+      {/* {categoriesIncomes.length === 0 && (
         <View style={styles.buttonBox}>
           <CustomButton
             title="Dodaj kategorie przychodów"
@@ -107,8 +107,8 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
             }
           />
         </View>
-      )}
-      {bankAccountStatus === 0 && categoriesIncomes.length > 0 && (
+      )} */}
+      {bankAccountStatus === 0 && (
         <View style={styles.buttonBox}>
           <CustomButton
             title="Uzupełnij stan konta"
@@ -142,8 +142,15 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
           </View>
         </>
       )}
-      <Text style={styles.label}>Oszczędności w poszczególnych miesiącach</Text>
-      <SavingsInMonthsGreyFrame yearSavings={monthsSavings} />
+      {yearSavings.length > 0 && (
+        <>
+          <Text style={styles.label}>
+            Oszczędności w poszczególnych miesiącach
+          </Text>
+          <SavingsInMonthsGreyFrame yearSavings={monthsSavings} />
+        </>
+      )}
+
       <CustomModal
         modalVisible={modalVisible}
         setModalVisible={(value) => setModalVisible(value)}

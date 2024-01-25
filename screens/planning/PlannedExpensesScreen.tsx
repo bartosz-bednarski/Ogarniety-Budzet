@@ -26,8 +26,12 @@ const PlannedExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   const [selectedCatId, setSelectedCatId] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [value, setValue] = useState("");
+
   const plannedExpenses = useAppSelector(
     (state) => state.expenses.plannedExpenses
+  );
+  const bankAccountStatus = useAppSelector(
+    (state) => state.piggyBank.bankAccountStatus
   );
   console.log("plannedExpenses", plannedExpenses);
   const onPressHandler = (catId: string) => {
@@ -54,15 +58,11 @@ const PlannedExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollView}>
-        {plannedExpenses.length === 0 && (
-          <View style={styles.informationBox}>
+        {bankAccountStatus === 0 && (
+          <View style={styles.buttonBox}>
             <CustomButton
-              title="Dodaj kategorie wydatków"
-              onPress={() =>
-                navigation.navigate("settingsNavigator", {
-                  screen: "editCategories",
-                })
-              }
+              title="Uzupełnij stan konta"
+              onPress={() => navigation.navigate("Oszczędności")}
             />
           </View>
         )}
@@ -136,6 +136,12 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     backgroundColor: COLORS_STYLE.backgroundBlack,
+  },
+  buttonBox: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: 10,
   },
   scrollView: {
     flex: 1,

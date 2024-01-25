@@ -40,7 +40,6 @@ const MonthSummaryScreen = () => {
         />
       </View>
       <GoldenFrame name="ZOSTAŁO" value={moneyLeft} />
-      <Text style={styles.text}>Miesiąc</Text>
     </View>
   );
 };

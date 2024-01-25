@@ -1,11 +1,7 @@
 import { Text, View, StyleSheet } from "react-native";
 import COLORS_STYLE from "../../utils/styles/colors";
 const YearsSummaryScreen = () => {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Lata</Text>
-    </View>
-  );
+  return <View style={styles.container}></View>;
 };
 const styles = StyleSheet.create({
   container: {

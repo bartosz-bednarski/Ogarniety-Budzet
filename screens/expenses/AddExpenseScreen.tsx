@@ -74,6 +74,7 @@ const AddExpenseScreen: React.FC<{ navigation: Navigation }> = ({
       <View style={styles.flatlistBox}>
         {categories.map((item, index) => (
           <CircleStringColorButton
+            key={item.catId}
             iconName={item.iconName}
             catId={item.catId}
             name={item.name}
