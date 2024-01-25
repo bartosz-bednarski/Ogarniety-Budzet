@@ -26,13 +26,18 @@ const IncomesNavigator = () => {
   const categoriesExpenses = useAppSelector(
     (state) => state.expenses.monthExpenses
   );
+  const currentYearInStore = useAppSelector(
+    (state) => state.piggyBank.curentYear
+  );
   // const yearSavings = useAppSelector((state) => state.piggyBank.yearsSavings);
   // console.log(yearSavings);
+
   const dateChangeHandler = async () => {
     //Test
-    let currentDay = 10;
+    let currentDay = 25;
     let currentMonth = 5;
-
+    let currentYear = 2025;
+    console.log(currentYearInStore);
     //INCOMES
     if (categoriesIncomes.length > 0) {
       //if jest po to żeby kod się nie  wysypał jak nie ma zdefiniowanych żadnych wydatków
@@ -44,8 +49,9 @@ const IncomesNavigator = () => {
       // console.log("1234567897454", monthOfLatestIncome);
       if (
         currentMonth > monthOfLatestIncome ||
-        (currentMonth === 0 && monthOfLatestIncome === 11)
+        currentYear > currentYearInStore
       ) {
+        console.log(currentMonth, monthOfLatestIncome);
         const sumOfMonthIncomes = categoriesIncomes
           .map((item) => Number(item.value))
           .reduce((partialSum, a) => partialSum + a, 0);
@@ -79,7 +85,7 @@ const IncomesNavigator = () => {
       ).getMonth();
       if (
         currentMonth > monthOfLatestIncome ||
-        (currentMonth === 0 && monthOfLatestIncome === 11)
+        currentYear > currentYearInStore
       ) {
         dispatch(updateMonthExpenses());
         dispatch(updateWeekExpenses("monthChange"));

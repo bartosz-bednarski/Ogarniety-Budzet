@@ -39,7 +39,6 @@ const YearSummaryScreen = () => {
         />
       </View>
       <GoldenFrame name="BILANS" value={bilans} />
-      <Text style={styles.text}>Miesiąc</Text>
     </View>
   );
 };

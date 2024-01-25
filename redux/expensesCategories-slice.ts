@@ -6,13 +6,7 @@ type ExpensesCategoriesInitialStateType = {
   categoriesList: CategoryItem[];
 };
 const expensesCategoriesInitialState: ExpensesCategoriesInitialStateType = {
-  categoriesList: [
-    {
-      catId: "#DIFFEXPENSES",
-      iconName: "star",
-      name: "Inne",
-    },
-  ],
+  categoriesList: [],
 };
 
 const expensesCategoriesSlice = createSlice({

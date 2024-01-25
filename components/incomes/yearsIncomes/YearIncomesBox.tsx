@@ -23,27 +23,6 @@ const YearIncomesBox: React.FC<{ yearIncomes: YearIncomesBoxProps }> = ({
     value: yearIncomes.sumOfAllIncomes,
     sum: item.sumOfAllIncomes,
   }));
-  // console.log(yearIncomes.categoriesIncomes);
-  // const legend = yearIncomes.categoriesIncomes.map((item, index) => {
-  //   if (item.stillExsists) {
-  //     const filteredCategories = incomesCategories.find(
-  //       (category) => category.catId === item.catId
-  //     );
-  //     return {
-  //       ...filteredCategories,
-  //       value: item.value,
-  //       color: pieChartColors[index],
-  //     };
-  //   } else if (!item.stillExsists) {
-  //     return {
-  //       name: "Inne",
-  //       iconName: "star",
-  //       color: pieChartColors[index],
-  //       value: item.value,
-  //     };
-  //   }
-  // });
-  // console.log(legend);
   return (
     <View style={styles.container}>
       <Text style={styles.monthName}>{yearIncomes.year}</Text>
@@ -63,9 +42,12 @@ const YearIncomesBox: React.FC<{ yearIncomes: YearIncomesBoxProps }> = ({
               coverFill={COLORS_STYLE.backgroundBlack}
             />
           </View>
-          <Text style={styles.value}>
-            {numberWithSpaces(yearIncomes.sumOfAllIncomes)} PLN
-          </Text>
+          <View style={styles.details}>
+            <Text style={styles.textWhiteBig}>SUMA</Text>
+            <Text style={styles.value}>
+              {numberWithSpaces(yearIncomes.sumOfAllIncomes)} PLN
+            </Text>
+          </View>
         </View>
         <View style={styles.dropdownButton}>
           <Ionicons
@@ -116,9 +98,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  value: {
+  textWhiteBig: {
+    width: "100%",
+    fontSize: 26,
+    textAlign: "center",
+    color: "white",
+    fontWeight: "600",
+  },
+  details: {
     width: "60%",
-    fontSize: 30,
+  },
+  value: {
+    width: "100%",
+    fontSize: 26,
     textAlign: "center",
     color: COLORS_STYLE.basicGold,
   },

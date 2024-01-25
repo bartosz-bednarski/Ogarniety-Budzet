@@ -41,7 +41,10 @@ type ExpensesInitialState = {
   }[];
   plannedExpenses: PlannedExpenseCategoryItem[];
   weekExpensesUpdated: boolean;
+  curentYear: number;
 };
+
+const dateCheck = "2025-06-25T08:06:22.626Z";
 const expensesInitialState: ExpensesInitialState = {
   weekExpenses: [],
   weekCategoriesExpenses: [],
@@ -51,8 +54,9 @@ const expensesInitialState: ExpensesInitialState = {
   yearsExpenses: [],
   plannedExpenses: [],
   weekExpensesUpdated: false,
+  curentYear: new Date(dateCheck).getFullYear(),
 };
-const dateCheck = "2025-06-10T08:06:22.626Z";
+
 const expensesSlice = createSlice({
   name: "expenses",
   initialState: expensesInitialState,
@@ -284,7 +288,7 @@ const expensesSlice = createSlice({
         state.monthExpenses = [];
       }
       //wyzeruj wartości przychodów w tablicy z przychodami z aktualnego miesiąca
-      if (new Date(dateCheck).getMonth() === 0) {
+      if (new Date(dateCheck).getFullYear() > state.curentYear) {
         // const yearToSet = new Date().getFullYear();
         const yearToSet = new Date(dateCheck).getFullYear() - 1;
         if (state.yearExpenses.length > 0) {
@@ -338,6 +342,9 @@ const expensesSlice = createSlice({
         );
       }
     },
+    setCurrentYear: (state) => {
+      state.curentYear = new Date(dateCheck).getFullYear();
+    },
   },
 });
 export const setExpense = expensesSlice.actions.setExpense;
@@ -350,4 +357,5 @@ export const updatePlannedExpenseCategory =
   expensesSlice.actions.updatePlannedExpenseCategory;
 export const updateWeekExpenses = expensesSlice.actions.updateWeekExpenses;
 export const updateMonthExpenses = expensesSlice.actions.updateMonth;
+export const setCurrentYearExpenses = expensesSlice.actions.setCurrentYear;
 export default expensesSlice.reducer;

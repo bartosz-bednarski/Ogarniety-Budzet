@@ -70,9 +70,12 @@ const MonthIncomesBox: React.FC<{ monthIncomes: MonthIncomesBoxProps }> = ({
               coverFill={COLORS_STYLE.tabGrey}
             />
           </View>
-          <Text style={styles.value}>
-            {numberWithSpaces(monthIncomes.sumOfAllIncomes)} PLN
-          </Text>
+          <View style={styles.details}>
+            <Text style={styles.textWhiteBig}>SUMA</Text>
+            <Text style={styles.value}>
+              {numberWithSpaces(monthIncomes.sumOfAllIncomes)} PLN
+            </Text>
+          </View>
         </View>
         <View style={styles.dropdownButton}>
           <Ionicons
@@ -123,9 +126,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  textWhiteBig: {
+    width: "100%",
+    fontSize: 26,
+    textAlign: "center",
+    color: "white",
+    fontWeight: "600",
+  },
+  details: {
+    width: "60%",
+  },
   value: {
-    width: "50%",
-    fontSize: 30,
+    width: "100%",
+    fontSize: 26,
     textAlign: "center",
     color: COLORS_STYLE.basicGold,
   },

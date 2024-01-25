@@ -18,6 +18,7 @@ import PieChart from "react-native-pie-chart";
 import AddTargetButton from "../../components/piggyBank/actualTargets/AddTargetButton";
 import TargetGoldFrame from "../../components/piggyBank/actualTargets/TargetGoldFrame";
 import AddCircleButton from "../../utils/ui/AddCircleButton";
+import CustomButton from "../../utils/ui/CustomButton";
 const ActualTargetsScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {
@@ -28,29 +29,46 @@ const ActualTargetsScreen: React.FC<{ navigation: Navigation }> = ({
   const targetsIncomesArray = finantialTargets.map((item) =>
     item.incomes.map((value) => value.value)
   );
-
+  const categoriesIncomes = useAppSelector(
+    (state) => state.incomesCategories.categoriesList
+  );
+  const bankAccountStatus = useAppSelector(
+    (state) => state.piggyBank.bankAccountStatus
+  );
   const sumOfFinantialIncomes = targetsIncomesArray
     .flat(1)
     .reduce((partialSum, a) => partialSum + a, 0);
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.scrollView}>
-        <GoldenFrame name="ZAOSZCZĘDZONO" value={sumOfFinantialIncomes} />
-        {finantialTargets.map((item) => (
-          <TargetGoldFrame
-            name={item.name}
-            iconName={item.iconName}
-            id={item.id}
-            incomes={item.incomes}
-            targetValue={item.targetValue}
-            key={item.id}
+      {bankAccountStatus === 0 && (
+        <View style={styles.buttonBox}>
+          <CustomButton
+            title="Uzupełnij stan konta"
+            onPress={() => navigation.navigate("account")}
           />
-        ))}
-      </ScrollView>
-      <AddCircleButton
-        name="Dodaj cel"
-        onPress={() => navigation.navigate("addTarget")}
-      />
+        </View>
+      )}
+      {bankAccountStatus > 0 && (
+        <>
+          <ScrollView style={styles.scrollView}>
+            <GoldenFrame name="ZAOSZCZĘDZONO" value={sumOfFinantialIncomes} />
+            {finantialTargets.map((item) => (
+              <TargetGoldFrame
+                name={item.name}
+                iconName={item.iconName}
+                id={item.id}
+                incomes={item.incomes}
+                targetValue={item.targetValue}
+                key={item.id}
+              />
+            ))}
+          </ScrollView>
+          <AddCircleButton
+            name="Dodaj cel"
+            onPress={() => navigation.navigate("addTarget")}
+          />
+        </>
+      )}
     </View>
   );
 };
@@ -67,6 +85,12 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "white",
+  },
+  buttonBox: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: 10,
   },
 });
 export default ActualTargetsScreen;
