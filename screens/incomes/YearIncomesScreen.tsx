@@ -14,10 +14,7 @@ const YearIncomesScreen = () => {
     .map((item) => Number(item.sumOfAllIncomes))
     .reduce((partialSum, a) => partialSum + a, 0);
   // console.log(yearIncomes);
-  console.log(
-    "66666666666666tututu",
-    yearIncomes.map((item) => item.sumOfAllIncomes)
-  );
+
   return (
     <ScrollView style={styles.container}>
       {yearIncomes.length === 0 && (

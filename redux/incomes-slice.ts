@@ -31,7 +31,7 @@ type IncomesInitialState = {
   }[];
   curentYear: number;
 };
-const dateCheck = "2025-06-25T08:06:22.626Z";
+const dateCheck = "2027-05-26T08:06:22.626Z";
 const incomesInitialState: IncomesInitialState = {
   categoriesIncomes: [],
   yearIncomes: [],
@@ -143,9 +143,10 @@ const incomesSlice = createSlice({
           },
         ];
       }
-
+      console.log("REDUX", state.curentYear);
       //wyzeruj wartości przychodów w tablicy z przychodami z aktualnego miesiąca
       if (new Date(dateCheck).getFullYear() > state.curentYear) {
+        console.log("REDUX", state.curentYear);
         // const yearToSet = new Date().getFullYear();
         const yearToSet = new Date(dateCheck).getFullYear() - 1;
         if (state.yearIncomes.length > 0) {

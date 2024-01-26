@@ -44,7 +44,7 @@ type ExpensesInitialState = {
   curentYear: number;
 };
 
-const dateCheck = "2025-06-25T08:06:22.626Z";
+const dateCheck = "2027-05-26T08:06:22.626Z";
 const expensesInitialState: ExpensesInitialState = {
   weekExpenses: [],
   weekCategoriesExpenses: [],
@@ -332,6 +332,7 @@ const expensesSlice = createSlice({
           //wyzeruj wartości przychodów w tablicy z przychodami z poprzedniego roku
           state.yearExpenses = [];
         }
+        state.curentYear = new Date(dateCheck).getFullYear();
       } else {
         state.monthCategoriesExpenses = state.monthCategoriesExpenses.map(
           (item) => ({

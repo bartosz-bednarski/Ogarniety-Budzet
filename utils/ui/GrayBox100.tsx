@@ -1,15 +1,20 @@
 import { View, Text, StyleSheet } from "react-native";
-import COLORS_STYLE from "../../utils/styles/colors";
-import { numberWithSpaces } from "../../utils/numberWithSpaces";
-
-const GrayBox: React.FC<{ name: string; value: number }> = ({
+import COLORS_STYLE from "../styles/colors";
+import { numberWithSpaces } from "../numberWithSpaces";
+import { Ionicons } from "@expo/vector-icons";
+const GrayBox100: React.FC<{ name: string; value: number }> = ({
   name,
   value,
 }) => {
   const valueWithSpaces = numberWithSpaces(value);
   return (
     <View style={styles.box}>
+      {(name === "Oszczędzono" || name === "Cele finansowe") && (
+        <Ionicons name="wallet" color={COLORS_STYLE.basicGold} size={16} />
+      )}
+
       <Text style={styles.textUp}>{name}</Text>
+
       <Text style={styles.textDown}>{valueWithSpaces} PLN</Text>
     </View>
   );
@@ -17,25 +22,29 @@ const GrayBox: React.FC<{ name: string; value: number }> = ({
 
 const styles = StyleSheet.create({
   box: {
-    width: "45%",
+    width: "100%",
+    flexDirection: "row",
     backgroundColor: COLORS_STYLE.tabGrey,
     alignItems: "center",
     justifyContent: "center",
-    padding: 10,
-    gap: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    gap: 5,
     borderRadius: 10,
+    marginVertical: 5,
   },
   textUp: {
     color: "white",
     textAlign: "center",
     fontSize: 20,
     fontWeight: "600",
+    marginRight: 15,
   },
   textDown: {
     color: COLORS_STYLE.basicGold,
     textAlign: "center",
     fontSize: 24,
-    fontWeight: "600",
+    fontWeight: "700",
   },
 });
-export default GrayBox;
+export default GrayBox100;

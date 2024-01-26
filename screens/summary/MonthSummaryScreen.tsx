@@ -1,12 +1,17 @@
 import { Text, View, StyleSheet } from "react-native";
 import COLORS_STYLE from "../../utils/styles/colors";
-import GrayBox from "../../components/expenses/GrayBox";
+import GrayBox50 from "../../utils/ui/GrayBox50";
 import { useAppSelector } from "../../redux/hooks";
 import PieChart from "react-native-pie-chart";
 import GoldenFrame from "../../utils/ui/GoldenFrame";
+import GrayBox100 from "../../utils/ui/GrayBox100";
 const MonthSummaryScreen = () => {
+  const dateCheck = "2027-05-26T08:06:22.626Z";
   const expenses = useAppSelector(
     (state) => state.expenses.monthCategoriesExpenses
+  );
+  const finantialTargets = useAppSelector(
+    (state) => state.piggyBank.finantialTargets
   );
   const incomes = useAppSelector((state) => state.incomes.categoriesIncomes);
   const sumOfExpenses = expenses
@@ -23,13 +28,30 @@ const MonthSummaryScreen = () => {
       ? 0
       : 100 - Number(((sumOfExpenses / sumOfIncomes) * 100).toFixed(2)),
   ];
-  const moneyLeft = sumOfIncomes - sumOfExpenses;
+  const uno = finantialTargets.map((item) => {
+    return item.incomes.filter(
+      (t) => t.dateMonth === new Date(dateCheck).getMonth()
+    );
+  });
+  const duo = uno.map((item) =>
+    item.filter((k) => k.dateMonth === 4).map((i) => i.value)
+  );
+  const targetsArr = [];
+  for (let i = 0; i < duo.length; i++) {
+    targetsArr.push(...duo[i]);
+  }
+  const finantialTargetsSum = targetsArr.reduce(
+    (partialSum, a) => partialSum + a,
+    0
+  );
+  console.log(finantialTargetsSum);
+
+  const moneyLeft = sumOfIncomes - sumOfExpenses - finantialTargetsSum;
   return (
     <View style={styles.container}>
-      <View style={styles.rowBox}>
-        <GrayBox name="Przychody" value={sumOfIncomes} />
-        <GrayBox name="Wydatki" value={sumOfExpenses} />
-      </View>
+      <GrayBox100 name="Oszczędzono" value={sumOfIncomes - sumOfExpenses} />
+      <GrayBox100 name="Cele finansowe" value={finantialTargetsSum} />
+
       <View style={styles.pieChart}>
         <PieChart
           widthAndHeight={200}
@@ -40,6 +62,10 @@ const MonthSummaryScreen = () => {
         />
       </View>
       <GoldenFrame name="ZOSTAŁO" value={moneyLeft} />
+      <View style={styles.rowBox}>
+        <GrayBox50 name="Przychody" value={sumOfIncomes} />
+        <GrayBox50 name="Wydatki" value={sumOfExpenses} />
+      </View>
     </View>
   );
 };
@@ -47,8 +73,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 30,
     backgroundColor: COLORS_STYLE.backgroundBlack,
+    alignItems: "center",
   },
   rowBox: {
     width: "100%",

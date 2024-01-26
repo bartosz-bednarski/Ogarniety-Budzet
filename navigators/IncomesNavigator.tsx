@@ -34,9 +34,9 @@ const IncomesNavigator = () => {
 
   const dateChangeHandler = async () => {
     //Test
-    let currentDay = 25;
-    let currentMonth = 5;
-    let currentYear = 2025;
+    let currentDay = 27;
+    let currentMonth = 4;
+    let currentYear = 2027;
     console.log(currentYearInStore);
     //INCOMES
     if (categoriesIncomes.length > 0) {
@@ -95,7 +95,7 @@ const IncomesNavigator = () => {
   //useEffect do sprawdzania czy miesiąc uległ zmianie, jeżeli tak to wprowadzenie zmian w reduxie w danych
   useEffect(() => {
     dateChangeHandler();
-  }, []);
+  }, [currentYearInStore]);
   return (
     <Stack.Navigator
       screenOptions={{
