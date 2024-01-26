@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   box: {
     paddingHorizontal: 15,
     paddingTop: 20,
-    paddingBottom: 15,
+    paddingBottom: 0,
     borderRadius: 15,
     width: "100%",
     backgroundColor: COLORS_STYLE.tabGrey,
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   dropdownButton: {
-    marginVertical: 5,
+    marginVertical: 0,
     height: 20,
     width: "100%",
     justifyContent: "center",

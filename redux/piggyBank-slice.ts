@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { PiggyBankInitialState } from "../types/piggyBank";
-const dateCheck = "2025-06-25T08:06:22.626Z";
+const dateCheck = "2027-05-26T08:06:22.626Z";
 const piggyBankInitialState: PiggyBankInitialState = {
   bankAccountStatus: 0,
   finantialTargets: [],
@@ -71,6 +71,7 @@ const piggyBankSlice = createSlice({
           //wyzeruj wartości przychodów w tablicy z przychodami z poprzedniego roku
           state.yearSavings = [];
         }
+        state.curentYear = new Date(dateCheck).getFullYear();
       }
     },
     setFinantialTarget: (state, action) => {

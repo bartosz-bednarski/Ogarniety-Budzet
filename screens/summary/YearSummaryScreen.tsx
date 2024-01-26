@@ -1,6 +1,6 @@
 import { Text, View, StyleSheet } from "react-native";
 import COLORS_STYLE from "../../utils/styles/colors";
-import GrayBox from "../../components/expenses/GrayBox";
+import GrayBox50 from "../../utils/ui/GrayBox50";
 import PieChart from "react-native-pie-chart";
 import GoldenFrame from "../../utils/ui/GoldenFrame";
 import { useAppSelector } from "../../redux/hooks";
@@ -26,8 +26,8 @@ const YearSummaryScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.rowBox}>
-        <GrayBox name="Przychody" value={sumOfIncomes} />
-        <GrayBox name="Wydatki" value={sumOfExpenses} />
+        <GrayBox50 name="Przychody" value={sumOfIncomes} />
+        <GrayBox50 name="Wydatki" value={sumOfExpenses} />
       </View>
       <View style={styles.pieChart}>
         <PieChart
