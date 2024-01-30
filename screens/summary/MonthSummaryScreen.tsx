@@ -7,45 +7,63 @@ import GoldenFrame from "../../utils/ui/GoldenFrame";
 import GrayBox100 from "../../utils/ui/GrayBox100";
 const MonthSummaryScreen = () => {
   const dateCheck = "2027-05-26T08:06:22.626Z";
-  const expenses = useAppSelector(
-    (state) => state.expenses.monthCategoriesExpenses
-  );
+  const expenses = useAppSelector((state) => state.expenses.monthExpenses);
   const finantialTargets = useAppSelector(
     (state) => state.piggyBank.finantialTargets
   );
   const incomes = useAppSelector((state) => state.incomes.categoriesIncomes);
-  const sumOfExpenses = expenses
-    .map((item) => Number(item.sum))
-    .reduce((partialSum, a) => partialSum + a, 0);
-  const sumOfIncomes = incomes
-    .map((item) => Number(item.value))
-    .reduce((partialSum, a) => partialSum + a, 0);
-  const pieChartData = [
-    sumOfIncomes !== 0
-      ? Number(((sumOfExpenses / sumOfIncomes) * 100).toFixed(2))
-      : 1,
-    100 - Number(((sumOfExpenses / sumOfIncomes) * 100).toFixed(2)) < 0
-      ? 0
-      : 100 - Number(((sumOfExpenses / sumOfIncomes) * 100).toFixed(2)),
-  ];
-  const uno = finantialTargets.map((item) => {
+
+  const moneyleftFilterMonths = finantialTargets.map((item) => {
     return item.incomes.filter(
       (t) => t.dateMonth === new Date(dateCheck).getMonth()
     );
   });
-  const duo = uno.map((item) =>
+  const moneyLeftValues = moneyleftFilterMonths.map((item) =>
     item.filter((k) => k.dateMonth === 4).map((i) => i.value)
   );
   const targetsArr = [];
-  for (let i = 0; i < duo.length; i++) {
-    targetsArr.push(...duo[i]);
+  for (let i = 0; i < moneyLeftValues.length; i++) {
+    targetsArr.push(...moneyLeftValues[i]);
   }
   const finantialTargetsSum = targetsArr.reduce(
     (partialSum, a) => partialSum + a,
     0
   );
-  console.log(finantialTargetsSum);
-
+  const expensesValues = expenses.map((i) => Number(i.value));
+  console.log(expensesValues);
+  const sumOfExpenses = expensesValues.reduce(
+    (partialSum, a) => partialSum + a,
+    0
+  );
+  console.log(sumOfExpenses);
+  const sumOfIncomes = incomes
+    .map((item) => Number(item.value))
+    .reduce((partialSum, a) => partialSum + a, 0);
+  const pieChartData = [
+    sumOfIncomes !== 0
+      ? Number(
+          (
+            ((sumOfExpenses + finantialTargetsSum) / sumOfIncomes) *
+            100
+          ).toFixed(2)
+        )
+      : 1,
+    100 -
+      Number(
+        (((sumOfExpenses + finantialTargetsSum) / sumOfIncomes) * 100).toFixed(
+          2
+        )
+      ) <
+    0
+      ? 0
+      : 100 -
+        Number(
+          (
+            ((sumOfExpenses + finantialTargetsSum) / sumOfIncomes) *
+            100
+          ).toFixed(2)
+        ),
+  ];
   const moneyLeft = sumOfIncomes - sumOfExpenses - finantialTargetsSum;
   return (
     <View style={styles.container}>
