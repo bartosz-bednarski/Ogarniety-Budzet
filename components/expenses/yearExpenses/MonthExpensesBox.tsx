@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Pressable } from "react-native";
 import COLORS_STYLE from "../../../utils/styles/colors";
 import { MonthIncomesBoxProps } from "../../../types/incomes";
 import { MONTHS } from "../../../utils/months";
@@ -7,6 +7,9 @@ import pieChartColors from "../../../utils/styles/pieChartColors";
 import { useAppSelector } from "../../../redux/hooks";
 import { Ionicons } from "@expo/vector-icons";
 import { MonthExpensesBoxProps } from "../../../types/expenses";
+import { useState } from "react";
+import { numberWithSpaces } from "../../../utils/numberWithSpaces";
+import StripsColumn from "../StripsColumn";
 const MonthExpensesBox: React.FC<{ monthExpenses: MonthExpensesBoxProps }> = ({
   monthExpenses,
 }) => {
@@ -14,64 +17,97 @@ const MonthExpensesBox: React.FC<{ monthExpenses: MonthExpensesBoxProps }> = ({
     (state) => state.expensesCategories.categoriesList
   );
   // console.log(monthIncomes.categoriesIncomes);
-  const legend = monthExpenses.categoriesExpenses.map((item, index) => {
-    if (item.stillExsists) {
-      const filteredCategories = expensesCategories.find(
-        (category) => category.catId === item.catId
-      );
-      return {
-        ...filteredCategories,
-        value: item.sum,
-        color: pieChartColors[index],
-      };
-    } else if (!item.stillExsists) {
-      return {
-        name: "Inne",
-        iconName: "star",
-        color: pieChartColors[index],
-        value: item.sum,
-      };
+  console.log(monthExpenses);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const sumOfMonthExpenses = monthExpenses.categoriesExpenses
+    .map((item) => item.sum)
+    .reduce((partialSum, a) => partialSum + a, 0);
+  const stripsColumnsData: any = monthExpenses.categoriesExpenses.map(
+    (item, index) => {
+      if (item.stillExsists) {
+        const filteredCategories = expensesCategories.find(
+          (category) => category.catId === item.catId
+        );
+        return {
+          catId: item.catId,
+          iconName: filteredCategories?.iconName,
+          name: filteredCategories?.name,
+          value: item.sum,
+          sum: sumOfMonthExpenses,
+        };
+      } else if (!item.stillExsists) {
+        return {
+          catId: item.catId,
+          name: "Inne",
+          iconName: "star",
+          value: item.sum,
+          sum: sumOfMonthExpenses,
+        };
+      }
     }
-  });
-  // console.log(legend);
+  );
+  // const stripsColumnsData: any[] = yearIncomes.months.map((item) => ({
+  //   catId: item.month,
+  //   iconName: "calendar-outline",
+  //   name: MONTHS[item.month],
+  //   value: yearIncomes.sumOfAllIncomes,
+  //   sum: item.sumOfAllIncomes,
+  // }));
+
   return (
-    <View style={styles.mainContainer}>
+    <View style={styles.container}>
       <Text style={styles.monthName}>{MONTHS[monthExpenses.month]}</Text>
-      <View style={styles.mainBox}>
-        <View style={styles.chartBox}>
-          <PieChart
-            widthAndHeight={120}
-            series={monthExpenses.categoriesExpenses.map((category) =>
-              category.sum === 0 ? 1 : category.sum
-            )}
-            sliceColor={pieChartColors.slice(
-              0,
-              monthExpenses.categoriesExpenses.length
-            )}
-            coverRadius={0.45}
-            coverFill={COLORS_STYLE.backgroundBlack}
-          />
-        </View>
-        <View style={styles.detailsBox}>
-          <Text style={styles.value}>{monthExpenses.sumOfAllExpenses} PLN</Text>
-          <View style={styles.legendBox}>
-            {legend.map((item) => (
-              <View style={styles.legendItem} key={item?.iconName}>
-                <Ionicons name={item?.iconName} size={24} color={item?.color} />
-                <Text style={{ color: item?.color }}>{item?.name}</Text>
-              </View>
-            ))}
+      <Pressable
+        style={styles.box}
+        onPress={() => setShowDropdown(!showDropdown)}
+      >
+        <View style={styles.mainBox}>
+          <View style={styles.chartBox}>
+            <PieChart
+              widthAndHeight={120}
+              series={monthExpenses.categoriesExpenses.map((item) =>
+                item.sum === 0 ? 1 : item.sum
+              )}
+              sliceColor={pieChartColors.slice(
+                0,
+                monthExpenses.categoriesExpenses.length
+              )}
+              coverRadius={0.45}
+              coverFill={COLORS_STYLE.tabGrey}
+            />
+          </View>
+          <View style={styles.details}>
+            <Text style={styles.textWhiteBig}>SUMA</Text>
+            <Text style={styles.value}>
+              {numberWithSpaces(sumOfMonthExpenses)} PLN
+            </Text>
           </View>
         </View>
-      </View>
+        <View style={styles.dropdownButton}>
+          <Ionicons
+            name={showDropdown ? "caret-up" : "caret-down"}
+            color={COLORS_STYLE.basicGold}
+            size={20}
+          />
+        </View>
+        {showDropdown && <StripsColumn data={stripsColumnsData} />}
+      </Pressable>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  mainContainer: {
+  container: {
     width: "100%",
     gap: 5,
+  },
+  box: {
+    paddingHorizontal: 15,
+    paddingTop: 20,
+    paddingBottom: 0,
+    borderRadius: 15,
+    width: "100%",
+    backgroundColor: COLORS_STYLE.tabGrey,
   },
   monthName: {
     fontSize: 20,
@@ -79,30 +115,37 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   mainBox: {
-    width: "100%",
-    backgroundColor: COLORS_STYLE.tabGrey,
     flexDirection: "row",
-    paddingHorizontal: 15,
-    paddingVertical: 15,
+    justifyContent: "space-between",
+    alignItems: "center",
     gap: 20,
-    borderRadius: 15,
   },
   chartBox: {
     width: "40%",
     justifyContent: "center",
     alignItems: "center",
   },
-  detailsBox: {
-    flexDirection: "column",
-    width: "50%",
-    gap: 10,
-    alignItems: "center",
+  dropdownButton: {
+    marginVertical: 0,
+    height: 20,
+    width: "100%",
     justifyContent: "center",
+    alignItems: "center",
+  },
+  textWhiteBig: {
+    width: "100%",
+    fontSize: 26,
+    textAlign: "center",
+    color: "white",
+    fontWeight: "600",
+  },
+  details: {
+    width: "60%",
   },
   value: {
-    fontSize: 30,
-    textAlign: "center",
     width: "100%",
+    fontSize: 26,
+    textAlign: "center",
     color: COLORS_STYLE.basicGold,
   },
   legendBox: {

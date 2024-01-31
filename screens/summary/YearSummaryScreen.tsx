@@ -76,7 +76,7 @@ const YearSummaryScreen = () => {
         />
       </View>
 
-      <GoldenFrame name="ZOSTAŁO" value={bilans} />
+      <GoldenFrame name="STAN KONTA" value={bilans} />
       <View style={styles.rowBox}>
         <GrayBox50 name="Przychody" value={sumOfIncomes} />
         <GrayBox50 name="Wydatki" value={sumOfExpenses} />
