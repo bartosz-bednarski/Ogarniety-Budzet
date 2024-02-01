@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   },
   name: {
     color: COLORS_STYLE.labelGrey,
-    width: 100,
+    width: 140,
   },
   price: {
     color: COLORS_STYLE.basicGold,

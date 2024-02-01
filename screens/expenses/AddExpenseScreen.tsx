@@ -8,6 +8,7 @@ import {
   Button,
   TextInput,
   ScrollView,
+  Pressable,
 } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { useState } from "react";
@@ -15,6 +16,7 @@ import { addExpense } from "../../redux/expenses-slice";
 import CustomButton from "../../utils/ui/CustomButton";
 import { Navigation } from "../../types/global";
 import CircleStringColorButton from "../../utils/ui/CircleStringColorButton";
+import COLORS_STYLE from "../../utils/styles/colors";
 const AddExpenseScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {
@@ -60,14 +62,27 @@ const AddExpenseScreen: React.FC<{ navigation: Navigation }> = ({
       >
         <View style={styles.modalLayout}>
           <View style={styles.modalView}>
-            <Text style={styles.label}>Podaj kwotę</Text>
+            <Text style={styles.label}>Dodajesz nowy wydatek</Text>
             <TextInput
               style={styles.textInput}
               value={value}
               onChangeText={(text) => setValue(text)}
               keyboardType="numeric"
+              placeholder="Podaj kwotę"
+              placeholderTextColor={COLORS_STYLE.labelGrey}
             />
-            <CustomButton title="Zatwierdź" onPress={submitHandler} />
+            <View style={styles.modalButtonsBox}>
+              <Pressable
+                style={styles.modalButton}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text style={styles.modalButtonText}>Anuluj</Text>
+              </Pressable>
+              <Text style={styles.textGold}>|</Text>
+              <Pressable style={styles.modalButton} onPress={submitHandler}>
+                <Text style={styles.modalButtonText}>Zapisz</Text>
+              </Pressable>
+            </View>
           </View>
         </View>
       </Modal>
@@ -142,8 +157,8 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    width: "80%",
-    backgroundColor: "#dddbdb",
+    width: "90%",
+    backgroundColor: COLORS_STYLE.tabGrey,
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
@@ -157,25 +172,43 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   label: {
-    fontSize: 16,
+    fontSize: 20,
     marginBottom: 20,
+    color: COLORS_STYLE.basicGold,
+    fontWeight: "500",
   },
   textInput: {
-    backgroundColor: "white",
-    borderColor: "black",
-    borderWidth: 1,
+    borderColor: "white",
+    borderBottomWidth: 1,
     width: "100%",
-    borderRadius: 10,
     height: 50,
     paddingVertical: 5,
-    paddingHorizontal: 5,
-    color: "black",
+    paddingHorizontal: 0,
+    color: "white",
     marginBottom: 20,
   },
   flatlistBox: {
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
+  },
+  modalButtonsBox: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  modalButton: {
+    justifyContent: "center",
+    width: "40%",
+  },
+  modalButtonText: {
+    color: "white",
+    fontSize: 20,
+    textAlign: "center",
+  },
+  textGold: {
+    color: COLORS_STYLE.basicGold,
+    fontSize: 20,
   },
 });
 export default AddExpenseScreen;

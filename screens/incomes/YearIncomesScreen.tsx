@@ -35,7 +35,7 @@ const YearIncomesScreen = () => {
                 item.sumOfAllIncomes === 0 ? 1 : item.sumOfAllIncomes
               )}
               sliceColor={pieChartColors.slice(0, yearIncomes.length)}
-              coverRadius={0.45}
+              coverRadius={0.6}
               coverFill={COLORS_STYLE.backgroundBlack}
             />
             <View style={styles.yearChartLegend}>

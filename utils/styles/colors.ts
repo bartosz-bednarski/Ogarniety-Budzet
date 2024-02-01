@@ -1,7 +1,7 @@
 const COLORS_STYLE = {
   basicGold: "#D4AF37",
   labelGrey: "#868686",
-  tabGrey: "#3D3B3B",
+  tabGrey: "#363636",
   backgroundBlack: "#000000",
   yellow: "#D3BE00",
   green: "#0FB734",

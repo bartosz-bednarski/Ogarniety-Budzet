@@ -25,7 +25,7 @@ const SingleExpense: React.FC<SingleExpenseProps> = ({
 };
 const styles = StyleSheet.create({
   container: {
-    height: 30,
+    height: 40,
     width: "100%",
     flexDirection: "row",
     gap: 3,

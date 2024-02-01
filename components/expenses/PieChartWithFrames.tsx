@@ -15,7 +15,7 @@ const PieChartWithFrames: React.FC<{
         widthAndHeight={120}
         series={categoriesExpensesWithNames.map((item) => item.sum)}
         sliceColor={categoriesExpensesWithNames.map((item) => item.color)}
-        coverRadius={0.65}
+        coverRadius={0.6}
         coverFill={COLORS_STYLE.backgroundBlack}
       />
       <View style={styles.topFramesBox}>

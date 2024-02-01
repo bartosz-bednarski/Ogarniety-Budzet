@@ -39,7 +39,7 @@ const YearExpensesScreen: React.FC<{ navigation: Navigation }> = ({
               widthAndHeight={200}
               series={yearExpenses.map((item) => item.sumOfAllExpenses)}
               sliceColor={pieChartColors.slice(0, yearExpenses.length)}
-              coverRadius={0.45}
+              coverRadius={0.6}
               coverFill={COLORS_STYLE.backgroundBlack}
             />
             <View style={styles.yearChartLegend}>
