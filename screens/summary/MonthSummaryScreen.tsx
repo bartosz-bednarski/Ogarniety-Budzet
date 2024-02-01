@@ -75,7 +75,7 @@ const MonthSummaryScreen = () => {
           widthAndHeight={200}
           series={pieChartData}
           sliceColor={["red", "green"]}
-          coverRadius={0.45}
+          coverRadius={0.6}
           coverFill={COLORS_STYLE.backgroundBlack}
         />
       </View>

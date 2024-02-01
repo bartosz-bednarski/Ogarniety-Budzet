@@ -7,6 +7,7 @@ import {
   TextInput,
   StyleSheet,
   ScrollView,
+  Pressable,
 } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { useState } from "react";
@@ -79,14 +80,30 @@ const PlannedExpensesScreen: React.FC<{ navigation: Navigation }> = ({
             >
               <View style={styles.modalLayout}>
                 <View style={styles.modalView}>
-                  <Text style={styles.modalLabel}>Podaj kwotę</Text>
+                  <Text style={styles.modalLabel}>Planujesz wydatki</Text>
                   <TextInput
                     style={styles.textInput}
                     value={value}
                     onChangeText={(text) => setValue(text)}
                     keyboardType="numeric"
+                    placeholder="Podaj kwotę"
+                    placeholderTextColor={COLORS_STYLE.labelGrey}
                   />
-                  <CustomButton title="Zatwierdź" onPress={submitHandler} />
+                  <View style={styles.modalButtonsBox}>
+                    <Pressable
+                      style={styles.modalButton}
+                      onPress={() => setModalVisible(!modalVisible)}
+                    >
+                      <Text style={styles.modalButtonText}>Anuluj</Text>
+                    </Pressable>
+                    <Text style={styles.textGold}>|</Text>
+                    <Pressable
+                      style={styles.modalButton}
+                      onPress={submitHandler}
+                    >
+                      <Text style={styles.modalButtonText}>Zapisz</Text>
+                    </Pressable>
+                  </View>
                 </View>
               </View>
             </Modal>
@@ -159,8 +176,8 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    width: "80%",
-    backgroundColor: "#dddbdb",
+    width: "90%",
+    backgroundColor: COLORS_STYLE.tabGrey,
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
@@ -174,19 +191,19 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   modalLabel: {
-    fontSize: 16,
+    fontSize: 20,
     marginBottom: 20,
+    color: COLORS_STYLE.basicGold,
+    fontWeight: "500",
   },
   textInput: {
-    backgroundColor: "white",
-    borderColor: "black",
-    borderWidth: 1,
+    borderColor: "white",
+    borderBottomWidth: 1,
     width: "100%",
-    borderRadius: 10,
     height: 50,
     paddingVertical: 5,
-    paddingHorizontal: 5,
-    color: "black",
+    paddingHorizontal: 0,
+    color: "white",
     marginBottom: 20,
   },
   label: {
@@ -198,6 +215,24 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
+  },
+  modalButtonsBox: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  modalButton: {
+    justifyContent: "center",
+    width: "40%",
+  },
+  modalButtonText: {
+    color: "white",
+    fontSize: 20,
+    textAlign: "center",
+  },
+  textGold: {
+    color: COLORS_STYLE.basicGold,
+    fontSize: 20,
   },
 });
 export default PlannedExpensesScreen;

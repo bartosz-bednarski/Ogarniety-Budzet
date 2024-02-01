@@ -24,7 +24,7 @@ const YearsSummaryBox: React.FC<{
               widthAndHeight={120}
               series={pieChartData}
               sliceColor={["red", "green"]}
-              coverRadius={0.45}
+              coverRadius={0.6}
               coverFill={COLORS_STYLE.tabGrey}
             />
           </View>

@@ -11,28 +11,27 @@ const ExpensesCategoriesListScreen: React.FC<{ navigation: any }> = ({
   const navigateToaddNewCategoryHandler = () => {
     navigation.navigate("addNewCategory");
   };
-  const renderCategoryHandler = ({ item }: { item: CategoryItem }) => {
-    return (
-      <CategoryItemRow
-        catId={item.catId}
-        iconName={item.iconName}
-        name={item.name}
-        onPress={() =>
-          navigation.navigate("editCategory", {
-            name: item.name,
-            catId: item.catId,
-            iconName: item.iconName,
-          })
-        }
-      />
-    );
-  };
+
   return (
     <View style={styles.editCategoriesContainer}>
       <View style={styles.categoriesScrollList}>
         <FlatList
           data={categories}
-          renderItem={renderCategoryHandler}
+          renderItem={({ item, index }) => (
+            <CategoryItemRow
+              catId={item.catId}
+              iconName={item.iconName}
+              name={item.name}
+              color={index}
+              onPress={() =>
+                navigation.navigate("editCategory", {
+                  name: item.name,
+                  catId: item.catId,
+                  iconName: item.iconName,
+                })
+              }
+            />
+          )}
           keyExtractor={(item) => item.catId.toString()}
         />
       </View>

@@ -72,7 +72,7 @@ const MonthExpensesBox: React.FC<{ monthExpenses: MonthExpensesBoxProps }> = ({
                 0,
                 monthExpenses.categoriesExpenses.length
               )}
-              coverRadius={0.45}
+              coverRadius={0.6}
               coverFill={COLORS_STYLE.tabGrey}
             />
           </View>
@@ -82,15 +82,19 @@ const MonthExpensesBox: React.FC<{ monthExpenses: MonthExpensesBoxProps }> = ({
               {numberWithSpaces(sumOfMonthExpenses)} PLN
             </Text>
           </View>
+          <View style={styles.calendarBox}>
+            <Ionicons name="calendar-outline" color={"white"} size={24} />
+          </View>
         </View>
+
+        {showDropdown && <StripsColumn data={stripsColumnsData} />}
         <View style={styles.dropdownButton}>
           <Ionicons
             name={showDropdown ? "caret-up" : "caret-down"}
-            color={COLORS_STYLE.basicGold}
+            color={COLORS_STYLE.tabGrey}
             size={20}
           />
         </View>
-        {showDropdown && <StripsColumn data={stripsColumnsData} />}
       </Pressable>
     </View>
   );
@@ -102,12 +106,13 @@ const styles = StyleSheet.create({
     gap: 5,
   },
   box: {
-    paddingHorizontal: 15,
-    paddingTop: 20,
+    paddingTop: 10,
     paddingBottom: 0,
     borderRadius: 15,
     width: "100%",
     backgroundColor: COLORS_STYLE.tabGrey,
+    borderColor: COLORS_STYLE.basicGold,
+    borderWidth: 1,
   },
   monthName: {
     fontSize: 20,
@@ -119,18 +124,25 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     gap: 20,
+    width: "100%",
+    marginBottom: 5,
   },
   chartBox: {
-    width: "40%",
+    width: "35%",
     justifyContent: "center",
     alignItems: "center",
+    marginLeft: 5,
   },
-  dropdownButton: {
-    marginVertical: 0,
-    height: 20,
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
+
+  details: {
+    width: "45%",
+  },
+  calendarBox: {
+    width: "20%",
+    height: "100%",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+    paddingRight: 5,
   },
   textWhiteBig: {
     width: "100%",
@@ -139,26 +151,25 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "600",
   },
-  details: {
-    width: "60%",
-  },
   value: {
     width: "100%",
     fontSize: 26,
     textAlign: "center",
+    fontWeight: "600",
     color: COLORS_STYLE.basicGold,
   },
-  legendBox: {
+  dropdownButton: {
+    marginTop: 5,
+    marginVertical: 0,
+    height: 20,
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 5,
-  },
-  legendItem: {
-    flexDirection: "row",
-    gap: 4,
+    backgroundColor: COLORS_STYLE.basicGold,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+    borderWidth: 1,
+    borderColor: COLORS_STYLE.basicGold,
   },
 });
 export default MonthExpensesBox;

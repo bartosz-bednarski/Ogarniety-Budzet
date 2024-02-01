@@ -32,7 +32,7 @@ const PieChartRealisation: React.FC<{
           widthAndHeight={120}
           series={pieChartData}
           sliceColor={[COLORS_STYLE.green, COLORS_STYLE.red]}
-          coverRadius={0.65}
+          coverRadius={0.6}
           coverFill={COLORS_STYLE.backgroundBlack}
         />
         <Text style={styles.percentage}>{percentage?.toFixed(0)}%</Text>
