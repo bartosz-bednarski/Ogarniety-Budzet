@@ -1,35 +1,36 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Pressable } from "react-native";
 import PieChart from "react-native-pie-chart";
 import COLORS_STYLE from "../../../utils/styles/colors";
 import React from "react";
+import { Ionicons } from "@expo/vector-icons";
 import { MonthSavings, YearSavings } from "../../../types/piggyBank";
 import { MONTHS } from "../../../utils/months";
 import { numberWithSpaces } from "../../../utils/numberWithSpaces";
-const SavingsInMonthsGreyFrame: React.FC<{ yearSavings: MonthSavings[] }> = ({
-  yearSavings,
-}) => {
-  const reversed = yearSavings.reverse();
-  const data = yearSavings.slice(0, 3);
+const SavingsInMonthsGreyFrame: React.FC<{
+  yearSavings: MonthSavings[];
+  onPress: () => void;
+}> = ({ yearSavings, onPress }) => {
   return (
-    <View style={styles.container}>
-      {yearSavings.map((item) => (
-        <View style={styles.box} key={item.month}>
-          <View style={styles.pieChartBox}>
-            <PieChart
-              widthAndHeight={100}
-              series={[item.savings]}
-              sliceColor={[COLORS_STYLE.basicGold]}
-              coverRadius={0.65}
-              coverFill={COLORS_STYLE.tabGrey}
+    <Pressable style={styles.container} onPress={onPress}>
+      <View style={styles.leftBox}>
+        {yearSavings.map((item) => (
+          <View style={styles.item} key={item.month}>
+            <Ionicons
+              name="calendar"
+              size={64}
+              color={COLORS_STYLE.basicGold}
             />
             <Text style={styles.monthName}>{MONTHS[Number(item.month)]}</Text>
+            <Text style={styles.monthSavings}>
+              {numberWithSpaces(item.savings)} PLN
+            </Text>
           </View>
-          <Text style={styles.monthSavings}>
-            {numberWithSpaces(item.savings)} PLN
-          </Text>
-        </View>
-      ))}
-    </View>
+        ))}
+      </View>
+      <View style={styles.rightBox}>
+        <Ionicons name="caret-forward" color={COLORS_STYLE.tabGrey} size={24} />
+      </View>
+    </Pressable>
   );
 };
 const styles = StyleSheet.create({
@@ -37,24 +38,32 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: COLORS_STYLE.tabGrey,
     flexDirection: "row",
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-    gap: 20,
+
     borderRadius: 15,
   },
-  box: {
+  rightBox: {
+    paddingVertical: 15,
+    width: "5%",
+    backgroundColor: COLORS_STYLE.basicGold,
+    alignItems: "center",
+    justifyContent: "center",
+    borderBottomRightRadius: 15,
+    borderTopRightRadius: 15,
+  },
+  leftBox: {
+    paddingVertical: 15,
+    flexDirection: "row",
+    width: "95%",
+    paddingLeft: 15,
+  },
+  item: {
     flexDirection: "column",
     gap: 5,
-  },
-  pieChartBox: {
-    position: "relative",
-    width: 100,
+    justifyContent: "center",
+    alignItems: "center",
   },
   monthName: {
-    position: "absolute",
-    top: 40,
-    left: 21,
-    fontSize: 12,
+    fontSize: 13,
     color: "white",
     fontWeight: "600",
     textAlign: "center",
