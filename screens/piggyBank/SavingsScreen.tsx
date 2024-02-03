@@ -147,7 +147,10 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
           <Text style={styles.label}>
             Oszczędności w poszczególnych miesiącach
           </Text>
-          <SavingsInMonthsGreyFrame yearSavings={monthsSavings} />
+          <SavingsInMonthsGreyFrame
+            yearSavings={monthsSavings}
+            onPress={() => navigation.navigate("monthsSavings")}
+          />
         </>
       )}
 
