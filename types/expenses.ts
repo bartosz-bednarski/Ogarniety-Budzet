@@ -1,3 +1,57 @@
+import { PlannedExpenseCategoryItem, CategoryItem } from "./settings";
+export type WeekExpenses = {
+  catId: string;
+  value: number;
+  date: string;
+  dateString: string;
+  id: string;
+}[];
+export type WeekCategoriesExpenses = { catId: string; sum: number }[];
+export type MonthExpenses = {
+  catId: string;
+  value: number;
+  date: string;
+  dateString: string;
+  id: string;
+}[];
+export type MonthCategoriesExpenses = { catId: string; sum: number }[];
+export type YearExpenses = {
+  month: number;
+  sumOfAllExpenses: number;
+  categoriesExpenses: {
+    catId: string;
+    sum: number;
+    stillExsists: boolean;
+  }[];
+}[];
+export type YearsExpenses = {
+  year: number;
+  sumOfAllExpenses: number;
+  months: {
+    month: number;
+    sumOfAllExpenses: number;
+    categoriesExpenses: {
+      catId: string;
+      sum: number;
+      stillExsists: boolean;
+    }[];
+  }[];
+}[];
+export type ExpensesInitialState = {
+  weekExpenses: WeekExpenses;
+  weekCategoriesExpenses: WeekCategoriesExpenses;
+  monthExpenses: MonthExpenses;
+  monthCategoriesExpenses: MonthCategoriesExpenses;
+  yearExpenses: YearExpenses;
+  yearsExpenses: YearsExpenses;
+  plannedExpenses: PlannedExpenseCategoryItem[];
+  weekExpensesUpdated: boolean;
+  curentYear: number;
+};
+export type ExpensesCategoriesInitialState = {
+  categoriesList: CategoryItem[];
+};
+
 export type CategoryPieChartProps = {
   plannedExpense: number;
   realExpense: number;

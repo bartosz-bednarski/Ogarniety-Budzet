@@ -1,3 +1,42 @@
+import { CategoryItem } from "./settings";
+export type CategoriesIncomes = {
+  catId: string;
+  date: string;
+  dateString: string;
+  value: number;
+}[];
+export type YearIncomes = {
+  month: number;
+  sumOfAllIncomes: number;
+  categoriesIncomes: {
+    catId: string;
+    value: number;
+    stillExsists: boolean;
+  }[];
+}[];
+export type YearsIncomes = {
+  year: number;
+  sumOfAllIncomes: number;
+  months: {
+    month: number;
+    sumOfAllIncomes: number;
+    categoriesIncomes: {
+      catId: string;
+      value: number;
+      stillExsists: boolean;
+    }[];
+  }[];
+}[];
+
+export type IncomesInitialState = {
+  categoriesIncomes: CategoriesIncomes;
+  yearIncomes: YearIncomes;
+  yearsIncomes: YearsIncomes;
+  curentYear: number;
+};
+export type IncomesCategoriesInitialState = {
+  categoriesList: CategoryItem[];
+};
 export type CategoriesIncomesWithNames = {
   catId: string;
   iconName?: string;

@@ -6,7 +6,9 @@ import AddCategoryButton from "../../../components/settings/AddCategoryButton";
 const ExpensesCategoriesListScreen: React.FC<{ navigation: any }> = ({
   navigation,
 }) => {
-  const categories = useAppSelector((state) => state.categories.categoriesList);
+  const categories = useAppSelector(
+    (state) => state.expensesCategories.categoriesList
+  );
   console.log(categories.length);
   const navigateToaddNewCategoryHandler = () => {
     navigation.navigate("addNewCategory");

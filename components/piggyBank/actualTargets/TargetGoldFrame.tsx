@@ -1,20 +1,9 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Pressable,
-  Modal,
-  Alert,
-  TextInput,
-} from "react-native";
+import { View, Text, StyleSheet, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import COLORS_STYLE from "../../../utils/styles/colors";
 import PieChart from "react-native-pie-chart";
 import { FinantialTarget } from "../../../types/piggyBank";
-import { useEffect, useState } from "react";
-import CustomButton from "../../../utils/ui/CustomButton";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import { addValueToFinantialTarget } from "../../../redux/piggyBank-slice";
+import { useState } from "react";
 import ModalAddValue from "./ModalAddValue";
 import ModalEditValue from "./ModalEditValue";
 import ModalDeleteTarget from "./ModalDeleteTarget";
@@ -26,7 +15,6 @@ const TargetGoldFrame: React.FC<FinantialTarget> = ({
   incomes,
   targetValue,
 }) => {
-  const dispatch = useAppDispatch();
   const [addValueModalVisible, setAddValueModalVisible] = useState(false);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [deleteTargetModalVisible, setDeleteTargetModalVisible] =

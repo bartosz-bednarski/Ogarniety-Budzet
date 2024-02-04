@@ -1,50 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { PlannedExpenseCategoryItem } from "../types/settings";
-type ExpensesInitialState = {
-  weekExpenses: {
-    catId: string;
-    value: number;
-    date: string;
-    dateString: string;
-    id: string;
-  }[];
-  weekCategoriesExpenses: { catId: string; sum: number }[];
-  monthExpenses: {
-    catId: string;
-    value: number;
-    date: string;
-    dateString: string;
-    id: string;
-  }[];
-  monthCategoriesExpenses: { catId: string; sum: number }[];
-  yearExpenses: {
-    month: number;
-    sumOfAllExpenses: number;
-    categoriesExpenses: {
-      catId: string;
-      sum: number;
-      stillExsists: boolean;
-    }[];
-  }[];
-  yearsExpenses: {
-    year: number;
-    sumOfAllExpenses: number;
-    months: {
-      month: number;
-      sumOfAllExpenses: number;
-      categoriesExpenses: {
-        catId: string;
-        sum: number;
-        stillExsists: boolean;
-      }[];
-    }[];
-  }[];
-  plannedExpenses: PlannedExpenseCategoryItem[];
-  weekExpensesUpdated: boolean;
-  curentYear: number;
-};
+import { ExpensesInitialState } from "../types/expenses";
 
-const dateCheck = "2027-05-26T08:06:22.626Z";
+const dateCheck = "2024-03-12T08:06:22.626Z";
 const expensesInitialState: ExpensesInitialState = {
   weekExpenses: [],
   weekCategoriesExpenses: [],
@@ -253,9 +210,7 @@ const expensesSlice = createSlice({
       const year = new Date().getFullYear();
       const fullDate = `${day}.${month}.${year}`;
       const monthToSet = new Date(state.monthExpenses[0].date).getMonth();
-      const randLetter = String.fromCharCode(
-        65 + Math.floor(Math.random() * 26)
-      );
+
       const sumOfAllExpenses = state.monthCategoriesExpenses
         .map((item) => Number(item.sum))
         .reduce((partialSum, a) => partialSum + a, 0);
@@ -322,9 +277,6 @@ const expensesSlice = createSlice({
               sum: 0,
               // date: new Date().toJSON(),
             })
-          );
-          const randLetter = String.fromCharCode(
-            65 + Math.floor(Math.random() * 26)
           );
           state.monthExpenses = [];
           state.weekExpenses = [];

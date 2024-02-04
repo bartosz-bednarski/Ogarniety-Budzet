@@ -1,10 +1,6 @@
 import AddTargetForm from "../../components/piggyBank/actualTargets/AddTargetForm";
 import { useState } from "react";
-import {
-  OnPressHandler,
-  OnSetCategoryIcon,
-  OnSetInputText,
-} from "../../types/settings";
+import { OnPressHandler } from "../../types/settings";
 import { useAppDispatch } from "../../redux/hooks";
 import { setFinantialTarget } from "../../redux/piggyBank-slice";
 const AddTargetScreen: React.FC<{
@@ -48,21 +44,6 @@ const AddTargetScreen: React.FC<{
           incomeId: incomeId,
         })
       );
-      // dispatch(
-      //   addExpensesCategory({
-      //     name: inputText,
-      //     iconName: categoryIcon,
-      //     catId: catId,
-      //   })
-      // );
-      // dispatch(
-      //   setPlannedExpense({
-      //     name: inputText,
-      //     iconName: categoryIcon,
-      //     catId: catId,
-      //   })
-      // );
-      // dispatch(setExpense({ catId: catId }));
       navigation.navigate("actualTargets");
     }
   };

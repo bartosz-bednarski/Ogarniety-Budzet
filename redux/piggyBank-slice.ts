@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { PiggyBankInitialState } from "../types/piggyBank";
-const dateCheck = "2027-05-26T08:06:22.626Z";
+const dateCheck = "2024-03-12T08:06:22.626Z";
 const piggyBankInitialState: PiggyBankInitialState = {
   bankAccountStatus: 0,
   finantialTargets: [],
@@ -49,7 +49,6 @@ const piggyBankSlice = createSlice({
             state.yearsSavings.length === 0 ||
             state.yearsSavings === undefined
           ) {
-            console.log("!!!!!!!!!!!!!!!!!!!!!!!!");
             state.yearsSavings = [
               {
                 year: yearToSet,
@@ -96,13 +95,6 @@ const piggyBankSlice = createSlice({
       const indexOfTarget = state.finantialTargets.findIndex(
         (item) => item.id === action.payload.id
       );
-      // state.finantialTargets[indexOfTarget].incomes = [
-      //   {
-      //     dateMonth: new Date(dateCheck).getMonth(),
-      //     value: 0,
-      //     id: action.payload.incomeId,
-      //   },
-      // ];
       state.finantialTargets[indexOfTarget].incomes = [
         ...state.finantialTargets[indexOfTarget].incomes,
         {

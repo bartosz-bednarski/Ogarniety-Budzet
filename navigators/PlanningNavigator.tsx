@@ -5,8 +5,11 @@ import { Pressable } from "react-native";
 import SettingsNavigator from "./SettingsNavigator";
 import COLORS_STYLE from "../utils/styles/colors";
 import PlanningTabNavigator from "./planning/PlanningTabNavigator";
-
+import { useAppSelector } from "../redux/hooks";
 const PlanningNavigator = () => {
+  const bankAccountStatus = useAppSelector(
+    (state) => state.piggyBank.bankAccountStatus
+  );
   const Stack = createNativeStackNavigator();
 
   return (
@@ -25,18 +28,20 @@ const PlanningNavigator = () => {
           headerTitle: "Planowanie",
           headerTitleAlign: "center",
           headerRight: () => {
-            return (
-              <Pressable
-                onPress={() => navigation.navigate("settingsNavigator")}
-              >
-                <Ionicons
-                  name="cog"
-                  size={30}
-                  color={COLORS_STYLE.basicGold}
-                  style={{ marginRight: 10 }}
-                />
-              </Pressable>
-            );
+            if (bankAccountStatus !== 0) {
+              return (
+                <Pressable
+                  onPress={() => navigation.navigate("settingsNavigator")}
+                >
+                  <Ionicons
+                    name="cog"
+                    size={30}
+                    color={COLORS_STYLE.basicGold}
+                    style={{ marginRight: 10 }}
+                  />
+                </Pressable>
+              );
+            }
           },
         })}
       />

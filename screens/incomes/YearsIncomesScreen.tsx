@@ -1,5 +1,4 @@
-import { Text, View, StyleSheet, ScrollView, Pressable } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { Text, View, StyleSheet, ScrollView } from "react-native";
 import PieChart from "react-native-pie-chart";
 import pieChartColors from "../../utils/styles/pieChartColors";
 import COLORS_STYLE from "../../utils/styles/colors";
@@ -11,7 +10,6 @@ const YearsIncomesScreen = () => {
   const sumOfAllIncomes = yearsIncomes
     .map((item) => Number(item.sumOfAllIncomes))
     .reduce((partialSum, a) => partialSum + a, 0);
-  // console.log("YEARS_INCOMES", yearsIncomes);
   return (
     <ScrollView style={styles.container}>
       {yearsIncomes.length === 0 && (
@@ -47,35 +45,6 @@ const YearsIncomesScreen = () => {
           </View>
         </>
       )}
-
-      {/* {yearIncomes.length > 0 &&
-      yearIncomes.map((item) => (
-        <View style={{ backgroundColor: "red", marginVertical: 30 }}>
-          <Text style={styles.text}>{item.month}</Text>
-          <Text style={styles.text}>{item.sumOfAllIncomes}</Text>
-          <View>
-            {item.categoriesIncomes.map((category) => {
-              if (category.stillExsists) {
-                return (
-                  <>
-                    <Text style={styles.text}>{category.catId}</Text>
-                    <Text style={styles.text}>{category.value}</Text>
-                    <Text style={styles.text}>Istnieje</Text>
-                  </>
-                );
-              } else {
-                return (
-                  <>
-                    <Text style={styles.text}>{category.catId}</Text>
-                    <Text style={styles.text}>{category.value}</Text>
-                    <Text style={styles.text}>Nie istnieje</Text>
-                  </>
-                );
-              }
-            })}
-          </View>
-        </View>
-      ))} */}
     </ScrollView>
   );
 };

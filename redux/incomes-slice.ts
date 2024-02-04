@@ -1,37 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { IncomesInitialState } from "../types/incomes";
 
-type IncomesInitialState = {
-  categoriesIncomes: {
-    catId: string;
-    date: string;
-    dateString: string;
-    value: number;
-  }[];
-  yearIncomes: {
-    month: number;
-    sumOfAllIncomes: number;
-    categoriesIncomes: {
-      catId: string;
-      value: number;
-      stillExsists: boolean;
-    }[];
-  }[];
-  yearsIncomes: {
-    year: number;
-    sumOfAllIncomes: number;
-    months: {
-      month: number;
-      sumOfAllIncomes: number;
-      categoriesIncomes: {
-        catId: string;
-        value: number;
-        stillExsists: boolean;
-      }[];
-    }[];
-  }[];
-  curentYear: number;
-};
-const dateCheck = "2027-05-26T08:06:22.626Z";
+const dateCheck = "2024-03-12T08:06:22.626Z";
 const incomesInitialState: IncomesInitialState = {
   categoriesIncomes: [],
   yearIncomes: [],
@@ -128,7 +98,6 @@ const incomesSlice = createSlice({
             })),
           },
         ];
-        console.log("REDUX!!!!", state.yearIncomes);
       } else if (state.yearIncomes.length > 0) {
         state.yearIncomes = [
           ...state.yearIncomes,
@@ -143,10 +112,8 @@ const incomesSlice = createSlice({
           },
         ];
       }
-      console.log("REDUX", state.curentYear);
       //wyzeruj wartości przychodów w tablicy z przychodami z aktualnego miesiąca
       if (new Date(dateCheck).getFullYear() > state.curentYear) {
-        console.log("REDUX", state.curentYear);
         // const yearToSet = new Date().getFullYear();
         const yearToSet = new Date(dateCheck).getFullYear() - 1;
         if (state.yearIncomes.length > 0) {
@@ -157,7 +124,6 @@ const incomesSlice = createSlice({
             state.yearsIncomes.length === 0 ||
             state.yearsIncomes === undefined
           ) {
-            console.log("!!!!!!!!!!!!!!!!!!!!!!!!");
             state.yearsIncomes = [
               {
                 year: yearToSet,
@@ -205,6 +171,6 @@ const incomesSlice = createSlice({
 export const setIncome = incomesSlice.actions.setIncome;
 export const updateIncome = incomesSlice.actions.updateIncome;
 export const deleteIncome = incomesSlice.actions.deleteIncome;
-export const updateMonth = incomesSlice.actions.updateMonth;
+export const updateMonthIncomes = incomesSlice.actions.updateMonth;
 export const setCurrentYearIncomes = incomesSlice.actions.setCurrentYear;
 export default incomesSlice.reducer;

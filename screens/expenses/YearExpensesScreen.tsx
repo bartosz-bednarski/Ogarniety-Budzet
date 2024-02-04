@@ -1,6 +1,5 @@
-import { Text, View, StyleSheet, ScrollView, Pressable } from "react-native";
+import { Text, View, StyleSheet, ScrollView } from "react-native";
 import { useAppSelector } from "../../redux/hooks";
-import { Ionicons } from "@expo/vector-icons";
 import PieChart from "react-native-pie-chart";
 import COLORS_STYLE from "../../utils/styles/colors";
 import { useEffect, useState } from "react";
@@ -10,13 +9,11 @@ import { MONTHS } from "../../utils/months";
 import MonthExpensesBox from "../../components/expenses/yearExpenses/MonthExpensesBox";
 import GoldenFrame from "../../utils/ui/GoldenFrame";
 MONTHS;
-// import PieChartComponent from "../components/PieChartComponent";
 
 const YearExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {
   const yearExpenses = useAppSelector((state) => state.expenses.yearExpenses);
-  // console.log("#########################", yearExpenses);
   const sumOfAllExpenses = yearExpenses
     .map((item) => Number(item.sumOfAllExpenses))
     .reduce((partialSum, a) => partialSum + a, 0);
@@ -26,7 +23,7 @@ const YearExpensesScreen: React.FC<{ navigation: Navigation }> = ({
       {yearExpenses.length === 0 && (
         <View style={styles.informationBox}>
           <Text style={styles.informationText}>
-            Tutaj wyświetlane będą informacje o przychodach z poszczególnych
+            Tutaj wyświetlane będą informacje o wydatkach z poszczególnych
             miesięcy
           </Text>
         </View>

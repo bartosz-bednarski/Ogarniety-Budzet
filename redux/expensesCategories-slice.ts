@@ -1,11 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 import { CategoryItem } from "../types/settings";
+import { ExpensesCategoriesInitialState } from "../types/expenses";
 
-type ExpensesCategoriesInitialStateType = {
-  categoriesList: CategoryItem[];
-};
-const expensesCategoriesInitialState: ExpensesCategoriesInitialStateType = {
+const expensesCategoriesInitialState: ExpensesCategoriesInitialState = {
   categoriesList: [],
 };
 

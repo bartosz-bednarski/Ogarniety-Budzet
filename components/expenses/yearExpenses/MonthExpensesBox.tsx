@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import COLORS_STYLE from "../../../utils/styles/colors";
-import { MonthIncomesBoxProps } from "../../../types/incomes";
 import { MONTHS } from "../../../utils/months";
 import PieChart from "react-native-pie-chart";
 import pieChartColors from "../../../utils/styles/pieChartColors";
@@ -9,15 +8,13 @@ import { Ionicons } from "@expo/vector-icons";
 import { MonthExpensesBoxProps } from "../../../types/expenses";
 import { useState } from "react";
 import { numberWithSpaces } from "../../../utils/numberWithSpaces";
-import StripsColumn from "../StripsColumn";
+import StripsColumn from "../../../utils/ui/StripsColumn";
 const MonthExpensesBox: React.FC<{ monthExpenses: MonthExpensesBoxProps }> = ({
   monthExpenses,
 }) => {
   const expensesCategories = useAppSelector(
     (state) => state.expensesCategories.categoriesList
   );
-  // console.log(monthIncomes.categoriesIncomes);
-  console.log(monthExpenses);
   const [showDropdown, setShowDropdown] = useState(false);
   const sumOfMonthExpenses = monthExpenses.categoriesExpenses
     .map((item) => item.sum)
@@ -46,13 +43,6 @@ const MonthExpensesBox: React.FC<{ monthExpenses: MonthExpensesBoxProps }> = ({
       }
     }
   );
-  // const stripsColumnsData: any[] = yearIncomes.months.map((item) => ({
-  //   catId: item.month,
-  //   iconName: "calendar-outline",
-  //   name: MONTHS[item.month],
-  //   value: yearIncomes.sumOfAllIncomes,
-  //   sum: item.sumOfAllIncomes,
-  // }));
 
   return (
     <View style={styles.container}>

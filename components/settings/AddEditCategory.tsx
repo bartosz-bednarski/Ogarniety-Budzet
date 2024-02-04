@@ -2,12 +2,8 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   TextInput,
   Pressable,
-  Button,
-  Modal,
-  Alert,
   ScrollView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -15,7 +11,6 @@ import { useState } from "react";
 import { CATEGORY_ICONS } from "../../utils/categoryIcons";
 import { AddEditCategoryProps } from "../../types/settings";
 import COLORS_STYLE from "../../utils/styles/colors";
-import DeleteCategoryButton from "./DeleteCategoryButton";
 import CustomButton from "../../utils/ui/CustomButton";
 const AddEditCategory: React.FC<AddEditCategoryProps> = ({
   onSetCategoryIcon,
@@ -23,7 +18,6 @@ const AddEditCategory: React.FC<AddEditCategoryProps> = ({
   onCategoryEdit,
   categoryIcon,
   inputText,
-  newCategory,
 }) => {
   const icons = CATEGORY_ICONS;
   const [dropdownActive, setDropdownActive] = useState(false);

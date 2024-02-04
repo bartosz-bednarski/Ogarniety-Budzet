@@ -1,5 +1,4 @@
-import { Text, View, StyleSheet, ScrollView, Pressable } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { Text, View, StyleSheet, ScrollView } from "react-native";
 import PieChart from "react-native-pie-chart";
 import COLORS_STYLE from "../../utils/styles/colors";
 import { useAppSelector } from "../../redux/hooks";
@@ -13,7 +12,6 @@ const YearIncomesScreen = () => {
   const sumOfAllIncomes = yearIncomes
     .map((item) => Number(item.sumOfAllIncomes))
     .reduce((partialSum, a) => partialSum + a, 0);
-  // console.log(yearIncomes);
 
   return (
     <ScrollView style={styles.container}>

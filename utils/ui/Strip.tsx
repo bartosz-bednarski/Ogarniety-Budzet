@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet } from "react-native";
-import COLORS_STYLE from "../../utils/styles/colors";
+import COLORS_STYLE from "../styles/colors";
 import { Ionicons } from "@expo/vector-icons";
-import pieChartColors from "../../utils/styles/pieChartColors";
+import pieChartColors from "../styles/pieChartColors";
 const Strip: React.FC<{
   iconName: string;
   categoryName: string | undefined;
