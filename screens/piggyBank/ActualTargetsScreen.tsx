@@ -1,21 +1,8 @@
-import {
-  FlatList,
-  Text,
-  View,
-  Modal,
-  Alert,
-  TextInput,
-  StyleSheet,
-  Pressable,
-  ScrollView,
-} from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { View, StyleSheet, ScrollView } from "react-native";
 import COLORS_STYLE from "../../utils/styles/colors";
 import { Navigation } from "../../types/global";
 import { useAppSelector } from "../../redux/hooks";
 import GoldenFrame from "../../utils/ui/GoldenFrame";
-import PieChart from "react-native-pie-chart";
-import AddTargetButton from "../../components/piggyBank/actualTargets/AddTargetButton";
 import TargetGoldFrame from "../../components/piggyBank/actualTargets/TargetGoldFrame";
 import AddCircleButton from "../../utils/ui/AddCircleButton";
 import CustomButton from "../../utils/ui/CustomButton";

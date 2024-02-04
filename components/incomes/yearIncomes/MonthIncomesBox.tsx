@@ -6,7 +6,7 @@ import PieChart from "react-native-pie-chart";
 import pieChartColors from "../../../utils/styles/pieChartColors";
 import { useAppSelector } from "../../../redux/hooks";
 import { Ionicons } from "@expo/vector-icons";
-import StripsColumn from "../../expenses/StripsColumn";
+import StripsColumn from "../../../utils/ui/StripsColumn";
 import { useState } from "react";
 import { numberWithSpaces } from "../../../utils/numberWithSpaces";
 const MonthIncomesBox: React.FC<{ monthIncomes: MonthIncomesBoxProps }> = ({

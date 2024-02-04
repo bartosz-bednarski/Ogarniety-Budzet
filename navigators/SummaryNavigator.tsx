@@ -1,15 +1,14 @@
 import { Pressable } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Ionicons } from "@expo/vector-icons";
-import IncomesScreen from "../screens/incomes/MonthIncomesScreen";
 import SettingsNavigator from "./SettingsNavigator";
 import COLORS_STYLE from "../utils/styles/colors";
-import IncomesTabNavigator from "./incomes/IncomesTabNavigator";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { useEffect } from "react";
-import { updateMonth, updateYear } from "../redux/incomes-slice";
 import SummaryTabNavigator from "./summary/SummaryTabNavigator";
+import { useAppSelector } from "../redux/hooks";
 const SummaryNavigator = () => {
+  const bankAccountStatus = useAppSelector(
+    (state) => state.piggyBank.bankAccountStatus
+  );
   const Stack = createNativeStackNavigator();
 
   return (
@@ -28,18 +27,20 @@ const SummaryNavigator = () => {
           headerTitle: "Podsumowanie",
           headerTitleAlign: "center",
           headerRight: () => {
-            return (
-              <Pressable
-                onPress={() => navigation.navigate("settingsNavigator")}
-              >
-                <Ionicons
-                  name="cog"
-                  size={30}
-                  color={COLORS_STYLE.basicGold}
-                  style={{ marginRight: 10 }}
-                />
-              </Pressable>
-            );
+            if (bankAccountStatus !== 0) {
+              return (
+                <Pressable
+                  onPress={() => navigation.navigate("settingsNavigator")}
+                >
+                  <Ionicons
+                    name="cog"
+                    size={30}
+                    color={COLORS_STYLE.basicGold}
+                    style={{ marginRight: 10 }}
+                  />
+                </Pressable>
+              );
+            }
           },
         })}
       />

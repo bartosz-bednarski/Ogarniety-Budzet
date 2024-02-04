@@ -11,7 +11,7 @@ import { useAppSelector } from "../../../redux/hooks";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import { numberWithSpaces } from "../../../utils/numberWithSpaces";
-import StripsColumn from "../../expenses/StripsColumn";
+import StripsColumn from "../../../utils/ui/StripsColumn";
 const YearIncomesBox: React.FC<{ yearIncomes: YearIncomesBoxProps }> = ({
   yearIncomes,
 }) => {

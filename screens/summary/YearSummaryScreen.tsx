@@ -30,11 +30,6 @@ const YearSummaryScreen = () => {
     (partialSum, a) => partialSum + a,
     0
   );
-  console.log(finantialTargetsSum);
-  // const finantialTargetsSum = targetsArr.reduce(
-  //   (partialSum, a) => partialSum + a,
-  //   0
-  // );
   const bilans = sumOfIncomes - sumOfExpenses - finantialTargetsSum;
 
   const pieChartData = [

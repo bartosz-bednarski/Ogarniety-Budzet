@@ -1,19 +1,21 @@
 import { Pressable } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Ionicons } from "@expo/vector-icons";
-import IncomesScreen from "../screens/incomes/MonthIncomesScreen";
 import SettingsNavigator from "./SettingsNavigator";
 import COLORS_STYLE from "../utils/styles/colors";
 import IncomesTabNavigator from "./incomes/IncomesTabNavigator";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { useEffect } from "react";
-import { updateMonth } from "../redux/incomes-slice";
+import { updateMonthIncomes } from "../redux/incomes-slice";
 import { updateMonthPiggyBank } from "../redux/piggyBank-slice";
 import {
   updateWeekExpenses,
   updateMonthExpenses,
 } from "../redux/expenses-slice";
 const IncomesNavigator = () => {
+  const bankAccountStatus = useAppSelector(
+    (state) => state.piggyBank.bankAccountStatus
+  );
   const Stack = createNativeStackNavigator();
   const categoriesIncomes = useAppSelector(
     (state) => state.incomes.categoriesIncomes
@@ -29,15 +31,12 @@ const IncomesNavigator = () => {
   const currentYearInStore = useAppSelector(
     (state) => state.piggyBank.curentYear
   );
-  // const yearSavings = useAppSelector((state) => state.piggyBank.yearsSavings);
-  // console.log(yearSavings);
 
   const dateChangeHandler = async () => {
     //Test
-    let currentDay = 27;
-    let currentMonth = 4;
-    let currentYear = 2027;
-    console.log(currentYearInStore);
+    let currentDay = 1;
+    let currentMonth = 2;
+    let currentYear = 2024;
     //INCOMES
     if (categoriesIncomes.length > 0) {
       //if jest po to żeby kod się nie  wysypał jak nie ma zdefiniowanych żadnych wydatków
@@ -46,12 +45,10 @@ const IncomesNavigator = () => {
       const monthOfLatestIncome = new Date(
         categoriesIncomes[0].date
       ).getMonth();
-      // console.log("1234567897454", monthOfLatestIncome);
       if (
         currentMonth > monthOfLatestIncome ||
         currentYear > currentYearInStore
       ) {
-        console.log(currentMonth, monthOfLatestIncome);
         const sumOfMonthIncomes = categoriesIncomes
           .map((item) => Number(item.value))
           .reduce((partialSum, a) => partialSum + a, 0);
@@ -59,14 +56,13 @@ const IncomesNavigator = () => {
           .map((item) => Number(item.value))
           .reduce((partialSum, a) => partialSum + a, 0);
         const savings = Number(sumOfMonthIncomes) - Number(sumOfMonthExpenses);
-        console.log("SAVINGS", savings);
         dispatch(
           updateMonthPiggyBank({
             month: monthOfLatestIncome,
             savings: savings,
           })
         );
-        dispatch(updateMonth());
+        dispatch(updateMonthIncomes());
       }
     }
 
@@ -112,18 +108,20 @@ const IncomesNavigator = () => {
           headerTitle: "Przychody",
           headerTitleAlign: "center",
           headerRight: () => {
-            return (
-              <Pressable
-                onPress={() => navigation.navigate("settingsNavigator")}
-              >
-                <Ionicons
-                  name="cog"
-                  size={30}
-                  color={COLORS_STYLE.basicGold}
-                  style={{ marginRight: 10 }}
-                />
-              </Pressable>
-            );
+            if (bankAccountStatus !== 0) {
+              return (
+                <Pressable
+                  onPress={() => navigation.navigate("settingsNavigator")}
+                >
+                  <Ionicons
+                    name="cog"
+                    size={30}
+                    color={COLORS_STYLE.basicGold}
+                    style={{ marginRight: 10 }}
+                  />
+                </Pressable>
+              );
+            }
           },
         })}
       />

@@ -5,16 +5,10 @@ import {
   FlatList,
   TextInput,
   Pressable,
-  Button,
-  Modal,
-  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
 import { CATEGORY_ICONS } from "../../../utils/categoryIcons";
-import { AddEditCategoryProps } from "../../../types/settings";
 import COLORS_STYLE from "../../../utils/styles/colors";
-import DeleteCategoryButton from "../../settings/DeleteCategoryButton";
 import CustomButton from "../../../utils/ui/CustomButton";
 import { AddTargetFormProps } from "../../../types/piggyBank";
 const AddTargetForm: React.FC<AddTargetFormProps> = ({

@@ -1,37 +1,32 @@
-import { Text, View, StyleSheet, ScrollView, Pressable } from "react-native";
+import { Text, View, StyleSheet, ScrollView } from "react-native";
 import { useAppSelector } from "../../redux/hooks";
-import { Ionicons } from "@expo/vector-icons";
-import PieChart from "react-native-pie-chart";
 import COLORS_STYLE from "../../utils/styles/colors";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import pieChartColors from "../../utils/styles/pieChartColors";
 import SingleExpense from "../../components/expenses/SingleExpense";
 import { CategoriesExpensesWithNames } from "../../types/expenses";
 import CustomButton from "../../utils/ui/CustomButton";
 import { Navigation } from "../../types/global";
-import FrameSmall from "../../utils/ui/FrameUnderlineSmall";
 import PieChartWithFrames from "../../components/expenses/PieChartWithFrames";
-import Strip from "../../components/expenses/Strip";
-import StripsColumn from "../../components/expenses/StripsColumn";
+import StripsColumn from "../../utils/ui/StripsColumn";
 import PieChartRealisation from "../../components/expenses/PieChartRealisation";
 import AddCircleButton from "../../utils/ui/AddCircleButton";
-// import PieChartComponent from "../components/PieChartComponent";
 
 const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {
-  const categories = useAppSelector((state) => state.categories.categoriesList);
+  const categories = useAppSelector(
+    (state) => state.expensesCategories.categoriesList
+  );
   const categoriesExpenses = useAppSelector(
     (state) => state.expenses.weekCategoriesExpenses
   );
   const plannedExpenses = useAppSelector(
     (state) => state.expenses.plannedExpenses
   );
-  const weekExpenses = useAppSelector((state) => state.expenses.weekExpenses);
   const bankAccountStatus = useAppSelector(
     (state) => state.piggyBank.bankAccountStatus
   );
-  // console.log(weekExpenses);
   const categoriesExpensesWithNames: CategoriesExpensesWithNames =
     categoriesExpenses.map((category, index) => ({
       ...category,
@@ -56,7 +51,6 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
     .map((cat) => Number(cat.sum))
     .reduce((partialSum, a) => partialSum + a, 0);
   const toSpend = sumOfPlannedExpenses - sumOfAllExpenses;
-  console.log(lastExpensesToShow);
   useEffect(() => {
     stripsColumnData = categoriesExpenses.map((category) => ({
       ...category,

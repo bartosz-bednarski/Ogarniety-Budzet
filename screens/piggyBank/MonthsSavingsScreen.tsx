@@ -1,27 +1,35 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import COLORS_STYLE from "../../utils/styles/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { useAppSelector } from "../../redux/hooks";
 import { MONTHS } from "../../utils/months";
 import { numberWithSpaces } from "../../utils/numberWithSpaces";
 import GoldenFrame from "../../utils/ui/GoldenFrame";
-const MonthsSavings = () => {
+const MonthsSavingsScreen = () => {
   const yearSavings = useAppSelector((state) => state.piggyBank.yearSavings);
   const sum = yearSavings
     .map((item) => item.savings)
     .reduce((partialSum, a) => partialSum + a, 0);
   console.log(sum);
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <GoldenFrame name="SUMA" value={sum} />
-      {yearSavings.map((item) => (
-        <View style={styles.item}>
-          <Ionicons name="calendar" size={44} color={COLORS_STYLE.basicGold} />
-          <Text style={styles.monthName}>{MONTHS[Number(item.month)]}</Text>
-          <Text style={styles.value}>{numberWithSpaces(item.savings)} PLN</Text>
-        </View>
-      ))}
-    </View>
+      <View style={styles.columnListBox}>
+        {yearSavings.map((item) => (
+          <View style={styles.item} key={item.month}>
+            <Ionicons
+              name="calendar"
+              size={44}
+              color={COLORS_STYLE.basicGold}
+            />
+            <Text style={styles.monthName}>{MONTHS[Number(item.month)]}</Text>
+            <Text style={styles.value}>
+              {numberWithSpaces(item.savings)} PLN
+            </Text>
+          </View>
+        ))}
+      </View>
+    </ScrollView>
   );
 };
 
@@ -31,6 +39,9 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 30,
     backgroundColor: COLORS_STYLE.backgroundBlack,
+  },
+  columnListBox: {
+    marginTop: 20,
     gap: 10,
   },
   item: {
@@ -52,4 +63,4 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
 });
-export default MonthsSavings;
+export default MonthsSavingsScreen;

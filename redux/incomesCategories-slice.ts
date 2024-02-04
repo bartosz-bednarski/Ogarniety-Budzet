@@ -1,11 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { CategoryItem } from "../types/settings";
+import { IncomesCategoriesInitialState } from "../types/incomes";
 
-type IncomesCategoriesInitialStateType = {
-  categoriesList: CategoryItem[];
-};
-
-const incomesCategoriesInitialState: IncomesCategoriesInitialStateType = {
+const incomesCategoriesInitialState: IncomesCategoriesInitialState = {
   categoriesList: [],
 };
 

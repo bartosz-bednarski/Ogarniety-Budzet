@@ -1,11 +1,9 @@
 import { Text, View, StyleSheet, ScrollView } from "react-native";
 import COLORS_STYLE from "../../utils/styles/colors";
 import { useAppSelector } from "../../redux/hooks";
-import GoldenFrame from "../../utils/ui/GoldenFrame";
 import PieChart from "react-native-pie-chart";
 import GrayBox50 from "../../utils/ui/GrayBox50";
 import GrayBox100 from "../../utils/ui/GrayBox100";
-import pieChartColors from "../../utils/styles/pieChartColors";
 import YearsSummaryBox from "../../components/summary/YearsSummaryBox";
 const YearsSummaryScreen = () => {
   const yearsExpenses = useAppSelector((state) => state.expenses.yearsExpenses);
@@ -38,10 +36,6 @@ const YearsSummaryScreen = () => {
       yearsSavings[yearsSavings.findIndex((k) => k.year === item.year)]
         .sumOfSavings,
   }));
-  console.log("expense", yearsExpenses);
-  console.log("incomes", yearsIncomes);
-  console.log("savings", yearsSavings);
-  console.log(grayBoxData);
   return (
     <ScrollView style={styles.container}>
       {yearsIncomes.length === 0 && (
@@ -70,12 +64,6 @@ const YearsSummaryScreen = () => {
           {grayBoxData.map((item) => (
             <YearsSummaryBox data={item} key={item.year} />
           ))}
-
-          {/* <View style={styles.monthIncomesBox}>
-            {yearsIncomes.map((year) => (
-              <YearIncomesBox yearIncomes={year} key={year.year} />
-            ))}
-          </View> */}
         </>
       )}
     </ScrollView>

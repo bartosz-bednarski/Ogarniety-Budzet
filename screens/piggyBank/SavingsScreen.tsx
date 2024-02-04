@@ -1,15 +1,16 @@
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, ScrollView } from "react-native";
 import COLORS_STYLE from "../../utils/styles/colors";
 import { Navigation } from "../../types/global";
 import GoldenFrame from "../../utils/ui/GoldenFrame";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { useAppSelector } from "../../redux/hooks";
 import CustomButton from "../../utils/ui/CustomButton";
 import { useState } from "react";
 import PieChart from "react-native-pie-chart";
 import { numberWithSpaces } from "../../utils/numberWithSpaces";
 
 import CustomModal from "../../components/piggyBank/savings/CustomModal";
-import SavingsInMonthsGreyFrame from "../../components/piggyBank/savings/SavingsInMonthsGreyFrame";
+import MonthsSavingsBox from "../../components/piggyBank/savings/MonthsSavingsBox";
+import RealisedTargetsBox from "../../components/piggyBank/savings/RealisedTargetsBox";
 const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {
@@ -22,9 +23,6 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
   const monthIncomes = useAppSelector(
     (state) => state.incomes.categoriesIncomes
   );
-  const categoriesIncomes = useAppSelector(
-    (state) => state.incomesCategories.categoriesList
-  );
   const categoriesExpenses = useAppSelector(
     (state) => state.expenses.monthCategoriesExpenses
   );
@@ -33,7 +31,6 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
   );
   const yearSavings = useAppSelector((state) => state.piggyBank.yearSavings);
   const monthsSavings = yearSavings.slice(0, 3);
-  console.log(yearSavings);
   let monthIncomesSum;
   let bankAccountPlusIncomes;
   let monthExpensesSum;
@@ -93,71 +90,69 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
       : 100 -
         Number(((sumOfFinantialIncomes / totalBankAccount) * 100).toFixed(2)),
   ];
-  console.log(realisedTargets);
   return (
     <View style={styles.container}>
-      {/* {categoriesIncomes.length === 0 && (
-        <View style={styles.buttonBox}>
-          <CustomButton
-            title="Dodaj kategorie przychodów"
-            onPress={() =>
-              navigation.navigate("settingsNavigator", {
-                screen: "addNewIncomesCategory",
-              })
-            }
-          />
-        </View>
-      )} */}
-      {bankAccountStatus === 0 && (
-        <View style={styles.buttonBox}>
-          <CustomButton
-            title="Uzupełnij stan konta"
-            onPress={() => setModalVisible(true)}
-          />
-        </View>
-      )}
-
-      {bankAccountStatus > 0 && (
-        <>
-          <GoldenFrame name="STAN KONTA" value={totalBankAccount} />
-          <Text style={styles.label}> Udziały w oszczędnościach</Text>
-          <View style={styles.greyBoxContainer}>
-            <PieChart
-              widthAndHeight={120}
-              series={pieChartOneData}
-              sliceColor={[COLORS_STYLE.basicGold, COLORS_STYLE.green]}
-              coverRadius={0.65}
-              coverFill={COLORS_STYLE.tabGrey}
+      <ScrollView>
+        {bankAccountStatus === 0 && (
+          <View style={styles.buttonBox}>
+            <CustomButton
+              title="Uzupełnij stan konta"
+              onPress={() => setModalVisible(true)}
             />
-            <View style={styles.greyBoxDetails}>
-              <Text style={styles.greyBoxLabel}>Wolne oszczędności</Text>
-              <Text style={styles.greyBoxGreenText}>
-                {numberWithSpaces(freeSavings)} PLN
-              </Text>
-              <Text style={styles.greyBoxLabel}>Cele finansowe</Text>
-              <Text style={styles.greyBoxGoldText}>
-                {numberWithSpaces(sumOfFinantialIncomes)} PLN
-              </Text>
-            </View>
           </View>
-        </>
-      )}
-      {yearSavings.length > 0 && (
-        <>
-          <Text style={styles.label}>
-            Oszczędności w poszczególnych miesiącach
-          </Text>
-          <SavingsInMonthsGreyFrame
-            yearSavings={monthsSavings}
-            onPress={() => navigation.navigate("monthsSavings")}
-          />
-        </>
-      )}
+        )}
 
-      <CustomModal
-        modalVisible={modalVisible}
-        setModalVisible={(value) => setModalVisible(value)}
-      />
+        {bankAccountStatus > 0 && (
+          <>
+            <GoldenFrame name="STAN KONTA" value={totalBankAccount} />
+            <Text style={styles.label}> Udziały w oszczędnościach</Text>
+            <View style={styles.greyBoxContainer}>
+              <PieChart
+                widthAndHeight={120}
+                series={pieChartOneData}
+                sliceColor={[COLORS_STYLE.basicGold, COLORS_STYLE.green]}
+                coverRadius={0.65}
+                coverFill={COLORS_STYLE.backgroundBlack}
+              />
+              <View style={styles.greyBoxDetails}>
+                <Text style={styles.greyBoxLabel}>Wolne oszczędności</Text>
+                <Text style={styles.greyBoxGreenText}>
+                  {numberWithSpaces(freeSavings)} PLN
+                </Text>
+                <Text style={styles.greyBoxLabel}>Cele finansowe</Text>
+                <Text style={styles.greyBoxGoldText}>
+                  {numberWithSpaces(sumOfFinantialIncomes)} PLN
+                </Text>
+              </View>
+            </View>
+          </>
+        )}
+        {yearSavings.length > 0 && (
+          <>
+            <Text style={styles.label}>
+              Oszczędności w poszczególnych miesiącach
+            </Text>
+            <MonthsSavingsBox
+              yearSavings={monthsSavings}
+              onPress={() => navigation.navigate("monthsSavings")}
+            />
+            {realisedTargets.length > 0 && (
+              <>
+                <Text style={styles.label}>Zrealizowane cele finansowe</Text>
+                <RealisedTargetsBox
+                  realisedTargets={realisedTargets.slice(0, 3)}
+                  onPress={() => navigation.navigate("realisedTargets")}
+                />
+              </>
+            )}
+          </>
+        )}
+
+        <CustomModal
+          modalVisible={modalVisible}
+          setModalVisible={(value) => setModalVisible(value)}
+        />
+      </ScrollView>
     </View>
   );
 };
@@ -166,7 +161,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingVertical: 10,
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
     backgroundColor: COLORS_STYLE.backgroundBlack,
   },
   text: {
@@ -186,8 +181,8 @@ const styles = StyleSheet.create({
   },
   greyBoxContainer: {
     width: "100%",
-    backgroundColor: COLORS_STYLE.tabGrey,
     flexDirection: "row",
+    alignItems: "center",
     paddingHorizontal: 15,
     paddingVertical: 15,
     gap: 20,
@@ -198,19 +193,25 @@ const styles = StyleSheet.create({
   },
   greyBoxLabel: {
     color: "white",
-    fontSize: 12,
+    fontSize: 16,
   },
   greyBoxGoldText: {
     color: COLORS_STYLE.basicGold,
     fontSize: 16,
     marginTop: 5,
+    paddingBottom: 10,
     marginBottom: 15,
+    borderBottomWidth: 1,
+    borderColor: COLORS_STYLE.basicGold,
   },
   greyBoxGreenText: {
     color: COLORS_STYLE.green,
-    fontSize: 16,
+    fontSize: 20,
     marginTop: 5,
+    paddingBottom: 10,
     marginBottom: 15,
+    borderBottomWidth: 1,
+    borderColor: COLORS_STYLE.green,
   },
 });
 export default SavingsScreen;

@@ -1,20 +1,16 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Ionicons } from "@expo/vector-icons";
-import ExpensesScreen from "../screens/expenses/WeekExpensesScreen";
 import { Pressable } from "react-native";
 import SettingsNavigator from "./SettingsNavigator";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import ExpensesTabNavigator from "./expenses/ExpensesTabNavigator";
 import COLORS_STYLE from "../utils/styles/colors";
 import AddExpenseScreen from "../screens/expenses/AddExpenseScreen";
-import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import {
-  updateMonthExpenses,
-  updateWeekExpenses,
-} from "../redux/expenses-slice";
+import { useAppSelector } from "../redux/hooks";
 const ExpensesNavigator = () => {
   const Stack = createNativeStackNavigator();
+  const bankAccountStatus = useAppSelector(
+    (state) => state.piggyBank.bankAccountStatus
+  );
   return (
     <Stack.Navigator
       screenOptions={{
@@ -31,18 +27,20 @@ const ExpensesNavigator = () => {
           headerTitle: "Wydatki",
           headerTitleAlign: "center",
           headerRight: () => {
-            return (
-              <Pressable
-                onPress={() => navigation.navigate("settingsNavigator")}
-              >
-                <Ionicons
-                  name="cog"
-                  size={30}
-                  color={COLORS_STYLE.basicGold}
-                  style={{ marginRight: 10 }}
-                />
-              </Pressable>
-            );
+            if (bankAccountStatus !== 0) {
+              return (
+                <Pressable
+                  onPress={() => navigation.navigate("settingsNavigator")}
+                >
+                  <Ionicons
+                    name="cog"
+                    size={30}
+                    color={COLORS_STYLE.basicGold}
+                    style={{ marginRight: 10 }}
+                  />
+                </Pressable>
+              );
+            }
           },
         })}
       />

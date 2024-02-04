@@ -1,12 +1,4 @@
-import {
-  FlatList,
-  Text,
-  View,
-  Modal,
-  Alert,
-  TextInput,
-  StyleSheet,
-} from "react-native";
+import { Text, View, Modal, Alert, TextInput, StyleSheet } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { useState } from "react";
 import {

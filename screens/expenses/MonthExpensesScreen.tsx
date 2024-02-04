@@ -8,14 +8,15 @@ import { CategoriesExpensesWithNames } from "../../types/expenses";
 import CustomButton from "../../utils/ui/CustomButton";
 import { Navigation } from "../../types/global";
 import PieChartWithFrames from "../../components/expenses/PieChartWithFrames";
-import StripsColumn from "../../components/expenses/StripsColumn";
+import StripsColumn from "../../utils/ui/StripsColumn";
 import PieChartRealisation from "../../components/expenses/PieChartRealisation";
-// import PieChartComponent from "../components/PieChartComponent";
 
 const MonthExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {
-  const categories = useAppSelector((state) => state.categories.categoriesList);
+  const categories = useAppSelector(
+    (state) => state.expensesCategories.categoriesList
+  );
   const categoriesExpenses = useAppSelector(
     (state) => state.expenses.monthCategoriesExpenses
   );
@@ -25,7 +26,6 @@ const MonthExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   const bankAccountStatus = useAppSelector(
     (state) => state.piggyBank.bankAccountStatus
   );
-  // console.log(weekExpenses);
   const categoriesExpensesWithNames: CategoriesExpensesWithNames =
     categoriesExpenses.map((category, index) => ({
       ...category,
@@ -75,11 +75,14 @@ const MonthExpensesScreen: React.FC<{ navigation: Navigation }> = ({
             )}
             {sumOfAllExpenses > 0 && (
               <>
-                <PieChartWithFrames
-                  categoriesExpensesWithNames={categoriesExpensesWithNames}
-                  sumOfAllExpenses={sumOfAllExpenses}
-                  toSpend={toSpend}
-                />
+                {categories !== undefined && (
+                  <PieChartWithFrames
+                    categoriesExpensesWithNames={categoriesExpensesWithNames}
+                    sumOfAllExpenses={sumOfAllExpenses}
+                    toSpend={toSpend}
+                  />
+                )}
+
                 <Text style={styles.label}>
                   Realizacja wydatków w poszczególnych kategoriach
                 </Text>

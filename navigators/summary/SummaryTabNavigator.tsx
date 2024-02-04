@@ -1,8 +1,3 @@
-import { Pressable } from "react-native";
-import SettingsNavigator from "../SettingsNavigator";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Ionicons } from "@expo/vector-icons";
-import SummaryScreen from "../../screens/SummaryScreen";
 import COLORS_STYLE from "../../utils/styles/colors";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import MonthSummaryScreen from "../../screens/summary/MonthSummaryScreen";

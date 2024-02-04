@@ -1,7 +1,6 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import COLORS_STYLE from "../../utils/styles/colors";
 import PlannedExpensesScreen from "../../screens/planning/PlannedExpensesScreen";
-import PlannedIncomesScreen from "../../screens/planning/PlannedIncomesScreen copy";
 
 const PlanningTabNavigator = () => {
   const Tab = createMaterialTopTabNavigator();

@@ -5,8 +5,13 @@ import SettingsNavigator from "./SettingsNavigator";
 import COLORS_STYLE from "../utils/styles/colors";
 import PiggyBankTabNavigator from "./piggyBank/PiggyBankTabNavigator";
 import AddTargetScreen from "../screens/piggyBank/AddTargetScreen";
-import MonthsSavings from "../screens/piggyBank/MonthsSavings";
+import MonthsSavingsScreen from "../screens/piggyBank/MonthsSavingsScreen";
+import RealisedTargetsScreen from "../screens/piggyBank/RealisedTargetsScreen";
+import { useAppSelector } from "../redux/hooks";
 const PiggyBankNavigator = () => {
+  const bankAccountStatus = useAppSelector(
+    (state) => state.piggyBank.bankAccountStatus
+  );
   const Stack = createNativeStackNavigator();
   return (
     <Stack.Navigator
@@ -24,18 +29,20 @@ const PiggyBankNavigator = () => {
           headerTitle: "Oszczędności",
           headerTitleAlign: "center",
           headerRight: () => {
-            return (
-              <Pressable
-                onPress={() => navigation.navigate("settingsNavigator")}
-              >
-                <Ionicons
-                  name="cog"
-                  size={30}
-                  color={COLORS_STYLE.basicGold}
-                  style={{ marginRight: 10 }}
-                />
-              </Pressable>
-            );
+            if (bankAccountStatus !== 0) {
+              return (
+                <Pressable
+                  onPress={() => navigation.navigate("settingsNavigator")}
+                >
+                  <Ionicons
+                    name="cog"
+                    size={30}
+                    color={COLORS_STYLE.basicGold}
+                    style={{ marginRight: 10 }}
+                  />
+                </Pressable>
+              );
+            }
           },
         })}
       />
@@ -65,13 +72,38 @@ const PiggyBankNavigator = () => {
         })}
       />
       <Stack.Screen
-        component={MonthsSavings}
+        component={MonthsSavingsScreen}
         name="monthsSavings"
         options={({ navigation }) => ({
           headerTintColor: COLORS_STYLE.basicGold,
           headerPressColor: COLORS_STYLE.basicGold,
           headerPressOpacity: 1,
           headerTitle: `Oszczędności w ${new Date().getFullYear()}`,
+          headerTitleAlign: "center",
+          headerRight: () => {
+            return (
+              <Pressable
+                onPress={() => navigation.navigate("settingsNavigator")}
+              >
+                <Ionicons
+                  name="cog"
+                  size={30}
+                  color={COLORS_STYLE.basicGold}
+                  style={{ marginRight: 10 }}
+                />
+              </Pressable>
+            );
+          },
+        })}
+      />
+      <Stack.Screen
+        component={RealisedTargetsScreen}
+        name="realisedTargets"
+        options={({ navigation }) => ({
+          headerTintColor: COLORS_STYLE.basicGold,
+          headerPressColor: COLORS_STYLE.basicGold,
+          headerPressOpacity: 1,
+          headerTitle: "Zrealizowane cele",
           headerTitleAlign: "center",
           headerRight: () => {
             return (
