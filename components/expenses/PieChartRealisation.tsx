@@ -12,6 +12,9 @@ const PieChartRealisation: React.FC<{
       percentage = 100;
     } else if (plannedExpenses! > 0) {
       percentage = (realExpenses / plannedExpenses!) * 100;
+      if (percentage > 100) {
+        percentage = 100;
+      }
     }
   } else {
     percentage = 0;

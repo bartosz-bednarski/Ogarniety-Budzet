@@ -2,6 +2,7 @@ import { View, Text, StyleSheet } from "react-native";
 import COLORS_STYLE from "../styles/colors";
 import { Ionicons } from "@expo/vector-icons";
 import pieChartColors from "../styles/pieChartColors";
+import { numberWithSpaces } from "../numberWithSpaces";
 const Strip: React.FC<{
   iconName: string;
   categoryName: string | undefined;
@@ -15,7 +16,6 @@ const Strip: React.FC<{
   plannedExpenses,
   pieChartColorsNum,
 }) => {
-  console.log(realExpenses, plannedExpenses);
   let percentage;
   if (realExpenses > 0) {
     if (plannedExpenses === 0) {
@@ -34,7 +34,7 @@ const Strip: React.FC<{
     <View style={styles.stripContainer}>
       <View style={styles.stripBoxTop}>
         <Text style={styles.name}>{categoryName}</Text>
-        <Text style={styles.price}>{realExpenses} PLN</Text>
+        <Text style={styles.price}>{numberWithSpaces(realExpenses)} PLN</Text>
       </View>
       <View style={styles.stripBoxBottom}>
         <Ionicons
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   },
   name: {
     color: COLORS_STYLE.labelGrey,
-    width: 140,
+    width: 110,
   },
   price: {
     color: COLORS_STYLE.basicGold,

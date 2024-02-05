@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, ScrollView } from "react-native";
 import COLORS_STYLE from "../../utils/styles/colors";
 import GrayBox50 from "../../utils/ui/GrayBox50";
 import { useAppSelector } from "../../redux/hooks";
@@ -30,12 +30,10 @@ const MonthSummaryScreen = () => {
     0
   );
   const expensesValues = expenses.map((i) => Number(i.value));
-  console.log(expensesValues);
   const sumOfExpenses = expensesValues.reduce(
     (partialSum, a) => partialSum + a,
     0
   );
-  console.log(sumOfExpenses);
   const sumOfIncomes = incomes
     .map((item) => Number(item.value))
     .reduce((partialSum, a) => partialSum + a, 0);
@@ -67,23 +65,25 @@ const MonthSummaryScreen = () => {
   const moneyLeft = sumOfIncomes - sumOfExpenses - finantialTargetsSum;
   return (
     <View style={styles.container}>
-      <GrayBox100 name="Oszczędzono" value={sumOfIncomes - sumOfExpenses} />
-      <GrayBox100 name="Cele finansowe" value={finantialTargetsSum} />
+      <ScrollView>
+        <GrayBox100 name="Oszczędzono" value={sumOfIncomes - sumOfExpenses} />
+        <GrayBox100 name="Cele finansowe" value={finantialTargetsSum} />
 
-      <View style={styles.pieChart}>
-        <PieChart
-          widthAndHeight={200}
-          series={pieChartData}
-          sliceColor={["red", "green"]}
-          coverRadius={0.6}
-          coverFill={COLORS_STYLE.backgroundBlack}
-        />
-      </View>
-      <GoldenFrame name="ZOSTAŁO" value={moneyLeft} />
-      <View style={styles.rowBox}>
-        <GrayBox50 name="Przychody" value={sumOfIncomes} />
-        <GrayBox50 name="Wydatki" value={sumOfExpenses} />
-      </View>
+        <View style={styles.pieChart}>
+          <PieChart
+            widthAndHeight={200}
+            series={pieChartData}
+            sliceColor={["red", "green"]}
+            coverRadius={0.6}
+            coverFill={COLORS_STYLE.backgroundBlack}
+          />
+        </View>
+        <GoldenFrame name="ZOSTAŁO" value={moneyLeft} />
+        <View style={styles.rowBox}>
+          <GrayBox50 name="Przychody" value={sumOfIncomes} />
+          <GrayBox50 name="Wydatki" value={sumOfExpenses} />
+        </View>
+      </ScrollView>
     </View>
   );
 };

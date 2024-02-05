@@ -28,7 +28,7 @@ const IncomesTabNavigator = () => {
             borderRadius: 20,
             borderWidth: 2,
             paddingVertical: 5,
-            paddingHorizontal: 20,
+            paddingHorizontal: 15,
           },
         }}
       />
@@ -44,7 +44,7 @@ const IncomesTabNavigator = () => {
             borderRadius: 20,
             borderWidth: 2,
             paddingVertical: 5,
-            paddingHorizontal: 20,
+            paddingHorizontal: 15,
           },
         }}
       />
@@ -60,7 +60,7 @@ const IncomesTabNavigator = () => {
             borderRadius: 20,
             borderWidth: 2,
             paddingVertical: 5,
-            paddingHorizontal: 20,
+            paddingHorizontal: 15,
           },
         }}
       />

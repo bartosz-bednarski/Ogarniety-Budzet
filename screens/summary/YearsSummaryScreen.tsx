@@ -37,36 +37,39 @@ const YearsSummaryScreen = () => {
         .sumOfSavings,
   }));
   return (
-    <ScrollView style={styles.container}>
-      {yearsIncomes.length === 0 && (
-        <View style={styles.informationBox}>
-          <Text style={styles.informationText}>
-            Tutaj wyświetlane będą informacje o przychodach z poszczególnych lat
-          </Text>
-        </View>
-      )}
-      {yearsIncomes.length > 0 && (
-        <>
-          <GrayBox100 name="Oszczędzono" value={sumOfAllSavings} />
-          <View style={styles.pieChart}>
-            <PieChart
-              widthAndHeight={200}
-              series={pieChartData}
-              sliceColor={["red", "green"]}
-              coverRadius={0.6}
-              coverFill={COLORS_STYLE.backgroundBlack}
-            />
+    <View style={styles.container}>
+      <ScrollView>
+        {yearsIncomes.length === 0 && (
+          <View style={styles.informationBox}>
+            <Text style={styles.informationText}>
+              Tutaj wyświetlane będą informacje o przychodach z poszczególnych
+              lat
+            </Text>
           </View>
-          <View style={styles.rowBox}>
-            <GrayBox50 name="Przychody" value={sumOfAllIncomes} />
-            <GrayBox50 name="Wydatki" value={sumOfAllExpenses} />
-          </View>
-          {grayBoxData.map((item) => (
-            <YearsSummaryBox data={item} key={item.year} />
-          ))}
-        </>
-      )}
-    </ScrollView>
+        )}
+        {yearsIncomes.length > 0 && (
+          <>
+            <GrayBox100 name="Oszczędzono" value={sumOfAllSavings} />
+            <View style={styles.pieChart}>
+              <PieChart
+                widthAndHeight={200}
+                series={pieChartData}
+                sliceColor={["red", "green"]}
+                coverRadius={0.6}
+                coverFill={COLORS_STYLE.backgroundBlack}
+              />
+            </View>
+            <View style={styles.rowBox}>
+              <GrayBox50 name="Przychody" value={sumOfAllIncomes} />
+              <GrayBox50 name="Wydatki" value={sumOfAllExpenses} />
+            </View>
+            {grayBoxData.map((item) => (
+              <YearsSummaryBox data={item} key={item.year} />
+            ))}
+          </>
+        )}
+      </ScrollView>
+    </View>
   );
 };
 const styles = StyleSheet.create({

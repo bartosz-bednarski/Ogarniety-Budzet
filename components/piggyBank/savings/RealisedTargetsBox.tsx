@@ -31,9 +31,9 @@ const RealisedTargetsBox: React.FC<{
               </Text>
             </View>
             <Text style={styles.name}>{item.name}</Text>
-            <Text style={styles.value}>
+            {/* <Text style={styles.value}>
               {numberWithSpaces(item.targetValue)} PLN
-            </Text>
+            </Text> */}
           </View>
         ))}
       </View>

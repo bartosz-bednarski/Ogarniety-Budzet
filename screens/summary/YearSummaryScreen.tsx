@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, ScrollView } from "react-native";
 import COLORS_STYLE from "../../utils/styles/colors";
 import GrayBox50 from "../../utils/ui/GrayBox50";
 import PieChart from "react-native-pie-chart";
@@ -59,23 +59,25 @@ const YearSummaryScreen = () => {
   ];
   return (
     <View style={styles.container}>
-      <GrayBox100 name="Oszczędzono" value={sumOfIncomes - sumOfExpenses} />
-      <GrayBox100 name="Cele finansowe" value={finantialTargetsSum} />
-      <View style={styles.pieChart}>
-        <PieChart
-          widthAndHeight={200}
-          series={pieChartData}
-          sliceColor={["red", "green"]}
-          coverRadius={0.6}
-          coverFill={COLORS_STYLE.backgroundBlack}
-        />
-      </View>
+      <ScrollView>
+        <GrayBox100 name="Oszczędzono" value={sumOfIncomes - sumOfExpenses} />
+        <GrayBox100 name="Cele finansowe" value={finantialTargetsSum} />
+        <View style={styles.pieChart}>
+          <PieChart
+            widthAndHeight={200}
+            series={pieChartData}
+            sliceColor={["red", "green"]}
+            coverRadius={0.6}
+            coverFill={COLORS_STYLE.backgroundBlack}
+          />
+        </View>
 
-      <GoldenFrame name="STAN KONTA" value={bilans} />
-      <View style={styles.rowBox}>
-        <GrayBox50 name="Przychody" value={sumOfIncomes} />
-        <GrayBox50 name="Wydatki" value={sumOfExpenses} />
-      </View>
+        <GoldenFrame name="STAN KONTA" value={bilans} />
+        <View style={styles.rowBox}>
+          <GrayBox50 name="Przychody" value={sumOfIncomes} />
+          <GrayBox50 name="Wydatki" value={sumOfExpenses} />
+        </View>
+      </ScrollView>
     </View>
   );
 };

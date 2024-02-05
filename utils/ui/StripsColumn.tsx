@@ -10,6 +10,7 @@ const StripsColumn: React.FC<{
     sum: number;
   }[];
 }> = ({ data }) => {
+  console.log(data);
   return (
     <View style={styles.stripsContainer}>
       {/* {currentCategoryRealistationPieChartData.map((item) => ( */}
@@ -30,7 +31,7 @@ const StripsColumn: React.FC<{
 };
 const styles = StyleSheet.create({
   stripsContainer: {
-    width: "100%",
+    width: "95%",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",

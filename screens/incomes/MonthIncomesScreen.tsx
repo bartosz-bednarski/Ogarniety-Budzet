@@ -67,63 +67,65 @@ const MonthIncomesScreen: React.FC<{ navigation: Navigation }> = ({
     setModalVisible(!modalVisible);
   };
   return (
-    <ScrollView style={styles.container}>
-      {bankAccountStatus === 0 && (
-        <View style={styles.buttonBox}>
-          <CustomButton
-            title="Uzupełnij stan konta"
-            onPress={() => navigation.navigate("Oszczędności")}
-          />
-        </View>
-      )}
-
-      {sumOfMonthIncomes > 0 && (
-        <>
-          <Text style={styles.label}>Zestawienie przychodów</Text>
-          <PieChartWithFrames
-            categoriesIncomesWithNames={categoriesIncomesWithNames}
-            sumOfAllIncomes={sumOfMonthIncomes}
-          />
-          <StripsColumn data={stripsColumnData} />
-        </>
-      )}
-      {categories.length > 0 && bankAccountStatus > 0 && (
-        <>
-          <Text style={styles.label}>Kategorie przychodów</Text>
-
-          <View style={styles.flatlistBox}>
-            {circleColorButtonData.map((item, index) => (
-              <CircleNumberColorButton
-                key={item.catId}
-                iconName={item.iconName}
-                value={item.value}
-                color={index}
-                catId={item.catId}
-                onPressHandler={() => onPressHandler(item.catId)}
-              />
-            ))}
-            <CircleStringColorButton
-              iconName="add"
-              name="Dodaj nową Kategorie"
-              color={20}
-              catId="addNewIncomesCategory"
-              onPressHandler={() =>
-                navigation.navigate("settingsNavigator", {
-                  screen: "addNewIncomesCategory",
-                })
-              }
+    <View style={styles.container}>
+      <ScrollView>
+        {bankAccountStatus === 0 && (
+          <View style={styles.buttonBox}>
+            <CustomButton
+              title="Uzupełnij stan konta"
+              onPress={() => navigation.navigate("Oszczędności")}
             />
           </View>
-          <ModalSetIncome
-            modalVisible={modalVisible}
-            setModalVisible={(value) => setModalVisible(value)}
-            value={value}
-            setValue={(value) => setValue(value)}
-            submitHandler={submitHandler}
-          />
-        </>
-      )}
-    </ScrollView>
+        )}
+
+        {sumOfMonthIncomes > 0 && (
+          <>
+            <Text style={styles.label}>Zestawienie przychodów</Text>
+            <PieChartWithFrames
+              categoriesIncomesWithNames={categoriesIncomesWithNames}
+              sumOfAllIncomes={sumOfMonthIncomes}
+            />
+            <StripsColumn data={stripsColumnData} />
+          </>
+        )}
+        {categories.length > 0 && bankAccountStatus > 0 && (
+          <>
+            <Text style={styles.label}>Kategorie przychodów</Text>
+
+            <View style={styles.flatlistBox}>
+              {circleColorButtonData.map((item, index) => (
+                <CircleNumberColorButton
+                  key={item.catId}
+                  iconName={item.iconName}
+                  value={item.value}
+                  color={index}
+                  catId={item.catId}
+                  onPressHandler={() => onPressHandler(item.catId)}
+                />
+              ))}
+              <CircleStringColorButton
+                iconName="add"
+                name="Dodaj nową Kategorie"
+                color={20}
+                catId="addNewIncomesCategory"
+                onPressHandler={() =>
+                  navigation.navigate("settingsNavigator", {
+                    screen: "addNewIncomesCategory",
+                  })
+                }
+              />
+            </View>
+            <ModalSetIncome
+              modalVisible={modalVisible}
+              setModalVisible={(value) => setModalVisible(value)}
+              value={value}
+              setValue={(value) => setValue(value)}
+              submitHandler={submitHandler}
+            />
+          </>
+        )}
+      </ScrollView>
+    </View>
   );
 };
 const styles = StyleSheet.create({

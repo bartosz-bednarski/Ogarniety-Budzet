@@ -107,13 +107,15 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
             <GoldenFrame name="STAN KONTA" value={totalBankAccount} />
             <Text style={styles.label}> Udziały w oszczędnościach</Text>
             <View style={styles.greyBoxContainer}>
-              <PieChart
-                widthAndHeight={120}
-                series={pieChartOneData}
-                sliceColor={[COLORS_STYLE.basicGold, COLORS_STYLE.green]}
-                coverRadius={0.65}
-                coverFill={COLORS_STYLE.backgroundBlack}
-              />
+              {totalBankAccount > 0 && (
+                <PieChart
+                  widthAndHeight={120}
+                  series={pieChartOneData}
+                  sliceColor={[COLORS_STYLE.basicGold, COLORS_STYLE.green]}
+                  coverRadius={0.65}
+                  coverFill={COLORS_STYLE.backgroundBlack}
+                />
+              )}
               <View style={styles.greyBoxDetails}>
                 <Text style={styles.greyBoxLabel}>Wolne oszczędności</Text>
                 <Text style={styles.greyBoxGreenText}>

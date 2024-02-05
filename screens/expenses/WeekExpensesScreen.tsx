@@ -70,14 +70,6 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
         )}
         {bankAccountStatus > 0 && (
           <ScrollView style={styles.scrollView}>
-            {sumOfAllExpenses === 0 && (
-              <View style={styles.informationBox}>
-                <CustomButton
-                  title="Dodaj wydatek"
-                  onPress={() => navigation.navigate("addExpense")}
-                />
-              </View>
-            )}
             {sumOfAllExpenses > 0 && (
               <>
                 <PieChartWithFrames

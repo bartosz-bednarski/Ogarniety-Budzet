@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   textDown: {
     color: COLORS_STYLE.basicGold,
     textAlign: "center",
-    fontSize: 24,
+    fontSize: 16,
     fontWeight: "700",
   },
 });
