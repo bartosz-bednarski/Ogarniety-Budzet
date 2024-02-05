@@ -11,10 +11,13 @@ import { useAppDispatch } from "../../redux/hooks";
 import { deleteExpensesCategory } from "../../redux/expensesCategories-slice";
 import { deleteAllExpensesFromCategory } from "../../redux/expenses-slice";
 import { OnPressHandler } from "../../types/settings";
+import { deleteIncomesCategory } from "../../redux/incomesCategories-slice";
+import { deleteIncome } from "../../redux/incomes-slice";
 const CategoryItemRow: React.FC<CategoryItemRowProps> = ({
   catId,
   iconName,
   name,
+  type,
   color,
   onPress,
 }) => {
@@ -22,11 +25,16 @@ const CategoryItemRow: React.FC<CategoryItemRowProps> = ({
   const navigation: Navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const onCategoryDeleteHandler: OnPressHandler = () => {
-    dispatch(deleteExpensesCategory({ catId: catId }));
-    dispatch(deleteAllExpensesFromCategory({ catId: catId }));
-    navigation.navigate("editCategories");
+    if (type === "incomes") {
+      dispatch(deleteIncomesCategory({ catId: catId }));
+      dispatch(deleteIncome({ catId: catId }));
+      navigation.navigate("incomesCategoriesList");
+    } else if (type === "expenses") {
+      dispatch(deleteExpensesCategory({ catId: catId }));
+      dispatch(deleteAllExpensesFromCategory({ catId: catId }));
+      navigation.navigate("editCategories");
+    }
   };
-  console.log(color);
   return (
     <View style={styles.container}>
       <Modal

@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IncomesInitialState } from "../types/incomes";
 
-const dateCheck = "2024-03-12T08:06:22.626Z";
+const dateCheck = "2024-06-12T08:06:22.626Z";
 const incomesInitialState: IncomesInitialState = {
   categoriesIncomes: [],
   yearIncomes: [],

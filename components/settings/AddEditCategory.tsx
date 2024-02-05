@@ -96,6 +96,7 @@ const AddEditCategory: React.FC<AddEditCategoryProps> = ({
             >
               {icons.map((item) => (
                 <Pressable
+                  key={item.id}
                   onPress={() => {
                     onSetCategoryIcon(item.iconName);
                     setDropdownActive(false);
@@ -153,6 +154,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS_STYLE.tabGrey,
     padding: 10,
     borderRadius: 15,
+    height: 300,
   },
   buttonsBox: {
     gap: 30,

@@ -9,6 +9,7 @@ export type CategoryItemRowProps = {
   iconName: any; //powinien być string ale ionicons nie przyjmuje typu string jako argument do name
   name: string;
   color: number;
+  type: string;
   onPress: () => void;
   // onPress: () => void;
 };

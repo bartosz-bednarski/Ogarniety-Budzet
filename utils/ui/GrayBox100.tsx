@@ -36,14 +36,14 @@ const styles = StyleSheet.create({
   textUp: {
     color: "white",
     textAlign: "center",
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: "600",
     marginRight: 15,
   },
   textDown: {
     color: COLORS_STYLE.basicGold,
     textAlign: "center",
-    fontSize: 24,
+    fontSize: 16,
     fontWeight: "700",
   },
 });

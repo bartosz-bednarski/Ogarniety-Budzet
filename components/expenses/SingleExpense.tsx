@@ -3,6 +3,7 @@ import { Ionicons } from "@expo/vector-icons";
 import COLORS_STYLE from "../../utils/styles/colors";
 import { SingleExpenseProps } from "../../types/expenses";
 import pieChartColors from "../../utils/styles/pieChartColors";
+import { numberWithSpaces } from "../../utils/numberWithSpaces";
 const SingleExpense: React.FC<SingleExpenseProps> = ({
   iconName,
   price,
@@ -17,7 +18,7 @@ const SingleExpense: React.FC<SingleExpenseProps> = ({
       </View>
       <View style={styles.boxRight}>
         <Text style={styles.greyText}>{name}</Text>
-        <Text style={styles.goldText}>{price} PLN</Text>
+        <Text style={styles.goldText}>{numberWithSpaces(price)} PLN</Text>
         <Text style={styles.greyText}>{date}</Text>
       </View>
     </View>

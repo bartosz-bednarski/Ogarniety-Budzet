@@ -54,7 +54,7 @@ const MonthExpensesBox: React.FC<{ monthExpenses: MonthExpensesBoxProps }> = ({
         <View style={styles.mainBox}>
           <View style={styles.chartBox}>
             <PieChart
-              widthAndHeight={120}
+              widthAndHeight={100}
               series={monthExpenses.categoriesExpenses.map((item) =>
                 item.sum === 0 ? 1 : item.sum
               )}
@@ -118,17 +118,17 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   chartBox: {
-    width: "35%",
+    width: "30%",
     justifyContent: "center",
     alignItems: "center",
-    marginLeft: 5,
+    marginLeft: 10,
   },
 
   details: {
     width: "45%",
   },
   calendarBox: {
-    width: "20%",
+    width: "10%",
     height: "100%",
     justifyContent: "flex-start",
     alignItems: "flex-start",
