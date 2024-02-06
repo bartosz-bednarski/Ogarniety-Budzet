@@ -4,6 +4,7 @@ import COLORS_STYLE from "../../utils/styles/colors";
 import { SingleExpenseProps } from "../../types/expenses";
 import pieChartColors from "../../utils/styles/pieChartColors";
 import { numberWithSpaces } from "../../utils/numberWithSpaces";
+import { useAppSelector } from "../../redux/hooks";
 const SingleExpense: React.FC<SingleExpenseProps> = ({
   iconName,
   price,
@@ -11,6 +12,9 @@ const SingleExpense: React.FC<SingleExpenseProps> = ({
   color,
   name,
 }) => {
+  const currency = useAppSelector(
+    (state) => state.currency.currentCurrency.currencyCode
+  );
   return (
     <View style={styles.container}>
       <View style={[styles.boxLeft, { borderColor: pieChartColors[color] }]}>
@@ -18,7 +22,9 @@ const SingleExpense: React.FC<SingleExpenseProps> = ({
       </View>
       <View style={styles.boxRight}>
         <Text style={styles.greyText}>{name}</Text>
-        <Text style={styles.goldText}>{numberWithSpaces(price)} PLN</Text>
+        <Text style={styles.goldText}>
+          {numberWithSpaces(price)} {currency}
+        </Text>
         <Text style={styles.greyText}>{date}</Text>
       </View>
     </View>

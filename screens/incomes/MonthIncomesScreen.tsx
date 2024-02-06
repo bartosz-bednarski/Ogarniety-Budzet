@@ -61,7 +61,9 @@ const MonthIncomesScreen: React.FC<{ navigation: Navigation }> = ({
   };
   const submitHandler = () => {
     if (value !== "" && value !== "0") {
-      dispatch(updateIncome({ catId: selectedCatId, value: value }));
+      dispatch(
+        updateIncome({ catId: selectedCatId, value: Number(value).toFixed(2) })
+      );
       setValue("");
     }
     setModalVisible(!modalVisible);

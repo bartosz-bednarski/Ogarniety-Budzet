@@ -1,16 +1,20 @@
 import { View, Text, StyleSheet } from "react-native";
 import COLORS_STYLE from "../styles/colors";
 import { numberWithSpaces } from "../numberWithSpaces";
+import { useAppSelector } from "../../redux/hooks";
 const FrameUnderlineSmall: React.FC<{
   mainColor: string;
   textUp: string;
   textDown: number;
 }> = ({ mainColor, textUp, textDown }) => {
+  const currency = useAppSelector(
+    (state) => state.currency.currentCurrency.currencyCode
+  );
   return (
     <View style={[styles.frame, { borderColor: mainColor }]}>
       <Text style={[styles.frameText, { color: "white" }]}>{textUp}</Text>
       <Text style={[styles.frameText, { color: mainColor }]}>
-        {numberWithSpaces(textDown)} PLN
+        {numberWithSpaces(textDown)} {currency}
       </Text>
     </View>
   );

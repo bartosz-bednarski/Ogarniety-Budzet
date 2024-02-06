@@ -6,11 +6,13 @@ import { MONTHS } from "../../utils/months";
 import { numberWithSpaces } from "../../utils/numberWithSpaces";
 import GoldenFrame from "../../utils/ui/GoldenFrame";
 const MonthsSavingsScreen = () => {
+  const currency = useAppSelector(
+    (state) => state.currency.currentCurrency.currencyCode
+  );
   const yearSavings = useAppSelector((state) => state.piggyBank.yearSavings);
   const sum = yearSavings
     .map((item) => item.savings)
     .reduce((partialSum, a) => partialSum + a, 0);
-  console.log(sum);
   return (
     <ScrollView style={styles.container}>
       <GoldenFrame name="SUMA" value={sum} />
@@ -24,7 +26,7 @@ const MonthsSavingsScreen = () => {
             />
             <Text style={styles.monthName}>{MONTHS[Number(item.month)]}</Text>
             <Text style={styles.value}>
-              {numberWithSpaces(item.savings)} PLN
+              {numberWithSpaces(item.savings)} {currency}
             </Text>
           </View>
         ))}

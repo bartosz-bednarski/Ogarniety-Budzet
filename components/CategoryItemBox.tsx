@@ -4,17 +4,23 @@ import { CategoryItem, PlannedExpenseCategoryItem } from "../types/settings";
 import { View } from "react-native";
 import COLORS_STYLE from "../utils/styles/colors";
 import { CategoryItemBoxProps } from "../types/utils";
+import { useAppSelector } from "../redux/hooks";
 const CategoryItemBox: React.FC<CategoryItemBoxProps> = ({
   category,
   onPressHandler,
 }) => {
+  const currency = useAppSelector(
+    (state) => state.currency.currentCurrency.currencyCode
+  );
   return (
     <View style={styles.container}>
       <Pressable style={styles.box} onPress={onPressHandler}>
         <Ionicons name={category.iconName} size={30} color="white" />
         <Text style={styles.text}>{category.name}</Text>
       </Pressable>
-      <Text style={styles.value}>{category.value} PLN</Text>
+      <Text style={styles.value}>
+        {category.value} {currency}
+      </Text>
     </View>
   );
 };

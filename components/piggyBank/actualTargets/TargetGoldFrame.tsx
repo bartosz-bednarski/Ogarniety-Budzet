@@ -8,6 +8,7 @@ import ModalAddValue from "./ModalAddValue";
 import ModalEditValue from "./ModalEditValue";
 import ModalDeleteTarget from "./ModalDeleteTarget";
 import ModalRealisedTarget from "./ModalRealisedTarget";
+import { useAppSelector } from "../../../redux/hooks";
 const TargetGoldFrame: React.FC<FinantialTarget> = ({
   name,
   iconName,
@@ -15,6 +16,9 @@ const TargetGoldFrame: React.FC<FinantialTarget> = ({
   incomes,
   targetValue,
 }) => {
+  const currency = useAppSelector(
+    (state) => state.currency.currentCurrency.currencyCode
+  );
   const [addValueModalVisible, setAddValueModalVisible] = useState(false);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [deleteTargetModalVisible, setDeleteTargetModalVisible] =
@@ -60,7 +64,7 @@ const TargetGoldFrame: React.FC<FinantialTarget> = ({
                 {((sumOfIncomes / targetValue) * 100).toFixed(2)} %
               </Text>
               <Text style={styles.targetText}>
-                {sumOfIncomes}/{targetValue} PLN
+                {sumOfIncomes}/{targetValue} {currency}
               </Text>
             </View>
           </View>

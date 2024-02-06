@@ -15,6 +15,9 @@ import StripsColumn from "../../../utils/ui/StripsColumn";
 const YearIncomesBox: React.FC<{ yearIncomes: YearIncomesBoxProps }> = ({
   yearIncomes,
 }) => {
+  const currency = useAppSelector(
+    (state) => state.currency.currentCurrency.currencyCode
+  );
   const [showDropdown, setShowDropdown] = useState(false);
   const stripsColumnsData: any[] = yearIncomes.months.map((item) => ({
     catId: item.month,
@@ -45,7 +48,7 @@ const YearIncomesBox: React.FC<{ yearIncomes: YearIncomesBoxProps }> = ({
           <View style={styles.details}>
             <Text style={styles.textWhiteBig}>SUMA</Text>
             <Text style={styles.value}>
-              {numberWithSpaces(yearIncomes.sumOfAllIncomes)} PLN
+              {numberWithSpaces(yearIncomes.sumOfAllIncomes)} {currency}
             </Text>
           </View>
           <View style={styles.calendarBox}>

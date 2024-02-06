@@ -3,6 +3,7 @@ import COLORS_STYLE from "../styles/colors";
 import { Ionicons } from "@expo/vector-icons";
 import pieChartColors from "../styles/pieChartColors";
 import { numberWithSpaces } from "../numberWithSpaces";
+import { useAppSelector } from "../../redux/hooks";
 const Strip: React.FC<{
   iconName: string;
   categoryName: string | undefined;
@@ -16,6 +17,9 @@ const Strip: React.FC<{
   plannedExpenses,
   pieChartColorsNum,
 }) => {
+  const currency = useAppSelector(
+    (state) => state.currency.currentCurrency.currencyCode
+  );
   let percentage;
   if (realExpenses > 0) {
     if (plannedExpenses === 0) {
@@ -34,7 +38,9 @@ const Strip: React.FC<{
     <View style={styles.stripContainer}>
       <View style={styles.stripBoxTop}>
         <Text style={styles.name}>{categoryName}</Text>
-        <Text style={styles.price}>{numberWithSpaces(realExpenses)} PLN</Text>
+        <Text style={styles.price}>
+          {numberWithSpaces(realExpenses)} {currency}
+        </Text>
       </View>
       <View style={styles.stripBoxBottom}>
         <Ionicons
