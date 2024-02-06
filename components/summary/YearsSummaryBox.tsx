@@ -3,9 +3,13 @@ import COLORS_STYLE from "../../utils/styles/colors";
 import PieChart from "react-native-pie-chart";
 import { Ionicons } from "@expo/vector-icons";
 import { numberWithSpaces } from "../../utils/numberWithSpaces";
+import { useAppSelector } from "../../redux/hooks";
 const YearsSummaryBox: React.FC<{
   data: { year: number; expenses: number; incomes: number; savings: number };
 }> = ({ data }) => {
+  const currency = useAppSelector(
+    (state) => state.currency.currentCurrency.currencyCode
+  );
   const pieChartData = [
     data.incomes !== 0
       ? Number(((data.expenses / data.incomes) * 100).toFixed(2))
@@ -37,7 +41,7 @@ const YearsSummaryBox: React.FC<{
                 size={16}
               />
               <Text style={styles.value}>
-                {numberWithSpaces(data.incomes)} PLN
+                {numberWithSpaces(data.incomes)} {currency}
               </Text>
             </View>
             <Text style={styles.whiteLabel}>Wydatki</Text>
@@ -48,7 +52,7 @@ const YearsSummaryBox: React.FC<{
                 size={16}
               />
               <Text style={styles.value}>
-                {numberWithSpaces(data.expenses)} PLN
+                {numberWithSpaces(data.expenses)} {currency}
               </Text>
             </View>
             <Text style={styles.whiteLabel}>Oszczędności</Text>
@@ -59,7 +63,7 @@ const YearsSummaryBox: React.FC<{
                 size={16}
               />
               <Text style={styles.value}>
-                {numberWithSpaces(data.savings)} PLN
+                {numberWithSpaces(data.savings)} {currency}
               </Text>
             </View>
           </View>

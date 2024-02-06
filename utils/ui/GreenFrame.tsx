@@ -1,17 +1,23 @@
 import { View, Text, StyleSheet } from "react-native";
 import COLORS_STYLE from "../styles/colors";
 import { numberWithSpaces } from "../numberWithSpaces";
+import { useAppSelector } from "../../redux/hooks";
 
 const GreenFrame: React.FC<{ value: number; name: string }> = ({
   value,
   name,
 }) => {
+  const currency = useAppSelector(
+    (state) => state.currency.currentCurrency.currencyCode
+  );
   const valueWithSpaces = numberWithSpaces(value);
   return (
     <View style={styles.container}>
       <View style={styles.box}>
         <Text style={styles.textGreen}>{name}</Text>
-        <Text style={styles.textGreen}>{valueWithSpaces} PLN</Text>
+        <Text style={styles.textGreen}>
+          {valueWithSpaces} {currency}
+        </Text>
       </View>
     </View>
   );

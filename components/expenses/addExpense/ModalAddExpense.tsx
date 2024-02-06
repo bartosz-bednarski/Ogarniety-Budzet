@@ -17,6 +17,9 @@ const ModalAddExpense: React.FC<{
   setValue: (value: string) => void;
   submitHandler: () => void;
 }> = ({ modalVisible, setModalVisible, value, setValue, submitHandler }) => {
+  const currency = useAppSelector(
+    (state) => state.currency.currentCurrency.currencyCode
+  );
   const [error, setError] = useState({ state: false, message: "" });
   const monthIncomes = useAppSelector(
     (state) => state.incomes.categoriesIncomes
@@ -106,7 +109,7 @@ const ModalAddExpense: React.FC<{
             <>
               <Text style={styles.error}>{error.message}</Text>
               <Text style={styles.error}>
-                Dostępne środki: {totalBankAccount - 1} PLN
+                Dostępne środki: {totalBankAccount - 1} {currency}
               </Text>
             </>
           )}

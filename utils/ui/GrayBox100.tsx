@@ -2,10 +2,14 @@ import { View, Text, StyleSheet } from "react-native";
 import COLORS_STYLE from "../styles/colors";
 import { numberWithSpaces } from "../numberWithSpaces";
 import { Ionicons } from "@expo/vector-icons";
+import { useAppSelector } from "../../redux/hooks";
 const GrayBox100: React.FC<{ name: string; value: number }> = ({
   name,
   value,
 }) => {
+  const currency = useAppSelector(
+    (state) => state.currency.currentCurrency.currencyCode
+  );
   const valueWithSpaces = numberWithSpaces(value);
   return (
     <View style={styles.box}>
@@ -15,7 +19,9 @@ const GrayBox100: React.FC<{ name: string; value: number }> = ({
 
       <Text style={styles.textUp}>{name}</Text>
 
-      <Text style={styles.textDown}>{valueWithSpaces} PLN</Text>
+      <Text style={styles.textDown}>
+        {valueWithSpaces} {currency}
+      </Text>
     </View>
   );
 };

@@ -2,6 +2,7 @@ import { Pressable, Text, StyleSheet, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import COLORS_STYLE from "../styles/colors";
 import pieChartColors from "../styles/pieChartColors";
+import { useAppSelector } from "../../redux/hooks";
 const CircleNumberColorButton: React.FC<{
   iconName: string | undefined;
   value: number;
@@ -9,6 +10,9 @@ const CircleNumberColorButton: React.FC<{
   catId: string;
   onPressHandler: () => void;
 }> = ({ iconName, value, color, catId, onPressHandler }) => {
+  const currency = useAppSelector(
+    (state) => state.currency.currentCurrency.currencyCode
+  );
   return (
     <View style={styles.container}>
       <Pressable
@@ -17,7 +21,9 @@ const CircleNumberColorButton: React.FC<{
       >
         <Ionicons name={iconName} size={50} color={pieChartColors[color]} />
       </Pressable>
-      <Text style={styles.value}>{value} PLN</Text>
+      <Text style={styles.value}>
+        {value} {currency}
+      </Text>
     </View>
   );
 };

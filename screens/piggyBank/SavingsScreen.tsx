@@ -14,6 +14,9 @@ import RealisedTargetsBox from "../../components/piggyBank/savings/RealisedTarge
 const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {
+  const currency = useAppSelector(
+    (state) => state.currency.currentCurrency.currencyCode
+  );
   const finantialTargets = useAppSelector(
     (state) => state.piggyBank.finantialTargets
   );
@@ -34,7 +37,7 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
   let monthIncomesSum;
   let bankAccountPlusIncomes;
   let monthExpensesSum;
-  let totalBankAccount;
+  let totalBankAccount: number;
   let sumOfRealisedTargets;
   if (realisedTargets !== undefined) {
     if (realisedTargets.length > 0) {
@@ -71,7 +74,7 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
   }
 
   const targetsIncomesArray = finantialTargets.map((item) =>
-    item.incomes.map((value) => value.value)
+    item.incomes.map((value) => Number(value.value))
   );
 
   const sumOfFinantialIncomes = targetsIncomesArray
@@ -104,7 +107,10 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
 
         {bankAccountStatus > 0 && (
           <>
-            <GoldenFrame name="STAN KONTA" value={totalBankAccount} />
+            <GoldenFrame
+              name="STAN KONTA"
+              value={Number(totalBankAccount.toFixed(2))}
+            />
             <Text style={styles.label}> Udziały w oszczędnościach</Text>
             <View style={styles.greyBoxContainer}>
               {totalBankAccount > 0 && (
@@ -119,11 +125,11 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
               <View style={styles.greyBoxDetails}>
                 <Text style={styles.greyBoxLabel}>Wolne oszczędności</Text>
                 <Text style={styles.greyBoxGreenText}>
-                  {numberWithSpaces(freeSavings)} PLN
+                  {numberWithSpaces(Number(freeSavings.toFixed(2)))} {currency}
                 </Text>
                 <Text style={styles.greyBoxLabel}>Cele finansowe</Text>
                 <Text style={styles.greyBoxGoldText}>
-                  {numberWithSpaces(sumOfFinantialIncomes)} PLN
+                  {numberWithSpaces(sumOfFinantialIncomes)} {currency}
                 </Text>
               </View>
             </View>

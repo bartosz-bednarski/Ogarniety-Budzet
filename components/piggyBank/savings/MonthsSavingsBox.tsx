@@ -5,10 +5,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { MonthSavings } from "../../../types/piggyBank";
 import { MONTHS } from "../../../utils/months";
 import { numberWithSpaces } from "../../../utils/numberWithSpaces";
+import { useAppSelector } from "../../../redux/hooks";
 const MonthsSavingsBox: React.FC<{
   yearSavings: MonthSavings[];
   onPress: () => void;
 }> = ({ yearSavings, onPress }) => {
+  const currency = useAppSelector(
+    (state) => state.currency.currentCurrency.currencyCode
+  );
   return (
     <Pressable style={styles.container} onPress={onPress}>
       <View style={styles.leftBox}>
@@ -21,7 +25,7 @@ const MonthsSavingsBox: React.FC<{
             />
             <Text style={styles.monthName}>{MONTHS[Number(item.month)]}</Text>
             <Text style={styles.monthSavings}>
-              {numberWithSpaces(item.savings)} PLN
+              {numberWithSpaces(item.savings)} {currency}
             </Text>
           </View>
         ))}

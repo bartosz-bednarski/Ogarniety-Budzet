@@ -5,6 +5,9 @@ import { useAppSelector } from "../../redux/hooks";
 import { numberWithSpaces } from "../../utils/numberWithSpaces";
 import GoldenFrame from "../../utils/ui/GoldenFrame";
 const RealisedTargetsScreen = () => {
+  const currency = useAppSelector(
+    (state) => state.currency.currentCurrency.currencyCode
+  );
   const realisedTargets = useAppSelector(
     (state) => state.piggyBank.realisedTargets
   );
@@ -24,7 +27,7 @@ const RealisedTargetsScreen = () => {
             />
             <Text style={styles.monthName}>{item.name}</Text>
             <Text style={styles.value}>
-              {numberWithSpaces(item.targetValue)} PLN
+              {numberWithSpaces(item.targetValue)} {currency}
             </Text>
           </View>
         ))}
