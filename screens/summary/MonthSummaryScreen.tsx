@@ -19,7 +19,9 @@ const MonthSummaryScreen = () => {
     );
   });
   const moneyLeftValues = moneyleftFilterMonths.map((item) =>
-    item.filter((k) => k.dateMonth === 4).map((i) => i.value)
+    item
+      .filter((k) => k.dateMonth === new Date(dateCheck).getMonth())
+      .map((i) => i.value)
   );
   const targetsArr = [];
   for (let i = 0; i < moneyLeftValues.length; i++) {
@@ -78,7 +80,7 @@ const MonthSummaryScreen = () => {
             coverFill={COLORS_STYLE.backgroundBlack}
           />
         </View>
-        <GoldenFrame name="ZOSTAŁO" value={moneyLeft} />
+        <GoldenFrame name="BILANS" value={moneyLeft} />
         <View style={styles.rowBox}>
           <GrayBox50 name="Przychody" value={sumOfIncomes} />
           <GrayBox50 name="Wydatki" value={sumOfExpenses} />

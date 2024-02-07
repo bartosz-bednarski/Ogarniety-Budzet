@@ -30,4 +30,13 @@ export const CATEGORY_ICONS = [
   { iconName: "home-outline", id: 28 },
   { iconName: "map-outline", id: 29 },
   { iconName: "cash-outline", id: 30 },
+  { iconName: "fast-food-outline", id: 31 },
+  { iconName: "folder-open-outline", id: 32 },
+  { iconName: "rocket-outline", id: 33 },
+  { iconName: "rose-outline", id: 34 },
+  { iconName: "skull-outline", id: 35 },
+  { iconName: "watch-outline", id: 36 },
+  { iconName: "wine-outline", id: 37 },
+  { iconName: "logo-usd", id: 38 },
+  { iconName: "stats-chart-outline", id: 39 },
 ];

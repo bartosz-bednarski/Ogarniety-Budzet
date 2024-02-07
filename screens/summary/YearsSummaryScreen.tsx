@@ -42,8 +42,8 @@ const YearsSummaryScreen = () => {
         {yearsIncomes.length === 0 && (
           <View style={styles.informationBox}>
             <Text style={styles.informationText}>
-              Tutaj wyświetlane będą informacje o przychodach z poszczególnych
-              lat
+              Tutaj będą wyświetlane informacje o przychodach z poszczególnych
+              lat.
             </Text>
           </View>
         )}

@@ -27,13 +27,13 @@ const PieChartWithFrames: React.FC<{
         {toSpend > 0 ? (
           <FrameUnderlineSmall
             textUp="DO WYDANIA"
-            textDown={toSpend}
+            textDown={Number(toSpend.toFixed(2))}
             mainColor={COLORS_STYLE.green}
           />
         ) : (
           <FrameUnderlineSmall
-            textUp="DO WYDANIA"
-            textDown={toSpend}
+            textUp="PRZEKROCZONO!"
+            textDown={Number(toSpend.toFixed(2))}
             mainColor={COLORS_STYLE.red}
           />
         )}

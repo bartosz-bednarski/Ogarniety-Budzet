@@ -38,7 +38,7 @@ const ActualTargetsScreen: React.FC<{ navigation: Navigation }> = ({
       {bankAccountStatus > 0 && (
         <>
           <ScrollView style={styles.scrollView}>
-            <GoldenFrame name="ZAOSZCZĘDZONO" value={sumOfFinantialIncomes} />
+            <GoldenFrame name="CELE FINANSOWE" value={sumOfFinantialIncomes} />
             {finantialTargets.map((item) => (
               <TargetGoldFrame
                 name={item.name}

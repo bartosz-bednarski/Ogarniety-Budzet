@@ -32,16 +32,16 @@ const MonthExpensesBox: React.FC<{ monthExpenses: MonthExpensesBoxProps }> = ({
           catId: item.catId,
           iconName: filteredCategories?.iconName,
           name: filteredCategories?.name,
-          value: item.sum,
-          sum: sumOfMonthExpenses,
+          value: sumOfMonthExpenses,
+          sum: item.sum,
         };
       } else if (!item.stillExsists) {
         return {
           catId: item.catId,
           name: "Inne",
           iconName: "star",
-          value: item.sum,
-          sum: sumOfMonthExpenses,
+          value: sumOfMonthExpenses,
+          sum: item.sum,
         };
       }
     }
