@@ -32,8 +32,8 @@ const CurrencyScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
     }
   }, [textInput]);
   const submitHandler = () => {
+    navigation.navigate("summary", { screen: "monthSummary" });
     dispatch(setCurrency(choosenCurrency));
-    navigation.navigate("Podsumowanie", { screen: "monthSummary" });
   };
   return (
     <View style={styles.conatiner}>
@@ -59,6 +59,7 @@ const CurrencyScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
                   setChoosenCurrency(item);
                   setTextInput("");
                 }}
+                key={item}
               >
                 <Ionicons name="search" color="white" size={20} />
                 <Text style={styles.text}>{item}</Text>

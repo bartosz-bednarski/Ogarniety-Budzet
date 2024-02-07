@@ -109,7 +109,7 @@ const ModalAddExpense: React.FC<{
             <>
               <Text style={styles.error}>{error.message}</Text>
               <Text style={styles.error}>
-                Dostępne środki: {totalBankAccount - 1} {currency}
+                Dostępne środki: {(totalBankAccount - 1).toFixed(2)} {currency}
               </Text>
             </>
           )}

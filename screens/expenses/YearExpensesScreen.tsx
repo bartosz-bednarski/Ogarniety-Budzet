@@ -13,10 +13,32 @@ MONTHS;
 const YearExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {
+  const dateCheck = "2024-06-12T08:06:22.626Z";
+
+  const monthExpenses = useAppSelector(
+    (state) => state.expenses.monthCategoriesExpenses
+  );
+
+  console.log(monthExpenses);
   const yearExpenses = useAppSelector((state) => state.expenses.yearExpenses);
-  const sumOfAllExpenses = yearExpenses
+  const sumOfYearExpenses = yearExpenses
     .map((item) => Number(item.sumOfAllExpenses))
     .reduce((partialSum, a) => partialSum + a, 0);
+  const sumOfMonthExpenses = monthExpenses
+    .map((item) => Number(item.sum))
+    .reduce((partialSum, a) => partialSum + a, 0);
+  const sumOfAllExpenses = sumOfYearExpenses + sumOfMonthExpenses;
+  const currentMonthExpensesBoxData = {
+    // month: new Date().getMonth(),
+    month: new Date(dateCheck).getMonth(),
+    sumOfAllExpenses: sumOfMonthExpenses,
+    categoriesExpenses: monthExpenses.map((item) => ({
+      catId: item.catId,
+      sum: item.sum,
+      stillExsists: true,
+    })),
+  };
+  console.log("!!!!!!!!!!!", currentMonthExpensesBoxData);
   // console.log(yearExpenses);
   return (
     <ScrollView style={styles.container}>
@@ -34,8 +56,11 @@ const YearExpensesScreen: React.FC<{ navigation: Navigation }> = ({
           <View style={styles.yearChart}>
             <PieChart
               widthAndHeight={200}
-              series={yearExpenses.map((item) => item.sumOfAllExpenses)}
-              sliceColor={pieChartColors.slice(0, yearExpenses.length)}
+              series={[
+                ...yearExpenses.map((item) => item.sumOfAllExpenses),
+                sumOfMonthExpenses === 0 ? 1 : sumOfMonthExpenses,
+              ]}
+              sliceColor={pieChartColors.slice(0, yearExpenses.length + 1)}
               coverRadius={0.6}
               coverFill={COLORS_STYLE.backgroundBlack}
             />
@@ -45,12 +70,17 @@ const YearExpensesScreen: React.FC<{ navigation: Navigation }> = ({
                   {MONTHS[item.month]}
                 </Text>
               ))}
+              <Text style={{ color: pieChartColors[yearExpenses.length] }}>
+                {/* {MONTHS[new Date().getMonth()]} */}
+                {MONTHS[new Date(dateCheck).getMonth()]}
+              </Text>
             </View>
           </View>
           <View style={styles.monthIncomesBox}>
             {yearExpenses.map((month) => (
               <MonthExpensesBox monthExpenses={month} key={month.month} />
             ))}
+            <MonthExpensesBox monthExpenses={currentMonthExpensesBoxData} />
           </View>
         </>
       )}

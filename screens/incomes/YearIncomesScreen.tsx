@@ -8,11 +8,28 @@ import MonthIncomesBox from "../../components/incomes/yearIncomes/MonthIncomesBo
 import GoldenFrame from "../../utils/ui/GoldenFrame";
 
 const YearIncomesScreen = () => {
+  const dateCheck = "2024-06-12T08:06:22.626Z";
+  const currentMonthIncomes = useAppSelector(
+    (state) => state.incomes.categoriesIncomes
+  );
   const yearIncomes = useAppSelector((state) => state.incomes.yearIncomes);
-  const sumOfAllIncomes = yearIncomes
+  const sumOfCurrentMonthIncomes = currentMonthIncomes
+    .map((item) => Number(item.value))
+    .reduce((partialSum, a) => partialSum + a, 0);
+  const sumOfYearIncomes = yearIncomes
     .map((item) => Number(item.sumOfAllIncomes))
     .reduce((partialSum, a) => partialSum + a, 0);
-
+  const sumOfAllIncomes = sumOfYearIncomes + sumOfCurrentMonthIncomes;
+  const currentMonthIncomesBoxData = {
+    // month: new Date().getMonth(),
+    month: new Date(dateCheck).getMonth(),
+    sumOfAllIncomes: sumOfCurrentMonthIncomes,
+    categoriesIncomes: currentMonthIncomes.map((item) => ({
+      catId: item.catId,
+      value: item.value,
+      stillExsists: true,
+    })),
+  };
   return (
     <ScrollView style={styles.container}>
       {yearIncomes.length === 0 && (
@@ -29,10 +46,13 @@ const YearIncomesScreen = () => {
           <View style={styles.yearChart}>
             <PieChart
               widthAndHeight={200}
-              series={yearIncomes.map((item) =>
-                item.sumOfAllIncomes === 0 ? 1 : item.sumOfAllIncomes
-              )}
-              sliceColor={pieChartColors.slice(0, yearIncomes.length)}
+              series={[
+                ...yearIncomes.map((item) =>
+                  item.sumOfAllIncomes === 0 ? 1 : item.sumOfAllIncomes
+                ),
+                sumOfCurrentMonthIncomes === 0 ? 1 : sumOfCurrentMonthIncomes,
+              ]}
+              sliceColor={pieChartColors.slice(0, yearIncomes.length + 1)}
               coverRadius={0.6}
               coverFill={COLORS_STYLE.backgroundBlack}
             />
@@ -42,12 +62,17 @@ const YearIncomesScreen = () => {
                   {MONTHS[item.month]}
                 </Text>
               ))}
+              <Text style={{ color: pieChartColors[yearIncomes.length] }}>
+                {/* {MONTHS[new Date().getMonth()]} */}
+                {MONTHS[new Date(dateCheck).getMonth()]}
+              </Text>
             </View>
           </View>
           <View style={styles.monthIncomesBox}>
             {yearIncomes.map((month) => (
               <MonthIncomesBox monthIncomes={month} key={month.month} />
             ))}
+            <MonthIncomesBox monthIncomes={currentMonthIncomesBoxData} />
           </View>
         </>
       )}

@@ -8,6 +8,22 @@ import GrayBox100 from "../../utils/ui/GrayBox100";
 const YearSummaryScreen = () => {
   const incomes = useAppSelector((state) => state.incomes.yearIncomes);
   const expenses = useAppSelector((state) => state.expenses.yearExpenses);
+  const currentMonthExpenses = useAppSelector(
+    (state) => state.expenses.monthExpenses
+  );
+  const currentMonthIncomes = useAppSelector(
+    (state) => state.incomes.categoriesIncomes
+  );
+  const currentMonthExpensesValues = currentMonthExpenses.map((item) =>
+    Number(item.value)
+  );
+  const sumOfCurrentMonthIncomes = currentMonthIncomes
+    .map((item) => Number(item.value))
+    .reduce((partialSum, a) => partialSum + a, 0);
+  const sumOfCurrentMonthExpenses = currentMonthExpensesValues.reduce(
+    (partialSum, a) => partialSum + a,
+    0
+  );
   const finantialTargets = useAppSelector(
     (state) => state.piggyBank.finantialTargets
   );
@@ -30,29 +46,32 @@ const YearSummaryScreen = () => {
     (partialSum, a) => partialSum + a,
     0
   );
-  const bilans = sumOfIncomes - sumOfExpenses - finantialTargetsSum;
+  const totalSumOfExpenses = sumOfCurrentMonthExpenses + sumOfExpenses;
+  const totalSumOfIncomes = sumOfCurrentMonthIncomes + sumOfIncomes;
+  const bilans = totalSumOfIncomes - totalSumOfExpenses - finantialTargetsSum;
 
   const pieChartData = [
-    sumOfIncomes !== 0
+    totalSumOfIncomes !== 0
       ? Number(
           (
-            ((sumOfExpenses + finantialTargetsSum) / sumOfIncomes) *
+            ((totalSumOfExpenses + finantialTargetsSum) / totalSumOfIncomes) *
             100
           ).toFixed(2)
         )
       : 1,
     100 -
       Number(
-        (((sumOfExpenses + finantialTargetsSum) / sumOfIncomes) * 100).toFixed(
-          2
-        )
+        (
+          ((totalSumOfExpenses + finantialTargetsSum) / totalSumOfIncomes) *
+          100
+        ).toFixed(2)
       ) <
     0
       ? 0
       : 100 -
         Number(
           (
-            ((sumOfExpenses + finantialTargetsSum) / sumOfIncomes) *
+            ((totalSumOfExpenses + finantialTargetsSum) / totalSumOfIncomes) *
             100
           ).toFixed(2)
         ),
@@ -60,7 +79,10 @@ const YearSummaryScreen = () => {
   return (
     <View style={styles.container}>
       <ScrollView>
-        <GrayBox100 name="Oszczędzono" value={sumOfIncomes - sumOfExpenses} />
+        <GrayBox100
+          name="Oszczędzono"
+          value={totalSumOfIncomes - totalSumOfExpenses}
+        />
         <GrayBox100 name="Cele finansowe" value={finantialTargetsSum} />
         <View style={styles.pieChart}>
           <PieChart
@@ -72,10 +94,10 @@ const YearSummaryScreen = () => {
           />
         </View>
 
-        <GoldenFrame name="STAN KONTA" value={bilans} />
+        <GoldenFrame name="BILANS" value={bilans} />
         <View style={styles.rowBox}>
-          <GrayBox50 name="Przychody" value={sumOfIncomes} />
-          <GrayBox50 name="Wydatki" value={sumOfExpenses} />
+          <GrayBox50 name="Przychody" value={totalSumOfIncomes} />
+          <GrayBox50 name="Wydatki" value={totalSumOfExpenses} />
         </View>
       </ScrollView>
     </View>

@@ -65,7 +65,7 @@ const AddEditCategory: React.FC<AddEditCategoryProps> = ({
               style={styles.textInput}
               onChangeText={(text) => onSetInputText(text)}
               value={inputText}
-              maxLength={20}
+              maxLength={19}
             />
             <View style={styles.buttonsBox}>
               <CustomButton title="Zatwierdź" onPress={onCategoryEdit} />
