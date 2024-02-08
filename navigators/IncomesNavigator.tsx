@@ -31,12 +31,26 @@ const IncomesNavigator = () => {
   const currentYearInStore = useAppSelector(
     (state) => state.piggyBank.curentYear
   );
+  const dateToUpdateWeek = useAppSelector(
+    (state) => state.expenses.dateToUpdateWeek
+  );
+  const currentMonthStore = useAppSelector(
+    (state) => state.expenses.currentMonth
+  );
+  const dateCheck = "2025-03-15T08:06:22.626Z";
+  const date = new Date(dateCheck);
+  const newDate = new Date();
+  console.log("DateChecking1", newDate.setDate(date.getDate() + 30));
 
+  console.log("DateChecking2", newDate.toJSON());
+  console.log("checking3", dateToUpdateWeek);
+  useEffect(() => {}, [weekExpensesUpdated, dispatch]);
+  console.log(currentMonthStore);
   const dateChangeHandler = async () => {
     //Test
-    let currentDay = 1;
-    let currentMonth = 5;
-    let currentYear = 2024;
+    let currentDay = 2;
+    let currentMonth = new Date(dateCheck).getMonth();
+    let currentYear = 2025;
     //INCOMES
     if (categoriesIncomes.length > 0) {
       //if jest po to żeby kod się nie  wysypał jak nie ma zdefiniowanych żadnych wydatków
@@ -46,7 +60,7 @@ const IncomesNavigator = () => {
         categoriesIncomes[0].date
       ).getMonth();
       if (
-        currentMonth > monthOfLatestIncome ||
+        currentMonth > currentMonthStore ||
         currentYear > currentYearInStore
       ) {
         const sumOfMonthIncomes = categoriesIncomes
@@ -58,7 +72,7 @@ const IncomesNavigator = () => {
         const savings = Number(sumOfMonthIncomes) - Number(sumOfMonthExpenses);
         dispatch(
           updateMonthPiggyBank({
-            month: monthOfLatestIncome,
+            month: currentMonthStore,
             savings: savings,
           })
         );
@@ -67,25 +81,30 @@ const IncomesNavigator = () => {
     }
 
     //EXPENSES
-    if (weekExpenses.length > 0) {
-      if (currentDay === 1 && !weekExpensesUpdated) {
-        dispatch(updateWeekExpenses(true));
-      }
-      if (currentDay !== 1 && weekExpensesUpdated) {
-        dispatch(updateWeekExpenses(false));
-      }
+    console.log("DATETOUPDATE", dateToUpdateWeek);
+    console.log("DATECHECK", dateCheck);
+    console.log("daysToUpdate", new Date(dateCheck).getDay());
+    if (currentMonth > currentMonthStore || currentYear > currentYearInStore) {
+      dispatch(updateWeekExpenses());
+      dispatch(updateMonthExpenses());
     }
-    if (categoriesExpenses.length > 0) {
-      const monthOfLatestIncome = new Date(
-        categoriesExpenses[0].date
-      ).getMonth();
-      if (
-        currentMonth > monthOfLatestIncome ||
-        currentYear > currentYearInStore
-      ) {
-        dispatch(updateMonthExpenses());
-        dispatch(updateWeekExpenses("monthChange"));
-      }
+    if (new Date(dateCheck) > new Date(dateToUpdateWeek)) {
+      console.log("ok");
+      dispatch(updateWeekExpenses());
+      //   if (currentDay !== 1 && weekExpensesUpdated) {
+      //     console.log("update to false");
+      //     dispatch(updateWeekExpenses(false));
+      //   }
+      //   if (currentDay === 1 && !weekExpensesUpdated) {
+      //     console.log("update to true 1", weekExpensesUpdated);
+      //     dispatch(updateWeekExpenses(true));
+      //     console.log("update to true 2", weekExpensesUpdated);
+      //   }
+      // }
+      // if (categoriesExpenses.length > 0) {
+      //   const monthOfLatestIncome = new Date(
+      //     categoriesExpenses[0].date
+      //   ).getMonth();
     }
   };
   //useEffect do sprawdzania czy miesiąc uległ zmianie, jeżeli tak to wprowadzenie zmian w reduxie w danych

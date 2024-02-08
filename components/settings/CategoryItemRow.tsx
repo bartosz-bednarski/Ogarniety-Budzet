@@ -19,8 +19,10 @@ const CategoryItemRow: React.FC<CategoryItemRowProps> = ({
   name,
   type,
   color,
+  index,
   onPress,
 }) => {
+  console.log("index", index);
   const dispatch = useAppDispatch();
   const navigation: Navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
@@ -68,8 +70,12 @@ const CategoryItemRow: React.FC<CategoryItemRowProps> = ({
         <Ionicons name={iconName} size={29} color={pieChartColors[color]} />
         <Text style={styles.catName}>{name}</Text>
       </Pressable>
-      <Pressable onPress={() => setModalVisible(true)}>
-        <Ionicons name="trash-outline" size={29} color={COLORS_STYLE.red} />
+      <Pressable onPress={() => index !== 0 && setModalVisible(true)}>
+        <Ionicons
+          name="trash-outline"
+          size={29}
+          color={index !== 0 ? COLORS_STYLE.red : COLORS_STYLE.labelGrey}
+        />
       </Pressable>
     </View>
   );

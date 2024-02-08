@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { ExpensesInitialState } from "../types/expenses";
 
-const dateCheck = "2024-06-12T08:06:22.626Z";
+const dateCheck = "2025-03-15T08:06:22.626Z";
 const expensesInitialState: ExpensesInitialState = {
   weekExpenses: [],
   weekCategoriesExpenses: [],
@@ -10,7 +10,9 @@ const expensesInitialState: ExpensesInitialState = {
   yearExpenses: [],
   yearsExpenses: [],
   plannedExpenses: [],
-  weekExpensesUpdated: false,
+  dateToUpdateWeek: new Date().toDateString(),
+  currentMonth: new Date().getMonth(),
+  weekExpensesUpdated: true,
   curentYear: new Date(dateCheck).getFullYear(),
 };
 
@@ -19,15 +21,6 @@ const expensesSlice = createSlice({
   initialState: expensesInitialState,
   reducers: {
     setExpense: (state, action) => {
-      state.monthCategoriesExpenses = [
-        ...state.monthCategoriesExpenses,
-        { catId: action.payload.catId, sum: 0 },
-      ];
-      state.weekCategoriesExpenses = [
-        ...state.weekCategoriesExpenses,
-        { catId: action.payload.catId, sum: 0 },
-      ];
-
       const day = new Date().getDate();
       const month = new Date().getMonth() + 1;
       const year = new Date().getFullYear();
@@ -35,6 +28,17 @@ const expensesSlice = createSlice({
       const randLetter = String.fromCharCode(
         65 + Math.floor(Math.random() * 26)
       );
+
+      state.monthCategoriesExpenses = [
+        ...state.monthCategoriesExpenses,
+        { catId: action.payload.catId, sum: 0 },
+      ];
+
+      state.weekCategoriesExpenses = [
+        ...state.weekCategoriesExpenses,
+        { catId: action.payload.catId, sum: 0 },
+      ];
+
       state.weekExpenses = [
         ...state.weekExpenses,
         {
@@ -46,6 +50,7 @@ const expensesSlice = createSlice({
           id: randLetter + Date.now(),
         },
       ];
+
       state.monthExpenses = [
         ...state.monthExpenses,
         {
@@ -60,13 +65,15 @@ const expensesSlice = createSlice({
     },
 
     addExpense: (state, action) => {
-      const day = new Date().getDate();
-      const month = new Date().getMonth() + 1;
-      const year = new Date().getFullYear();
+      //DODAC ZERA W DACIE TO JEST OD STRIPOW
+      const day = new Date(dateCheck).getDate();
+      const month = new Date(dateCheck).getMonth() + 1;
+      const year = new Date(dateCheck).getFullYear();
       const fullDate = `${day}.${month}.${year}`;
       const randLetter = String.fromCharCode(
         65 + Math.floor(Math.random() * 26)
       );
+
       state.weekExpenses = [
         ...state.weekExpenses,
         {
@@ -78,6 +85,7 @@ const expensesSlice = createSlice({
           id: randLetter + Date.now(),
         },
       ];
+
       state.monthExpenses = [
         ...state.monthExpenses,
         {
@@ -138,6 +146,7 @@ const expensesSlice = createSlice({
         ];
       }
     },
+
     setPlannedExpense: (state, action) => {
       state.plannedExpenses = [
         ...state.plannedExpenses,
@@ -149,6 +158,7 @@ const expensesSlice = createSlice({
         },
       ];
     },
+
     addPlannedExpense: (state, action) => {
       const indexOfPlannedExpense = state.plannedExpenses.findIndex(
         (item) => item.catId === action.payload.catId
@@ -158,6 +168,7 @@ const expensesSlice = createSlice({
         value: action.payload.value,
       };
     },
+
     updatePlannedExpenseCategory: (state, action) => {
       if (state.plannedExpenses.length > 0) {
         const indexOfPlannedExpense = state.plannedExpenses.findIndex(
@@ -172,6 +183,7 @@ const expensesSlice = createSlice({
         return;
       }
     },
+
     deleteAllExpensesFromCategory: (state, action) => {
       state.plannedExpenses = state.plannedExpenses.filter(
         (item) => item.catId !== action.payload.catId
@@ -189,21 +201,47 @@ const expensesSlice = createSlice({
         (item) => item.catId !== action.payload.catId
       );
     },
-    updateWeekExpenses: (state, action) => {
-      if (action.payload === "monthChange") {
-        state.weekExpenses = [];
-        state.weekCategoriesExpenses = [];
-        state.weekExpensesUpdated = false;
-      }
-      if (action.payload) {
-        state.weekExpenses = [];
-        state.weekCategoriesExpenses = [];
-        state.weekExpensesUpdated = action.payload;
-      }
-      if (!action.payload) {
-        state.weekExpensesUpdated = action.payload;
-      }
+    setCurrentMonth: (state) => {
+      state.currentMonth = new Date(dateCheck).getMonth();
     },
+    setDateToUpdateWeek: (state) => {
+      //Tak ma być
+      // const currentDay = new Date().getDay()
+      // const daysToUpdate = 8 - currentDay;
+      // const newDate = new Date();
+      // const todayDate =new Date() ;
+      // newDate.setDate(todayDate.getDate() + daysToUpdate);
+      // state.dateToUpdateWeek = new Date(newDate.setHours(1, 0, 0, 1)).toJSON();
+
+      //TEST
+      const currentDay = new Date(dateCheck).getDay();
+      const daysToUpdate = 8 - currentDay;
+      const newDate = new Date(dateCheck);
+      const todayDate = new Date(dateCheck);
+      newDate.setDate(todayDate.getDate() + daysToUpdate);
+      state.dateToUpdateWeek = new Date(newDate.setHours(1, 0, 0, 1)).toJSON();
+    },
+    updateWeekExpenses: (state) => {
+      //Tak ma być
+      // const currentDay = new Date().getDay()
+      // const daysToUpdate = 8 - currentDay;
+      // const newDate = new Date();
+      // const todayDate = new Date();
+      // newDate.setDate(todayDate.getDate() + daysToUpdate);
+      // state.dateToUpdateWeek = new Date(newDate.setHours(1, 0, 0, 1)).toJSON();
+      // state.weekExpenses = [];
+      // state.weekCategoriesExpenses = [];
+      //TEST
+      const currentDay = new Date(dateCheck).getDay();
+      const daysToUpdate = 8 - currentDay;
+      const newDate = new Date(dateCheck);
+      const todayDate = new Date(dateCheck);
+      newDate.setDate(todayDate.getDate() + daysToUpdate);
+      state.dateToUpdateWeek = new Date(newDate.setHours(1, 0, 0, 1)).toJSON();
+      state.weekExpenses = [];
+      state.weekCategoriesExpenses = [];
+    },
+
     updateMonth: (state) => {
       const day = new Date().getDate();
       const month = new Date().getMonth() + 1;
@@ -214,6 +252,7 @@ const expensesSlice = createSlice({
       const sumOfAllExpenses = state.monthCategoriesExpenses
         .map((item) => Number(item.sum))
         .reduce((partialSum, a) => partialSum + a, 0);
+      state.currentMonth = new Date(dateCheck).getMonth();
       if (state.yearExpenses.length === 0) {
         state.yearExpenses = [
           {
@@ -242,6 +281,7 @@ const expensesSlice = createSlice({
         ];
         state.monthExpenses = [];
       }
+
       //wyzeruj wartości przychodów w tablicy z przychodami z aktualnego miesiąca
       if (new Date(dateCheck).getFullYear() > state.curentYear) {
         // const yearToSet = new Date().getFullYear();
@@ -271,6 +311,7 @@ const expensesSlice = createSlice({
               },
             ];
           }
+
           state.monthCategoriesExpenses = state.monthCategoriesExpenses.map(
             (item) => ({
               catId: item.catId,
@@ -294,12 +335,16 @@ const expensesSlice = createSlice({
           })
         );
       }
+      state.weekExpenses = [];
+      state.weekCategoriesExpenses = [];
     },
+
     setCurrentYear: (state) => {
       state.curentYear = new Date(dateCheck).getFullYear();
     },
   },
 });
+
 export const setExpense = expensesSlice.actions.setExpense;
 export const addExpense = expensesSlice.actions.addExpense;
 export const setPlannedExpense = expensesSlice.actions.setPlannedExpense;
@@ -311,4 +356,6 @@ export const updatePlannedExpenseCategory =
 export const updateWeekExpenses = expensesSlice.actions.updateWeekExpenses;
 export const updateMonthExpenses = expensesSlice.actions.updateMonth;
 export const setCurrentYearExpenses = expensesSlice.actions.setCurrentYear;
+export const setDateToUpdateWeek = expensesSlice.actions.setDateToUpdateWeek;
+export const setCurrentMonthExpenses = expensesSlice.actions.setCurrentMonth;
 export default expensesSlice.reducer;

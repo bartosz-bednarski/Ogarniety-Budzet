@@ -57,6 +57,7 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
       ...plannedExpenses.find((item) => item.catId === category.catId),
     }));
   }, [plannedExpenses, categoriesExpenses]);
+  console.log(sumOfAllExpenses);
   return (
     <>
       <View style={styles.container}>
@@ -70,6 +71,18 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
         )}
         {bankAccountStatus > 0 && (
           <ScrollView style={styles.scrollView}>
+            {categories.length === 0 && (
+              <View style={styles.informationBox}>
+                <CustomButton
+                  title="Dodaj kategorię wydatków"
+                  onPress={() =>
+                    navigation.navigate("settingsNavigator", {
+                      screen: "addNewCategory",
+                    })
+                  }
+                />
+              </View>
+            )}
             {sumOfAllExpenses > 0 && (
               <>
                 <PieChartWithFrames
@@ -90,7 +103,9 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
             )}
             {lastExpensesToShow.length > 0 && (
               <>
-                <Text style={styles.label}>Lista ostatnich wydatków</Text>
+                {sumOfAllExpenses > 0 && (
+                  <Text style={styles.label}>Lista ostatnich wydatków</Text>
+                )}
                 <View style={styles.lastExpensesContainer}>
                   {lastExpensesToShow.map((item) => {
                     if (item.value !== 0) {

@@ -24,10 +24,10 @@ const MonthExpensesBox: React.FC<{ monthExpenses: MonthExpensesBoxProps }> = ({
     .reduce((partialSum, a) => partialSum + a, 0);
   const stripsColumnsData: any = monthExpenses.categoriesExpenses.map(
     (item, index) => {
-      if (item.stillExsists) {
-        const filteredCategories = expensesCategories.find(
-          (category) => category.catId === item.catId
-        );
+      const filteredCategories = expensesCategories.find(
+        (category) => category.catId === item.catId
+      );
+      if (item.stillExsists && filteredCategories?.name !== undefined) {
         return {
           catId: item.catId,
           iconName: filteredCategories?.iconName,
@@ -35,7 +35,7 @@ const MonthExpensesBox: React.FC<{ monthExpenses: MonthExpensesBoxProps }> = ({
           value: sumOfMonthExpenses,
           sum: item.sum,
         };
-      } else if (!item.stillExsists) {
+      } else if (!item.stillExsists || filteredCategories?.name === undefined) {
         return {
           catId: item.catId,
           name: "Inne",
@@ -46,7 +46,7 @@ const MonthExpensesBox: React.FC<{ monthExpenses: MonthExpensesBoxProps }> = ({
       }
     }
   );
-
+  console.log("BOXI", stripsColumnsData);
   return (
     <View style={styles.container}>
       <Text style={styles.monthName}>{MONTHS[monthExpenses.month]}</Text>

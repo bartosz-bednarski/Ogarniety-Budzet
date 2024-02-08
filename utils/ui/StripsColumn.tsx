@@ -10,20 +10,24 @@ const StripsColumn: React.FC<{
     sum: number;
   }[];
 }> = ({ data }) => {
-  console.log(data);
   return (
     <View style={styles.stripsContainer}>
       {/* {currentCategoryRealistationPieChartData.map((item) => ( */}
-      {data.map((item, index) => (
-        <Strip
-          key={item.catId}
-          iconName={item.iconName}
-          categoryName={item.name}
-          realExpenses={item.sum}
-          plannedExpenses={item.value}
-          pieChartColorsNum={index}
-        />
-      ))}
+      {data.map((item, index) => {
+        let randLetter = String.fromCharCode(
+          65 + Math.floor(Math.random() * 26)
+        );
+        return (
+          <Strip
+            key={randLetter + Date.now()}
+            iconName={item.iconName}
+            categoryName={item.name}
+            realExpenses={item.sum}
+            plannedExpenses={item.value}
+            pieChartColorsNum={index}
+          />
+        );
+      })}
 
       {/* ))} */}
     </View>

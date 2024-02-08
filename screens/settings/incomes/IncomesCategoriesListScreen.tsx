@@ -24,6 +24,7 @@ const IncomesCategoriesListScreen: React.FC<{ navigation: any }> = ({
               iconName={item.iconName}
               name={item.name}
               color={index}
+              index={index}
               type={"incomes"}
               onPress={() =>
                 navigation.navigate("editIncomesCategory", {

@@ -1,4 +1,5 @@
 import { PlannedExpenseCategoryItem, CategoryItem } from "./settings";
+
 export type WeekExpenses = {
   catId: string;
   value: number;
@@ -46,7 +47,9 @@ export type ExpensesInitialState = {
   yearsExpenses: YearsExpenses;
   plannedExpenses: PlannedExpenseCategoryItem[];
   weekExpensesUpdated: boolean;
+  dateToUpdateWeek: string;
   curentYear: number;
+  currentMonth: number;
 };
 export type ExpensesCategoriesInitialState = {
   categoriesList: CategoryItem[];

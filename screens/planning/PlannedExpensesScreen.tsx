@@ -10,34 +10,30 @@ import CircleNumberColorButton from "../../utils/ui/CircleNumberColorButton";
 import CircleStringColorButton from "../../utils/ui/CircleStringColorButton";
 import StripsColumn from "../../utils/ui/StripsColumn";
 import ModalSetPlannedExpense from "../../components/planning/ModalSetPlannedExpense";
+
 const PlannedExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {
-  const dispatch = useAppDispatch();
-  const [selectedCatId, setSelectedCatId] = useState("");
-  const [modalVisible, setModalVisible] = useState(false);
-  const [value, setValue] = useState("");
-
   const plannedExpenses = useAppSelector(
     (state) => state.expenses.plannedExpenses
   );
   const bankAccountStatus = useAppSelector(
     (state) => state.piggyBank.bankAccountStatus
   );
-  const onPressHandler = (catId: string) => {
-    setSelectedCatId(catId);
-    setModalVisible(true);
-  };
-  const submitHandler = () => {
-    if (value !== "" && value !== "0") {
-      dispatch(addPlannedExpense({ catId: selectedCatId, value: value }));
-      setValue("");
-    }
-    setModalVisible(!modalVisible);
-  };
+  const categoriesExpenses = useAppSelector(
+    (state) => state.expensesCategories.categoriesList
+  );
+
+  const dispatch = useAppDispatch();
+
+  const [selectedCatId, setSelectedCatId] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+  const [value, setValue] = useState("");
+
   const sumOfPlannedExpenses = plannedExpenses
     .map((item) => Number(item.value))
     .reduce((partialSum, a) => partialSum + a, 0);
+
   const stripsColumnData = plannedExpenses.map((item) => ({
     catId: item.catId,
     iconName: item.iconName,
@@ -45,9 +41,35 @@ const PlannedExpensesScreen: React.FC<{ navigation: Navigation }> = ({
     value: sumOfPlannedExpenses,
     sum: Number(item.value),
   }));
+
+  const onPressHandler = (catId: string) => {
+    setSelectedCatId(catId);
+    setModalVisible(true);
+  };
+
+  const submitHandler = () => {
+    if (value !== "" && value !== "0") {
+      dispatch(addPlannedExpense({ catId: selectedCatId, value: value }));
+      setValue("");
+    }
+    setModalVisible(!modalVisible);
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollView}>
+        {categoriesExpenses.length === 0 && bankAccountStatus > 0 && (
+          <View style={styles.informationBox}>
+            <CustomButton
+              title="Dodaj kategorię wydatków"
+              onPress={() =>
+                navigation.navigate("settingsNavigator", {
+                  screen: "addNewCategory",
+                })
+              }
+            />
+          </View>
+        )}
         {bankAccountStatus === 0 && (
           <View style={styles.buttonBox}>
             <CustomButton
