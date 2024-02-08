@@ -80,7 +80,7 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
   const sumOfFinantialIncomes = targetsIncomesArray
     .flat(1)
     .reduce((partialSum, a) => partialSum + a, 0);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(true);
   const freeSavings = totalBankAccount - sumOfFinantialIncomes;
   const pieChartOneData = [
     sumOfFinantialIncomes !== 0
@@ -155,11 +155,12 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
             )}
           </>
         )}
-
-        <CustomModal
-          modalVisible={modalVisible}
-          setModalVisible={(value) => setModalVisible(value)}
-        />
+        {bankAccountStatus === 0 && (
+          <CustomModal
+            modalVisible={modalVisible}
+            setModalVisible={(value) => setModalVisible(value)}
+          />
+        )}
       </ScrollView>
     </View>
   );

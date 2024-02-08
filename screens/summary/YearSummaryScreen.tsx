@@ -5,6 +5,7 @@ import PieChart from "react-native-pie-chart";
 import GoldenFrame from "../../utils/ui/GoldenFrame";
 import { useAppSelector } from "../../redux/hooks";
 import GrayBox100 from "../../utils/ui/GrayBox100";
+
 const YearSummaryScreen = () => {
   const incomes = useAppSelector((state) => state.incomes.yearIncomes);
   const expenses = useAppSelector((state) => state.expenses.yearExpenses);
@@ -17,15 +18,16 @@ const YearSummaryScreen = () => {
   const currentMonthExpensesValues = currentMonthExpenses.map((item) =>
     Number(item.value)
   );
+  const finantialTargets = useAppSelector(
+    (state) => state.piggyBank.finantialTargets
+  );
+
   const sumOfCurrentMonthIncomes = currentMonthIncomes
     .map((item) => Number(item.value))
     .reduce((partialSum, a) => partialSum + a, 0);
   const sumOfCurrentMonthExpenses = currentMonthExpensesValues.reduce(
     (partialSum, a) => partialSum + a,
     0
-  );
-  const finantialTargets = useAppSelector(
-    (state) => state.piggyBank.finantialTargets
   );
 
   const sumOfIncomes = incomes
@@ -39,6 +41,7 @@ const YearSummaryScreen = () => {
   );
 
   const targetsArr = [];
+
   for (let i = 0; i < finantialTargetsValues.length; i++) {
     targetsArr.push(...finantialTargetsValues[i]);
   }
@@ -46,6 +49,7 @@ const YearSummaryScreen = () => {
     (partialSum, a) => partialSum + a,
     0
   );
+
   const totalSumOfExpenses = sumOfCurrentMonthExpenses + sumOfExpenses;
   const totalSumOfIncomes = sumOfCurrentMonthIncomes + sumOfIncomes;
   const bilans = totalSumOfIncomes - totalSumOfExpenses - finantialTargetsSum;
@@ -76,6 +80,7 @@ const YearSummaryScreen = () => {
           ).toFixed(2)
         ),
   ];
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -93,7 +98,6 @@ const YearSummaryScreen = () => {
             coverFill={COLORS_STYLE.backgroundBlack}
           />
         </View>
-
         <GoldenFrame name="BILANS" value={bilans} />
         <View style={styles.rowBox}>
           <GrayBox50 name="Przychody" value={totalSumOfIncomes} />
@@ -103,6 +107,7 @@ const YearSummaryScreen = () => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

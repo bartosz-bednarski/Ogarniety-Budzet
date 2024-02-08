@@ -29,10 +29,14 @@ const MonthIncomesBox: React.FC<{ monthIncomes: MonthIncomesBoxProps }> = ({
     //   sum: number;
     // }
     monthIncomes.categoriesIncomes.map((item, index) => {
-      if (item.stillExsists) {
-        const filteredCategories = incomesCategories.find(
-          (category) => category.catId === item.catId
-        );
+      const filteredCategories = incomesCategories.find(
+        (category) => category.catId === item.catId
+      );
+      if (
+        item.stillExsists &&
+        filteredCategories?.catId !== undefined &&
+        filteredCategories.name !== undefined
+      ) {
         return {
           catId: filteredCategories!.catId,
           iconName: filteredCategories!.iconName,
@@ -41,7 +45,11 @@ const MonthIncomesBox: React.FC<{ monthIncomes: MonthIncomesBoxProps }> = ({
           sum: item.value,
           // color: pieChartColors[index],
         };
-      } else if (!item.stillExsists) {
+      } else if (
+        !item.stillExsists ||
+        filteredCategories?.catId === undefined ||
+        filteredCategories.name === undefined
+      ) {
         return {
           name: "Inne",
           iconName: "star",

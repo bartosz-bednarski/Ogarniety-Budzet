@@ -3,6 +3,7 @@ import { Ionicons } from "@expo/vector-icons";
 import COLORS_STYLE from "../styles/colors";
 import pieChartColors from "../styles/pieChartColors";
 import { useAppSelector } from "../../redux/hooks";
+import { numberWithSpaces } from "../numberWithSpaces";
 const CircleNumberColorButton: React.FC<{
   iconName: string | undefined;
   value: number;
@@ -22,7 +23,7 @@ const CircleNumberColorButton: React.FC<{
         <Ionicons name={iconName} size={50} color={pieChartColors[color]} />
       </Pressable>
       <Text style={styles.value}>
-        {value} {currency}
+        {numberWithSpaces(value)} {currency}
       </Text>
     </View>
   );

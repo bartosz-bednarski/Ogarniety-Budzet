@@ -20,6 +20,7 @@ const MonthExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   const categoriesExpenses = useAppSelector(
     (state) => state.expenses.monthCategoriesExpenses
   );
+  console.log(categoriesExpenses);
   const plannedExpenses = useAppSelector(
     (state) => state.expenses.plannedExpenses
   );
@@ -65,7 +66,7 @@ const MonthExpensesScreen: React.FC<{ navigation: Navigation }> = ({
       {bankAccountStatus > 0 && (
         <>
           <ScrollView>
-            {sumOfAllExpenses === 0 && (
+            {categoriesExpenses.length === 0 && (
               <View style={styles.informationBox}>
                 <CustomButton
                   title="Dodaj wydatek"

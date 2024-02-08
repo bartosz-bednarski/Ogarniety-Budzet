@@ -32,7 +32,7 @@ const PieChartWithFrames: React.FC<{
           />
         ) : (
           <FrameUnderlineSmall
-            textUp="PRZEKROCZONO!"
+            textUp="PRZEKROCZONO PLANOWANY BUDŻET!"
             textDown={Number(toSpend.toFixed(2))}
             mainColor={COLORS_STYLE.red}
           />

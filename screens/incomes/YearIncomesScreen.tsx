@@ -8,7 +8,7 @@ import MonthIncomesBox from "../../components/incomes/yearIncomes/MonthIncomesBo
 import GoldenFrame from "../../utils/ui/GoldenFrame";
 
 const YearIncomesScreen = () => {
-  const dateCheck = "2024-06-12T08:06:22.626Z";
+  const dateCheck = "2025-03-15T08:06:22.626Z";
   const currentMonthIncomes = useAppSelector(
     (state) => state.incomes.categoriesIncomes
   );

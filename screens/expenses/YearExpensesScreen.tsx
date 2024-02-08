@@ -13,7 +13,7 @@ MONTHS;
 const YearExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {
-  const dateCheck = "2024-06-12T08:06:22.626Z";
+  const dateCheck = "2025-03-15T08:06:22.626Z";
 
   const monthExpenses = useAppSelector(
     (state) => state.expenses.monthCategoriesExpenses
@@ -21,6 +21,7 @@ const YearExpensesScreen: React.FC<{ navigation: Navigation }> = ({
 
   console.log(monthExpenses);
   const yearExpenses = useAppSelector((state) => state.expenses.yearExpenses);
+  console.log("YEAReXPENSES", yearExpenses[0]);
   const sumOfYearExpenses = yearExpenses
     .map((item) => Number(item.sumOfAllExpenses))
     .reduce((partialSum, a) => partialSum + a, 0);
@@ -38,8 +39,6 @@ const YearExpensesScreen: React.FC<{ navigation: Navigation }> = ({
       stillExsists: true,
     })),
   };
-  console.log("!!!!!!!!!!!", currentMonthExpensesBoxData);
-  // console.log(yearExpenses);
   return (
     <ScrollView style={styles.container}>
       {yearExpenses.length === 0 && (

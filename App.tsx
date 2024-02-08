@@ -12,6 +12,7 @@ import ExpensesNavigator from "./navigators/ExpensesNavigator";
 import IncomesNavigator from "./navigators/IncomesNavigator";
 import PiggyBankNavigator from "./navigators/PiggyBankNavigator";
 import COLORS_STYLE from "./utils/styles/colors";
+
 export default function App() {
   const navTheme = DefaultTheme;
   navTheme.colors.background = "black";

@@ -30,18 +30,6 @@ const AddExpenseScreen: React.FC<{ navigation: Navigation }> = ({
 
   return (
     <ScrollView style={styles.container}>
-      {categories.length === 0 && (
-        <View style={styles.informationBox}>
-          <CustomButton
-            title="Dodaj kategorie wydatków"
-            onPress={() =>
-              navigation.navigate("settingsNavigator", {
-                screen: "editCategories",
-              })
-            }
-          />
-        </View>
-      )}
       <ModalAddExpense
         modalVisible={modalVisible}
         setModalVisible={(value) => setModalVisible(value)}

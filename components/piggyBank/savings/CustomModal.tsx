@@ -1,6 +1,6 @@
 import { Text, View, Modal, Alert, TextInput, StyleSheet } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   setBankAccountStatus,
   setCurrentYearPiggyBank,
@@ -16,55 +16,75 @@ import {
   addExpense,
   setExpense,
   setCurrentYearExpenses,
+  setDateToUpdateWeek,
+  setCurrentMonthExpenses,
 } from "../../../redux/expenses-slice";
 import CustomButton from "../../../utils/ui/CustomButton";
 import { addExpensesCategory } from "../../../redux/expensesCategories-slice";
 import { addIncomesCategory } from "../../../redux/incomesCategories-slice";
+import COLORS_STYLE from "../../../utils/styles/colors";
+
 const CustomModal: React.FC<{
   modalVisible: boolean;
   setModalVisible: (value: boolean) => void;
 }> = ({ modalVisible, setModalVisible }) => {
   const dispatch = useAppDispatch();
+
   const [bankAccountInput, setBankAccountInput] = useState("");
   const [incomesInput, setIncomesInput] = useState("");
-  const categoriesIncomes = useAppSelector(
-    (state) => state.incomesCategories.categoriesList
-  );
-  const expensesCategories = useAppSelector(
-    (state) => state.expensesCategories.categoriesList
-  );
+  const [inputError, setInputError] = useState({ status: false, message: "" });
+
+  useEffect(() => {
+    Number(bankAccountInput) > 0 &&
+      setInputError({ status: false, message: "" });
+  }, [bankAccountInput]);
 
   const submitHandler = () => {
+    dispatch(setCurrentMonthExpenses());
+    dispatch(setDateToUpdateWeek());
     dispatch(setCurrentYearIncomes());
     dispatch(setCurrentYearPiggyBank());
     dispatch(setCurrentYearExpenses());
+
     const randomId = function (length = 6) {
       return Math.random()
         .toString(36)
         .substring(2, length + 2);
     };
+
     const incomeCatId = randomId(5);
     const catId = randomId(4);
-    if (
-      Number(bankAccountInput) > 0 &&
-      Number(incomesInput) === 0 &&
-      bankAccountInput.length > 0 &&
-      incomesInput.length > 0
-    ) {
+
+    if (Number(bankAccountInput) === 0) {
+      setInputError({
+        status: true,
+        message: "Wartość stanu konta powinna być większa niż 0.",
+      });
+    }
+
+    if (Number(bankAccountInput) > 0 && Number(incomesInput) === 0) {
       dispatch(setBankAccountStatus(bankAccountInput));
+      dispatch(
+        addIncomesCategory({
+          name: "Inne",
+          iconName: "star",
+          catId: incomeCatId,
+        })
+      );
+      dispatch(setIncome({ catId: incomeCatId }));
+      dispatch(updateIncome({ catId: incomeCatId, value: 0 }));
       setModalVisible(false);
     } else if (
       Number(bankAccountInput) > 0 &&
       Number(incomesInput) > 0 &&
-      bankAccountInput.length > 0 &&
-      incomesInput.length > 0 &&
       Number(incomesInput) > Number(bankAccountInput)
     ) {
+      //Utworz funkcje z ifa!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       const difference = Number(incomesInput) - Number(bankAccountInput) + 1;
       const income = Number(incomesInput);
 
       dispatch(setBankAccountStatus(1));
-
       dispatch(
         addIncomesCategory({
           name: "Inne",
@@ -74,7 +94,6 @@ const CustomModal: React.FC<{
       );
       dispatch(setIncome({ catId: incomeCatId }));
       dispatch(updateIncome({ catId: incomeCatId, value: income }));
-
       dispatch(
         addExpensesCategory({
           name: "Inne",
@@ -95,21 +114,11 @@ const CustomModal: React.FC<{
           catId: catId,
         })
       );
-      dispatch(
-        setPlannedExpense({
-          catId: catId,
-          iconName: "star",
-          name: "Inne",
-        })
-      );
       dispatch(addPlannedExpense({ catId: catId, value: difference }));
-
       setModalVisible(false);
     } else if (
       Number(bankAccountInput) > 0 &&
       Number(incomesInput) > 0 &&
-      bankAccountInput.length > 0 &&
-      incomesInput.length > 0 &&
       Number(bankAccountInput) > Number(incomesInput)
     ) {
       const difference = Number(bankAccountInput) - Number(incomesInput);
@@ -124,10 +133,10 @@ const CustomModal: React.FC<{
       );
       dispatch(setIncome({ catId: incomeCatId }));
       dispatch(updateIncome({ catId: incomeCatId, value: income }));
-
       setModalVisible(false);
     }
   };
+
   return (
     <Modal
       animationType="slide"
@@ -151,7 +160,9 @@ const CustomModal: React.FC<{
             keyboardType="numeric"
             maxLength={10}
           />
-
+          {inputError.status && (
+            <Text style={styles.errorText}>{inputError.message}</Text>
+          )}
           <Text style={styles.modalLabel}>
             Podaj kwotę przychodów uzyskanych w tym miesiącu
           </Text>
@@ -223,6 +234,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     color: "black",
     marginBottom: 20,
+  },
+  errorText: {
+    fontSize: 12,
+    color: COLORS_STYLE.red,
+    width: "100%",
+    textAlign: "left",
+    fontWeight: "700",
   },
 });
 export default CustomModal;
