@@ -15,6 +15,7 @@ import StripsColumn from "../../utils/ui/StripsColumn";
 import CircleNumberColorButton from "../../utils/ui/CircleNumberColorButton";
 import CircleStringColorButton from "../../utils/ui/CircleStringColorButton";
 import ModalSetIncome from "../../components/incomes/ModalSetIncomes";
+import InfoDateUpdate from "../../utils/ui/InfoDateUpdate";
 const MonthIncomesScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {
@@ -79,7 +80,13 @@ const MonthIncomesScreen: React.FC<{ navigation: Navigation }> = ({
             />
           </View>
         )}
-
+        {bankAccountStatus > 0 && sumOfMonthIncomes === 0 && (
+          <InfoDateUpdate
+            goldText="Nowy Miesiąc"
+            whiteText="Uzupełnij swoje przychody"
+            arrow="down"
+          />
+        )}
         {sumOfMonthIncomes > 0 && (
           <>
             <Text style={styles.label}>Zestawienie przychodów</Text>

@@ -13,7 +13,8 @@ MONTHS;
 const YearExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {
-  const dateCheck = "2025-03-15T08:06:22.626Z";
+  //TEST
+  // const dateCheck = "2025-03-15T08:06:22.626Z";
 
   const monthExpenses = useAppSelector(
     (state) => state.expenses.monthCategoriesExpenses
@@ -30,8 +31,10 @@ const YearExpensesScreen: React.FC<{ navigation: Navigation }> = ({
     .reduce((partialSum, a) => partialSum + a, 0);
   const sumOfAllExpenses = sumOfYearExpenses + sumOfMonthExpenses;
   const currentMonthExpensesBoxData = {
-    // month: new Date().getMonth(),
-    month: new Date(dateCheck).getMonth(),
+    //TEST
+    // month: new Date(dateCheck).getMonth(),
+
+    month: new Date().getMonth(),
     sumOfAllExpenses: sumOfMonthExpenses,
     categoriesExpenses: monthExpenses.map((item) => ({
       catId: item.catId,
@@ -44,8 +47,8 @@ const YearExpensesScreen: React.FC<{ navigation: Navigation }> = ({
       {yearExpenses.length === 0 && (
         <View style={styles.informationBox}>
           <Text style={styles.informationText}>
-            Tutaj wyświetlane będą informacje o wydatkach z poszczególnych
-            miesięcy
+            Tutaj będą wyświetlane informacje o wydatkach z poszczególnych
+            miesięcy.
           </Text>
         </View>
       )}
@@ -70,8 +73,9 @@ const YearExpensesScreen: React.FC<{ navigation: Navigation }> = ({
                 </Text>
               ))}
               <Text style={{ color: pieChartColors[yearExpenses.length] }}>
-                {/* {MONTHS[new Date().getMonth()]} */}
-                {MONTHS[new Date(dateCheck).getMonth()]}
+                {/* {TEST} */}
+                {/* {MONTHS[new Date(dateCheck).getMonth()]} */}
+                {MONTHS[new Date().getMonth()]}
               </Text>
             </View>
           </View>

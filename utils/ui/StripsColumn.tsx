@@ -10,16 +10,31 @@ const StripsColumn: React.FC<{
     sum: number;
   }[];
 }> = ({ data }) => {
+  function randomId() {
+    let S4 = function () {
+      return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+    };
+    return (
+      S4() +
+      S4() +
+      "-" +
+      S4() +
+      "-" +
+      S4() +
+      "-" +
+      S4() +
+      "-" +
+      S4() +
+      S4() +
+      S4()
+    );
+  }
   return (
     <View style={styles.stripsContainer}>
-      {/* {currentCategoryRealistationPieChartData.map((item) => ( */}
       {data.map((item, index) => {
-        let randLetter = String.fromCharCode(
-          65 + Math.floor(Math.random() * 26)
-        );
         return (
           <Strip
-            key={randLetter + Date.now()}
+            key={randomId()}
             iconName={item.iconName}
             categoryName={item.name}
             realExpenses={item.sum}

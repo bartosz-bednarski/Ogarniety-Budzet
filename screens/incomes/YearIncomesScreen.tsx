@@ -8,7 +8,9 @@ import MonthIncomesBox from "../../components/incomes/yearIncomes/MonthIncomesBo
 import GoldenFrame from "../../utils/ui/GoldenFrame";
 
 const YearIncomesScreen = () => {
-  const dateCheck = "2025-03-15T08:06:22.626Z";
+  //TEST
+  // const dateCheck = "2025-03-15T08:06:22.626Z";
+
   const currentMonthIncomes = useAppSelector(
     (state) => state.incomes.categoriesIncomes
   );
@@ -21,8 +23,11 @@ const YearIncomesScreen = () => {
     .reduce((partialSum, a) => partialSum + a, 0);
   const sumOfAllIncomes = sumOfYearIncomes + sumOfCurrentMonthIncomes;
   const currentMonthIncomesBoxData = {
-    // month: new Date().getMonth(),
-    month: new Date(dateCheck).getMonth(),
+    //TEST
+    // month: new Date(dateCheck).getMonth(),
+
+    month: new Date().getMonth(),
+
     sumOfAllIncomes: sumOfCurrentMonthIncomes,
     categoriesIncomes: currentMonthIncomes.map((item) => ({
       catId: item.catId,
@@ -35,8 +40,8 @@ const YearIncomesScreen = () => {
       {yearIncomes.length === 0 && (
         <View style={styles.informationBox}>
           <Text style={styles.informationText}>
-            Tutaj wyświetlane będą informacje o przychodach z poszczególnych
-            miesięcy
+            Tutaj będą wyświetlane informacje o przychodach z poszczególnych
+            miesięcy.
           </Text>
         </View>
       )}
@@ -63,8 +68,9 @@ const YearIncomesScreen = () => {
                 </Text>
               ))}
               <Text style={{ color: pieChartColors[yearIncomes.length] }}>
-                {/* {MONTHS[new Date().getMonth()]} */}
-                {MONTHS[new Date(dateCheck).getMonth()]}
+                {/*TEST*/}
+                {/* {MONTHS[new Date(dateCheck).getMonth()]} */}
+                {MONTHS[new Date().getMonth()]}
               </Text>
             </View>
           </View>

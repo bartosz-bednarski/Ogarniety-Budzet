@@ -37,6 +37,7 @@ const SettingsScreen: React.FC<{ navigation: Navigation }> = ({
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   settingsContainer: {
     flex: 1,
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   listItemBoxPressed: {
-    backgroundColor: "blue",
+    backgroundColor: COLORS_STYLE.basicGold,
     opacity: 0.4,
   },
   listItemText: {
@@ -64,4 +65,5 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 });
+
 export default SettingsScreen;

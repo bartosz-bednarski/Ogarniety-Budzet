@@ -11,6 +11,8 @@ import PieChartWithFrames from "../../components/expenses/PieChartWithFrames";
 import StripsColumn from "../../utils/ui/StripsColumn";
 import PieChartRealisation from "../../components/expenses/PieChartRealisation";
 import AddCircleButton from "../../utils/ui/AddCircleButton";
+import { Ionicons } from "@expo/vector-icons";
+import InfoDateUpdate from "../../utils/ui/InfoDateUpdate";
 
 const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
@@ -27,6 +29,7 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   const bankAccountStatus = useAppSelector(
     (state) => state.piggyBank.bankAccountStatus
   );
+
   const categoriesExpensesWithNames: CategoriesExpensesWithNames =
     categoriesExpenses.map((category, index) => ({
       ...category,
@@ -34,11 +37,13 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
       ...categories.find((item) => item.catId === category.catId),
     }));
   const lastExpenses = useAppSelector((state) => state.expenses.weekExpenses);
+
   const lastExpensesToShow = lastExpenses.map((item) => ({
     ...item,
     ...categories.find((cat) => cat.catId === item.catId),
     iconColorNumber: categories.findIndex((cat) => cat.catId === item.catId),
   }));
+  console.log("!!!!!!!!", lastExpensesToShow);
   let stripsColumnData = categoriesExpenses.map((category) => ({
     ...category,
     ...plannedExpenses.find((item) => item.catId === category.catId),
@@ -69,6 +74,15 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
             />
           </View>
         )}
+        {bankAccountStatus > 0 &&
+          sumOfAllExpenses === 0 &&
+          categories.length > 0 && (
+            <InfoDateUpdate
+              goldText="Nowy Tydzień"
+              whiteText="Uzupełnij swoje wydatki"
+              arrow="down"
+            />
+          )}
         {bankAccountStatus > 0 && (
           <ScrollView style={styles.scrollView}>
             {categories.length === 0 && (
@@ -83,6 +97,7 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
                 />
               </View>
             )}
+
             {sumOfAllExpenses > 0 && (
               <>
                 <PieChartWithFrames
@@ -117,6 +132,8 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
                           key={item.id}
                           color={item.iconColorNumber}
                           name={item.name}
+                          id={item.id}
+                          catId={item.catId}
                         />
                       );
                     }
