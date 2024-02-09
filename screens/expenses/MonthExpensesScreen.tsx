@@ -10,6 +10,7 @@ import { Navigation } from "../../types/global";
 import PieChartWithFrames from "../../components/expenses/PieChartWithFrames";
 import StripsColumn from "../../utils/ui/StripsColumn";
 import PieChartRealisation from "../../components/expenses/PieChartRealisation";
+import InfoDateUpdate from "../../utils/ui/InfoDateUpdate";
 
 const MonthExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
@@ -20,7 +21,6 @@ const MonthExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   const categoriesExpenses = useAppSelector(
     (state) => state.expenses.monthCategoriesExpenses
   );
-  console.log(categoriesExpenses);
   const plannedExpenses = useAppSelector(
     (state) => state.expenses.plannedExpenses
   );
@@ -63,6 +63,15 @@ const MonthExpensesScreen: React.FC<{ navigation: Navigation }> = ({
           />
         </View>
       )}
+      {bankAccountStatus > 0 &&
+        sumOfAllExpenses === 0 &&
+        categoriesExpenses.length > 0 && (
+          <InfoDateUpdate
+            goldText="Nowy Miesiąc"
+            whiteText="Uzupełnij swoje wydatki"
+            arrow="back"
+          />
+        )}
       {bankAccountStatus > 0 && (
         <>
           <ScrollView>

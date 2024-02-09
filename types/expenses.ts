@@ -67,6 +67,8 @@ export type SingleExpenseProps = {
   date: string;
   name: string | undefined;
   color: number;
+  id: string;
+  catId: string;
 };
 export type CategoriesExpensesWithNames = {
   catId: string;

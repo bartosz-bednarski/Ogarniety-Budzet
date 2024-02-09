@@ -1,15 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { PiggyBankInitialState } from "../types/piggyBank";
-const dateCheck = "2025-03-15T08:06:22.626Z";
+
+//TEST
+// const dateCheck = "2025-03-15T08:06:22.626Z";
+//TEST
+// const piggyBankInitialState: PiggyBankInitialState = {
+//   bankAccountStatus: 0,
+//   finantialTargets: [],
+//   yearSavings: [],
+//   yearsSavings: [],
+//   realisedTargets: [],
+//   curentYear: new Date(dateCheck).getFullYear(),
+// };
 const piggyBankInitialState: PiggyBankInitialState = {
   bankAccountStatus: 0,
   finantialTargets: [],
   yearSavings: [],
   yearsSavings: [],
   realisedTargets: [],
-  curentYear: new Date(dateCheck).getFullYear(),
+  curentYear: new Date().getFullYear(),
 };
-
 const piggyBankSlice = createSlice({
   name: "piggyBank",
   initialState: piggyBankInitialState,
@@ -38,9 +48,12 @@ const piggyBankSlice = createSlice({
         ];
       }
       //wyzeruj wartości przychodów w tablicy z przychodami z aktualnego miesiąca
-      if (new Date(dateCheck).getFullYear() > state.curentYear) {
-        // const yearToSet = new Date().getFullYear();
-        const yearToSet = new Date(dateCheck).getFullYear() - 1;
+
+      //TEST
+      // if (new Date(dateCheck).getFullYear() > state.curentYear) {
+      //         const yearToSet = new Date(dateCheck).getFullYear() - 1;
+      if (new Date().getFullYear() > state.curentYear) {
+        const yearToSet = new Date().getFullYear() - 1;
         if (state.yearSavings.length > 0) {
           const sumOfSavings = state.yearSavings
             .map((item) => Number(item.savings))
@@ -70,7 +83,9 @@ const piggyBankSlice = createSlice({
           //wyzeruj wartości przychodów w tablicy z przychodami z poprzedniego roku
           state.yearSavings = [];
         }
-        state.curentYear = new Date(dateCheck).getFullYear();
+        //TEST
+        // state.curentYear = new Date(dateCheck).getFullYear();
+        state.curentYear = new Date().getFullYear();
       }
     },
     setFinantialTarget: (state, action) => {
@@ -82,8 +97,14 @@ const piggyBankSlice = createSlice({
           targetValue: Number(action.payload.targetValue),
           id: action.payload.id,
           incomes: [
+            //TEST
+            // {
+            //   dateMonth: new Date(dateCheck).getMonth(),
+            //   value: 0,
+            //   id: action.payload.incomeId,
+            // },
             {
-              dateMonth: new Date(dateCheck).getMonth(),
+              dateMonth: new Date().getMonth(),
               value: 0,
               id: action.payload.incomeId,
             },
@@ -97,8 +118,14 @@ const piggyBankSlice = createSlice({
       );
       state.finantialTargets[indexOfTarget].incomes = [
         ...state.finantialTargets[indexOfTarget].incomes,
+        //TEST
+        // {
+        //   dateMonth: new Date(dateCheck).getMonth(),
+        //   value: Number(action.payload.value),
+        //   id: action.payload.incomeId,
+        // },
         {
-          dateMonth: new Date(dateCheck).getMonth(),
+          dateMonth: new Date().getMonth(),
           value: Number(action.payload.value),
           id: action.payload.incomeId,
         },
@@ -119,12 +146,20 @@ const piggyBankSlice = createSlice({
     setTargetRealised: (state, action) => {
       if (state.realisedTargets === undefined) {
         state.realisedTargets = [
+          //TEST
+          // {
+          //   name: action.payload.name,
+          //   iconName: action.payload.iconName,
+          //   targetValue: Number(action.payload.targetValue),
+          //   id: action.payload.id,
+          //   dateMonth: new Date(dateCheck).getMonth(),
+          // },
           {
             name: action.payload.name,
             iconName: action.payload.iconName,
             targetValue: Number(action.payload.targetValue),
             id: action.payload.id,
-            dateMonth: new Date(dateCheck).getMonth(),
+            dateMonth: new Date().getMonth(),
           },
         ];
         state.finantialTargets = state.finantialTargets.filter(
@@ -133,12 +168,20 @@ const piggyBankSlice = createSlice({
       } else {
         state.realisedTargets = [
           ...state.realisedTargets,
+          //TEST
+          // {
+          //   name: action.payload.name,
+          //   iconName: action.payload.iconName,
+          //   targetValue: Number(action.payload.targetValue),
+          //   id: action.payload.id,
+          //   dateMonth: new Date(dateCheck).getMonth(),
+          // },
           {
             name: action.payload.name,
             iconName: action.payload.iconName,
             targetValue: Number(action.payload.targetValue),
             id: action.payload.id,
-            dateMonth: new Date(dateCheck).getMonth(),
+            dateMonth: new Date().getMonth(),
           },
         ];
         state.finantialTargets = state.finantialTargets.filter(
@@ -147,7 +190,9 @@ const piggyBankSlice = createSlice({
       }
     },
     setCurrentYear: (state) => {
-      state.curentYear = new Date(dateCheck).getFullYear();
+      //TEST
+      // state.curentYear = new Date(dateCheck).getFullYear();
+      state.curentYear = new Date().getFullYear();
     },
   },
 });

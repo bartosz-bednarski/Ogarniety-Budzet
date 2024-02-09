@@ -1,12 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IncomesInitialState } from "../types/incomes";
-
-const dateCheck = "2025-03-15T08:06:22.626Z";
+//TEST
+// const dateCheck = "2025-03-15T08:06:22.626Z";
+//TEST
+// const incomesInitialState: IncomesInitialState = {
+//   categoriesIncomes: [],
+//   yearIncomes: [],
+//   yearsIncomes: [],
+//   curentYear: new Date(dateCheck).getFullYear(),
+// };
 const incomesInitialState: IncomesInitialState = {
   categoriesIncomes: [],
   yearIncomes: [],
   yearsIncomes: [],
-  curentYear: new Date(dateCheck).getFullYear(),
+  curentYear: new Date().getFullYear(),
 };
 
 const incomesSlice = createSlice({
@@ -20,10 +27,16 @@ const incomesSlice = createSlice({
       const fullDate = `${day}.${month}.${year}`;
       if (state.categoriesIncomes.length === 0) {
         state.categoriesIncomes = [
+          //TEST
+          // {
+          //   catId: action.payload.catId,
+          //   date: dateCheck,
+          //   dateString: fullDate,
+          //   value: 0,
+          // },
           {
             catId: action.payload.catId,
-            // date: new Date().toJSON(),
-            date: dateCheck,
+            date: new Date().toJSON(),
             dateString: fullDate,
             value: 0,
           },
@@ -31,10 +44,16 @@ const incomesSlice = createSlice({
       } else if (state.categoriesIncomes.length > 0) {
         state.categoriesIncomes = [
           ...state.categoriesIncomes,
+          //TEST
+          // {
+          //   catId: action.payload.catId,
+          //   date: dateCheck,
+          //   dateString: fullDate,
+          //   value: 0,
+          // },
           {
             catId: action.payload.catId,
-            // date: new Date().toJSON(),
-            date: dateCheck,
+            date: new Date().toJSON(),
             dateString: fullDate,
             value: 0,
           },
@@ -50,10 +69,16 @@ const incomesSlice = createSlice({
         const indexOfIncome = state.categoriesIncomes.findIndex(
           (item) => item.catId === action.payload.catId
         );
+        //TEST
+        // state.categoriesIncomes[indexOfIncome] = {
+        //   ...state.categoriesIncomes[indexOfIncome],
+        //   date: dateCheck,
+        //   dateString: fullDate,
+        //   value: action.payload.value,
+        // };
         state.categoriesIncomes[indexOfIncome] = {
           ...state.categoriesIncomes[indexOfIncome],
-          // date: new Date().toJSON(),
-          date: dateCheck,
+          date: new Date().toJSON(),
           dateString: fullDate,
           value: action.payload.value,
         };
@@ -113,9 +138,12 @@ const incomesSlice = createSlice({
         ];
       }
       //wyzeruj wartości przychodów w tablicy z przychodami z aktualnego miesiąca
-      if (new Date(dateCheck).getFullYear() > state.curentYear) {
-        // const yearToSet = new Date().getFullYear();
-        const yearToSet = new Date(dateCheck).getFullYear() - 1;
+
+      //TEST
+      // if (new Date(dateCheck).getFullYear() > state.curentYear) {
+      //   const yearToSet = new Date(dateCheck).getFullYear() - 1;
+      if (new Date().getFullYear() > state.curentYear) {
+        const yearToSet = new Date().getFullYear() - 1;
         if (state.yearIncomes.length > 0) {
           const sumOfAllIncomes = state.yearIncomes
             .map((item) => Number(item.sumOfAllIncomes))
@@ -141,29 +169,45 @@ const incomesSlice = createSlice({
               },
             ];
           }
+          //TEST
+          // state.categoriesIncomes = state.categoriesIncomes.map((item) => ({
+          //   catId: item.catId,
+          //   date: dateCheck,
+          //   dateString: fullDate,
+          //   value: 0,
+          // }));
           state.categoriesIncomes = state.categoriesIncomes.map((item) => ({
             catId: item.catId,
-            // date: new Date().toJSON(),
-            date: dateCheck,
+            date: new Date().toJSON(),
             dateString: fullDate,
             value: 0,
           }));
           //wyzeruj wartości przychodów w tablicy z przychodami z poprzedniego roku
           state.yearIncomes = [];
         }
-        state.curentYear = new Date(dateCheck).getFullYear();
+        //TEST
+        // state.curentYear = new Date(dateCheck).getFullYear();
+        state.curentYear = new Date().getFullYear();
       } else {
+        //TEST
+        // state.categoriesIncomes = state.categoriesIncomes.map((item) => ({
+        //   catId: item.catId,
+        //   date: dateCheck,
+        //   dateString: fullDate,
+        //   value: 0,
+        // }))
         state.categoriesIncomes = state.categoriesIncomes.map((item) => ({
           catId: item.catId,
-          // date: new Date().toJSON(),
-          date: dateCheck,
+          date: new Date().toJSON(),
           dateString: fullDate,
           value: 0,
         }));
       }
     },
     setCurrentYear: (state) => {
-      state.curentYear = new Date(dateCheck).getFullYear();
+      //TEST
+      // state.curentYear = new Date(dateCheck).getFullYear();
+      state.curentYear = new Date().getFullYear();
     },
   },
 });
