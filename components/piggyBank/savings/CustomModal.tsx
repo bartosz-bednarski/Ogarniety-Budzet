@@ -5,6 +5,7 @@ import {
   setBankAccountStatus,
   setCurrentYearPiggyBank,
 } from "../../../redux/piggyBank-slice";
+import { setBankAccount } from "../../../redux/bankAccounts-slice";
 import {
   setCurrentYearIncomes,
   setIncome,
@@ -64,6 +65,7 @@ const CustomModal: React.FC<{
 
     if (Number(bankAccountInput) > 0 && Number(incomesInput) === 0) {
       dispatch(setBankAccountStatus(bankAccountInput));
+      dispatch(setBankAccount(bankAccountInput));
       dispatch(
         addIncomesCategory({
           name: "Inne",
@@ -85,6 +87,7 @@ const CustomModal: React.FC<{
       const income = Number(incomesInput);
 
       dispatch(setBankAccountStatus(1));
+      dispatch(setBankAccount(1));
       dispatch(
         addIncomesCategory({
           name: "Inne",
@@ -124,6 +127,7 @@ const CustomModal: React.FC<{
       const difference = Number(bankAccountInput) - Number(incomesInput);
       const income = Number(incomesInput) - 1;
       dispatch(setBankAccountStatus(difference));
+      dispatch(setBankAccount(difference));
       dispatch(
         addIncomesCategory({
           name: "Inne",

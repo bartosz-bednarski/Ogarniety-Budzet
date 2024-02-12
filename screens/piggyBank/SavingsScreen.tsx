@@ -20,9 +20,15 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
   const finantialTargets = useAppSelector(
     (state) => state.piggyBank.finantialTargets
   );
-  const bankAccountStatus = useAppSelector(
-    (state) => state.piggyBank.bankAccountStatus
+  const bankAccountsStore = useAppSelector(
+    (state) => state.bankAccounts.accounts
   );
+  const activeBankAccountStore = useAppSelector(
+    (state) => state.bankAccounts.activeAccount
+  );
+  const bankAccountStatus = bankAccountsStore.filter(
+    (item) => item.accountId === activeBankAccountStore.accountId
+  )[0].bankAccountStatus;
   const monthIncomes = useAppSelector(
     (state) => state.incomes.categoriesIncomes
   );

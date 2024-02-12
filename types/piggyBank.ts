@@ -12,6 +12,18 @@ export type PiggyBankInitialState = {
   realisedTargets: RealisedTarget[];
   curentYear: number;
 };
+export type BankAccountsInitialState = {
+  accounts: {
+    accountName: string;
+    accountId: string;
+    currency: string;
+    bankAccountStatus: number;
+    yearSavings: MonthSavings[];
+    yearsSavings: YearSavings[];
+    currentYear: number;
+  }[];
+  activeAccount: { accountName: string; accountId: string; currency: string };
+};
 export type RealisedTarget = {
   name: string;
   iconName: string;

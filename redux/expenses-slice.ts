@@ -48,12 +48,12 @@ const expensesSlice = createSlice({
 
       state.monthCategoriesExpenses = [
         ...state.monthCategoriesExpenses,
-        { catId: action.payload.catId, sum: 0 },
+        { catId: action.payload.catId, sum: 0, bankAccountId: "#Rachunek1" },
       ];
 
       state.weekCategoriesExpenses = [
         ...state.weekCategoriesExpenses,
-        { catId: action.payload.catId, sum: 0 },
+        { catId: action.payload.catId, sum: 0, bankAccountId: "#Rachunek1" },
       ];
 
       state.weekExpenses = [
@@ -74,6 +74,7 @@ const expensesSlice = createSlice({
           dateString: fullDate,
           date: new Date().toJSON(),
           id: randLetter + Date.now(),
+          bankAccountId: "#Rachunek1",
         },
       ];
 
@@ -95,6 +96,7 @@ const expensesSlice = createSlice({
           dateString: fullDate,
           date: new Date().toJSON(),
           id: randLetter + Date.now(),
+          bankAccountId: "#Rachunek1",
         },
       ];
     },
@@ -139,6 +141,7 @@ const expensesSlice = createSlice({
           dateString: fullDate,
           date: new Date().toJSON(),
           id: randLetter + Date.now(),
+          bankAccountId: action.payload.bankAccountId,
         },
       ];
 
@@ -160,6 +163,7 @@ const expensesSlice = createSlice({
           dateString: fullDate,
           date: new Date().toJSON(),
           id: randLetter + Date.now(),
+          bankAccountId: action.payload.bankAccountId,
         },
       ];
 
@@ -189,7 +193,11 @@ const expensesSlice = createSlice({
       } else {
         state.weekCategoriesExpenses = [
           ...state.weekCategoriesExpenses,
-          { catId: action.payload.catId, sum: Number(action.payload.value) },
+          {
+            catId: action.payload.catId,
+            sum: Number(action.payload.value),
+            bankAccountId: action.payload.bankAccountId,
+          },
         ];
       }
 
@@ -208,7 +216,11 @@ const expensesSlice = createSlice({
       } else {
         state.monthCategoriesExpenses = [
           ...state.monthCategoriesExpenses,
-          { catId: action.payload.catId, sum: Number(action.payload.value) },
+          {
+            catId: action.payload.catId,
+            sum: Number(action.payload.value),
+            bankAccountId: action.payload.bankAccountId,
+          },
         ];
       }
     },
@@ -332,6 +344,7 @@ const expensesSlice = createSlice({
             categoriesExpenses: state.monthCategoriesExpenses.map((item) => ({
               catId: item.catId,
               sum: item.sum,
+              bankAccountId: item.bankAccountId,
               stillExsists: true,
             })),
           },
@@ -346,6 +359,7 @@ const expensesSlice = createSlice({
             categoriesExpenses: state.monthCategoriesExpenses.map((item) => ({
               catId: item.catId,
               sum: item.sum,
+              bankAccountId: item.bankAccountId,
               stillExsists: true,
             })),
           },
@@ -391,6 +405,7 @@ const expensesSlice = createSlice({
           state.monthCategoriesExpenses = state.monthCategoriesExpenses.map(
             (item) => ({
               catId: item.catId,
+              bankAccountId: item.bankAccountId,
               sum: 0,
             })
           );
@@ -410,6 +425,7 @@ const expensesSlice = createSlice({
         state.monthCategoriesExpenses = state.monthCategoriesExpenses.map(
           (item) => ({
             catId: item.catId,
+            bankAccountId: item.bankAccountId,
             sum: 0,
           })
         );

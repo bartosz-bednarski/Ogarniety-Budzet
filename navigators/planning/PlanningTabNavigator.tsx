@@ -1,6 +1,7 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import COLORS_STYLE from "../../utils/styles/colors";
 import PlannedExpensesScreen from "../../screens/planning/PlannedExpensesScreen";
+import ActualTargetsScreen from "../../screens/planning/ActualTargetsScreen";
 
 const PlanningTabNavigator = () => {
   const Tab = createMaterialTopTabNavigator();
@@ -30,11 +31,11 @@ const PlanningTabNavigator = () => {
           },
         }}
       />
-      {/* <Tab.Screen
-        component={PlannedIncomesScreen}
-        name="plannedIncomes"
+      <Tab.Screen
+        component={ActualTargetsScreen}
+        name="actualTargets"
         options={{
-          tabBarLabel: "Przychody",
+          tabBarLabel: "Cele Finansowe",
           tabBarActiveTintColor: COLORS_STYLE.basicGold,
           tabBarInactiveTintColor: "grey",
           tabBarLabelStyle: {
@@ -45,7 +46,7 @@ const PlanningTabNavigator = () => {
             paddingHorizontal: 10,
           },
         }}
-      /> */}
+      />
     </Tab.Navigator>
   );
 };

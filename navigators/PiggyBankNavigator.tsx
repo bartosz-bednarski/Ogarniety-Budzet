@@ -4,9 +4,9 @@ import { Ionicons } from "@expo/vector-icons";
 import SettingsNavigator from "./SettingsNavigator";
 import COLORS_STYLE from "../utils/styles/colors";
 import PiggyBankTabNavigator from "./piggyBank/PiggyBankTabNavigator";
-import AddTargetScreen from "../screens/piggyBank/AddTargetScreen";
+import AddTargetScreen from "../screens/planning/AddTargetScreen";
 import MonthsSavingsScreen from "../screens/piggyBank/MonthsSavingsScreen";
-import RealisedTargetsScreen from "../screens/piggyBank/RealisedTargetsScreen";
+import RealisedTargetsScreen from "../screens/planning/RealisedTargetsScreen";
 import { useAppSelector } from "../redux/hooks";
 const PiggyBankNavigator = () => {
   const bankAccountStatus = useAppSelector(
@@ -46,7 +46,7 @@ const PiggyBankNavigator = () => {
           },
         })}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         component={AddTargetScreen}
         name="addTarget"
         options={({ navigation }) => ({
@@ -70,7 +70,7 @@ const PiggyBankNavigator = () => {
             );
           },
         })}
-      />
+      /> */}
       <Stack.Screen
         component={MonthsSavingsScreen}
         name="monthsSavings"

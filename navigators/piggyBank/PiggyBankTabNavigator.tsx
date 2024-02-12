@@ -1,7 +1,7 @@
 import COLORS_STYLE from "../../utils/styles/colors";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import ActualTargetsScreen from "../../screens/piggyBank/ActualTargetsScreen";
 import SavingsScreen from "../../screens/piggyBank/SavingsScreen";
+import ManageBankAccountsScreen from "../../screens/piggyBank/ManageBankAccountsScreen";
 const PiggyBankTabNavigator = () => {
   const Tab = createMaterialTopTabNavigator();
   return (
@@ -31,10 +31,10 @@ const PiggyBankTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        component={ActualTargetsScreen}
-        name="actualTargets"
+        component={ManageBankAccountsScreen}
+        name="manageBankAccounts"
         options={{
-          tabBarLabel: "Aktualne cele",
+          tabBarLabel: "Zarządzaj",
           tabBarActiveTintColor: COLORS_STYLE.basicGold,
           tabBarInactiveTintColor: "grey",
           tabBarLabelStyle: {
