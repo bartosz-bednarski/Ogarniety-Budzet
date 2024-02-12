@@ -3,7 +3,7 @@ import COLORS_STYLE from "../../utils/styles/colors";
 import { Navigation } from "../../types/global";
 import { useAppSelector } from "../../redux/hooks";
 import GoldenFrame from "../../utils/ui/GoldenFrame";
-import TargetGoldFrame from "../../components/piggyBank/actualTargets/TargetGoldFrame";
+import TargetGoldFrame from "../../components/planning/actualTargets/TargetGoldFrame";
 import AddCircleButton from "../../utils/ui/AddCircleButton";
 import CustomButton from "../../utils/ui/CustomButton";
 const ActualTargetsScreen: React.FC<{ navigation: Navigation }> = ({

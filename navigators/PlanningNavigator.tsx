@@ -1,11 +1,11 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Ionicons } from "@expo/vector-icons";
-import AddExpenseScreen from "../screens/expenses/AddExpenseScreen";
 import { Pressable } from "react-native";
 import SettingsNavigator from "./SettingsNavigator";
 import COLORS_STYLE from "../utils/styles/colors";
 import PlanningTabNavigator from "./planning/PlanningTabNavigator";
 import { useAppSelector } from "../redux/hooks";
+import AddTargetScreen from "../screens/planning/AddTargetScreen";
 const PlanningNavigator = () => {
   const bankAccountStatus = useAppSelector(
     (state) => state.piggyBank.bankAccountStatus
@@ -42,6 +42,31 @@ const PlanningNavigator = () => {
                 </Pressable>
               );
             }
+          },
+        })}
+      />
+      <Stack.Screen
+        component={AddTargetScreen}
+        name="addTarget"
+        options={({ navigation }) => ({
+          headerTintColor: COLORS_STYLE.basicGold,
+          headerPressColor: COLORS_STYLE.basicGold,
+          headerPressOpacity: 1,
+          headerTitle: "Dodaj cel",
+          headerTitleAlign: "center",
+          headerRight: () => {
+            return (
+              <Pressable
+                onPress={() => navigation.navigate("settingsNavigator")}
+              >
+                <Ionicons
+                  name="cog"
+                  size={30}
+                  color={COLORS_STYLE.basicGold}
+                  style={{ marginRight: 10 }}
+                />
+              </Pressable>
+            );
           },
         })}
       />

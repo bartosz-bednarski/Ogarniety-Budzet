@@ -6,16 +6,26 @@ export type WeekExpenses = {
   date: string;
   dateString: string;
   id: string;
+  bankAccountId: string;
 }[];
-export type WeekCategoriesExpenses = { catId: string; sum: number }[];
+export type WeekCategoriesExpenses = {
+  catId: string;
+  sum: number;
+  bankAccountId: string;
+}[];
 export type MonthExpenses = {
   catId: string;
   value: number;
   date: string;
   dateString: string;
   id: string;
+  bankAccountId: string;
 }[];
-export type MonthCategoriesExpenses = { catId: string; sum: number }[];
+export type MonthCategoriesExpenses = {
+  catId: string;
+  sum: number;
+  bankAccountId: string;
+}[];
 export type YearExpenses = {
   month: number;
   sumOfAllExpenses: number;
@@ -23,6 +33,7 @@ export type YearExpenses = {
     catId: string;
     sum: number;
     stillExsists: boolean;
+    bankAccountId: string;
   }[];
 }[];
 export type YearsExpenses = {
@@ -35,6 +46,7 @@ export type YearsExpenses = {
       catId: string;
       sum: number;
       stillExsists: boolean;
+      bankAccountId: string;
     }[];
   }[];
 }[];
