@@ -6,20 +6,27 @@ import COLORS_STYLE from "../utils/styles/colors";
 import IncomesTabNavigator from "./incomes/IncomesTabNavigator";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { useEffect } from "react";
-import { updateMonthIncomes } from "../redux/incomes-slice";
-import { updateMonthPiggyBank } from "../redux/piggyBank-slice";
+import {
+  setCurrentYearIncomes,
+  updateMonthIncomes,
+} from "../redux/incomes-slice";
 import {
   updateWeekExpenses,
   updateMonthExpenses,
 } from "../redux/expenses-slice";
+import { updateMonthBankAccounts } from "../redux/bankAccounts-slice";
+import { setCurrentYearPiggyBank } from "../redux/piggyBank-slice";
 
 const IncomesNavigator = () => {
   //TEST
   // const dateCheck = "2025-03-15T08:06:22.626Z";
-
-  const bankAccountStatus = useAppSelector(
-    (state) => state.piggyBank.bankAccountStatus
+  const activeBankAccount = useAppSelector(
+    (state) => state.bankAccounts.activeAccount.accountName
   );
+  const bankAccounts = useAppSelector((state) => state.bankAccounts.accounts);
+  // const bankAccountStatus = useAppSelector(
+  //   (state) => state.piggyBank.bankAccountStatus
+  // );
   const Stack = createNativeStackNavigator();
   const categoriesIncomes = useAppSelector(
     (state) => state.incomes.categoriesIncomes
@@ -29,16 +36,19 @@ const IncomesNavigator = () => {
     (state) => state.expenses.weekExpensesUpdated
   );
   const categoriesExpenses = useAppSelector(
-    (state) => state.expenses.monthExpenses
+    (state) => state.expenses.monthCategoriesExpenses
   );
   const currentYearInStore = useAppSelector(
-    (state) => state.piggyBank.curentYear
+    (state) => state.bankAccounts.accounts[0].currentYear
   );
   const dateToUpdateWeek = useAppSelector(
     (state) => state.expenses.dateToUpdateWeek
   );
   const currentMonthStore = useAppSelector(
     (state) => state.expenses.currentMonth
+  );
+  const expensesCurrentYearStore = useAppSelector(
+    (state) => state.expenses.curentYear
   );
 
   // const date = new Date(dateCheck);
@@ -60,32 +70,64 @@ const IncomesNavigator = () => {
     if (categoriesIncomes.length > 0) {
       //if jest po to żeby kod się nie  wysypał jak nie ma zdefiniowanych żadnych wydatków
       //Tak powinno być:
-
+      console.log("Store", currentYearInStore);
+      console.log("YearExpensesStore", expensesCurrentYearStore);
+      console.log("REAL", currentYear);
+      console.log("REAL_MONTH", currentMonth);
+      console.log("STORE_MONTH", currentMonthStore);
       if (
         currentMonth > currentMonthStore ||
         currentYear > currentYearInStore
       ) {
-        const sumOfMonthIncomes = categoriesIncomes
-          .map((item) => Number(item.value))
-          .reduce((partialSum, a) => partialSum + a, 0);
-        const sumOfMonthExpenses = categoriesExpenses
-          .map((item) => Number(item.value))
-          .reduce((partialSum, a) => partialSum + a, 0);
-        const savings = Number(sumOfMonthIncomes) - Number(sumOfMonthExpenses);
+        const sumOfMonthIncomes = categoriesIncomes.map((item) => ({
+          bankAccountId: item.bankAccountId,
+          sum: item.categories
+            .map((cat) => Number(cat.value))
+            .reduce((partialSum, a) => partialSum + a, 0),
+        }));
+        // const sumOfMonthIncomes = categoriesIncomes
+        //   .map((item) => Number(item.value))
+        //   .reduce((partialSum, a) => partialSum + a, 0);
+        const sumOfMonthExpenses =
+          categoriesExpenses.length > 0
+            ? categoriesExpenses.map((item) => ({
+                bankAccountId: item.bankAccountId,
+                sum: item.categories
+                  .map((cat) => Number(cat.sum))
+                  .reduce((partialSum, a) => partialSum + a, 0),
+              }))
+            : 0;
+        console.log("CKEKING", sumOfMonthExpenses, sumOfMonthIncomes);
+        // const sumOfMonthExpenses = categoriesExpenses
+        //   .map((item) => Number(item.value))
+        //   .reduce((partialSum, a) => partialSum + a, 0);
+        const savings = sumOfMonthIncomes.map((item) => {
+          const sumOfExpenses =
+            sumOfMonthExpenses !== 0
+              ? sumOfMonthExpenses[
+                  sumOfMonthExpenses.findIndex(
+                    (expense) => expense.bankAccountId === item.bankAccountId
+                  )
+                ].sum
+              : 0;
+          return {
+            bankAccountId: item.bankAccountId,
+            savings: item.sum - sumOfExpenses,
+          };
+        });
+        // const savings = Number(sumOfMonthIncomes) - Number(sumOfMonthExpenses);
         dispatch(
-          updateMonthPiggyBank({
+          updateMonthBankAccounts({
             month: currentMonthStore,
             savings: savings,
           })
         );
         dispatch(updateMonthIncomes());
+        //EXPENSES
+        dispatch(updateWeekExpenses());
+        dispatch(updateMonthExpenses());
+        dispatch(setCurrentYearPiggyBank());
       }
-    }
-
-    //EXPENSES
-    if (currentMonth > currentMonthStore || currentYear > currentYearInStore) {
-      dispatch(updateWeekExpenses());
-      dispatch(updateMonthExpenses());
     }
 
     //TEST
@@ -95,7 +137,9 @@ const IncomesNavigator = () => {
 
     if (new Date() > new Date(dateToUpdateWeek)) {
       dispatch(updateWeekExpenses());
+      dispatch(setCurrentYearPiggyBank());
     }
+    dispatch(setCurrentYearPiggyBank());
   };
 
   //useEffect do sprawdzania czy miesiąc uległ zmianie, jeżeli tak to wprowadzenie zmian w reduxie w danych
@@ -116,10 +160,10 @@ const IncomesNavigator = () => {
           headerTintColor: COLORS_STYLE.basicGold,
           headerPressColor: COLORS_STYLE.basicGold,
           headerPressOpacity: 1,
-          headerTitle: "Przychody",
+          headerTitle: activeBankAccount,
           headerTitleAlign: "center",
           headerRight: () => {
-            if (bankAccountStatus !== 0) {
+            if (bankAccounts.findIndex((i) => i.accountId === "0") === -1) {
               return (
                 <Pressable
                   onPress={() => navigation.navigate("settingsNavigator")}

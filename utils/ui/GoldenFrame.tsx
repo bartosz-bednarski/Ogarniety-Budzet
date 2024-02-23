@@ -7,8 +7,8 @@ const GoldenFrame: React.FC<{ value: number; name: string }> = ({
   value,
   name,
 }) => {
-  const currency = useAppSelector(
-    (state) => state.currency.currentCurrency.currencyCode
+  const activeBankAccount = useAppSelector(
+    (state) => state.bankAccounts.activeAccount
   );
   const valueWithSpaces = numberWithSpaces(value);
   return (
@@ -16,7 +16,7 @@ const GoldenFrame: React.FC<{ value: number; name: string }> = ({
       <View style={styles.box}>
         <Text style={styles.textWhite}>{name}</Text>
         <Text style={styles.textGold}>
-          {valueWithSpaces} {currency}
+          {valueWithSpaces} {activeBankAccount.currency}
         </Text>
       </View>
     </View>

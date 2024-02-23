@@ -8,8 +8,10 @@ import AddExpenseScreen from "../screens/expenses/AddExpenseScreen";
 import { useAppSelector } from "../redux/hooks";
 const ExpensesNavigator = () => {
   const Stack = createNativeStackNavigator();
-  const bankAccountStatus = useAppSelector(
-    (state) => state.piggyBank.bankAccountStatus
+  const bankAccounts = useAppSelector((state) => state.bankAccounts.accounts);
+
+  const activeBankAccount = useAppSelector(
+    (state) => state.bankAccounts.activeAccount.accountName
   );
   return (
     <Stack.Navigator
@@ -24,10 +26,10 @@ const ExpensesNavigator = () => {
           headerTintColor: COLORS_STYLE.basicGold,
           headerPressColor: COLORS_STYLE.basicGold,
           headerPressOpacity: 1,
-          headerTitle: "Wydatki",
+          headerTitle: activeBankAccount,
           headerTitleAlign: "center",
           headerRight: () => {
-            if (bankAccountStatus !== 0) {
+            if (bankAccounts.findIndex((i) => i.accountId === "0") === -1) {
               return (
                 <Pressable
                   onPress={() => navigation.navigate("settingsNavigator")}

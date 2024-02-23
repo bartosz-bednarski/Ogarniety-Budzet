@@ -27,14 +27,25 @@ const ModalAddExpense: React.FC<{
   const categoriesExpenses = useAppSelector(
     (state) => state.expenses.monthCategoriesExpenses
   );
+  const activeBankAccountStore = useAppSelector(
+    (state) => state.bankAccounts.activeAccount
+  );
   const realisedTargets = useAppSelector(
     (state) => state.piggyBank.realisedTargets
   );
   const finantialTargets = useAppSelector(
     (state) => state.piggyBank.finantialTargets
   );
-  const bankAccountStatus = useAppSelector(
-    (state) => state.piggyBank.bankAccountStatus
+  const bankAccounts = useAppSelector((state) => state.bankAccounts.accounts);
+  const activeBankAccountStoreId = useAppSelector(
+    (state) => state.bankAccounts.activeAccount.accountId
+  );
+
+  const bankAccountsActiveAccountIndexId = bankAccounts.findIndex(
+    (item) => item.accountId === activeBankAccountStoreId
+  );
+  const monthIncomesActiveBankAccountIdIndex = monthIncomes.findIndex(
+    (item) => item.bankAccountId === activeBankAccountStore.accountId
   );
   let monthIncomesSum;
   let bankAccountPlusIncomes;
@@ -53,35 +64,64 @@ const ModalAddExpense: React.FC<{
     sumOfRealisedTargets = 0;
   }
   if (monthIncomes.length > 0 && categoriesExpenses.length > 0) {
-    monthIncomesSum = monthIncomes
-      .map((item) => Number(item.value))
-      .reduce((partialSum, a) => partialSum + a, 0);
-    monthExpensesSum = categoriesExpenses
-      .map((item) => Number(item.sum))
-      .reduce((partialSum, a) => partialSum + a, 0);
+    monthIncomesSum =
+      monthIncomesActiveBankAccountIdIndex !== -1
+        ? monthIncomes[monthIncomesActiveBankAccountIdIndex].categories
+            .map((item) => Number(item.value))
+            .reduce((partialSum, a) => partialSum + a, 0)
+        : 0;
+    const monthExpensesActiveBankAccountIdIndex = categoriesExpenses.findIndex(
+      (item) => item.bankAccountId === activeBankAccountStore.accountId
+    );
+    monthExpensesSum =
+      monthExpensesActiveBankAccountIdIndex !== -1
+        ? categoriesExpenses[monthExpensesActiveBankAccountIdIndex].categories
+            .map((item) => Number(item.sum))
+            .reduce((partialSum, a) => partialSum + a, 0)
+        : 0;
+
     bankAccountPlusIncomes =
-      Number(monthIncomesSum) + Number(bankAccountStatus);
+      Number(monthIncomesSum) +
+      Number(bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus);
     totalBankAccount =
       bankAccountPlusIncomes - monthExpensesSum - sumOfRealisedTargets;
   } else if (monthIncomes.length > 0) {
-    monthIncomesSum = monthIncomes
+    monthIncomesSum = monthIncomes[
+      monthIncomesActiveBankAccountIdIndex
+    ].categories
       .map((item) => Number(item.value))
       .reduce((partialSum, a) => partialSum + a, 0);
-    bankAccountPlusIncomes = bankAccountStatus;
     bankAccountPlusIncomes =
-      Number(monthIncomesSum) + Number(bankAccountStatus);
+      bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus;
+    bankAccountPlusIncomes =
+      Number(monthIncomesSum) +
+      Number(bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus);
     totalBankAccount = bankAccountPlusIncomes - sumOfRealisedTargets;
   } else {
-    totalBankAccount = bankAccountStatus - sumOfRealisedTargets;
+    totalBankAccount =
+      bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus -
+      sumOfRealisedTargets;
   }
   console.log(totalBankAccount);
 
   const submitCheck = () => {
-    if (Number(value) < totalBankAccount) {
-      submitHandler();
-      setError({ state: false, message: "" });
+    if (value !== "" && isNaN(Number(value)) === false) {
+      if (Number(value) < totalBankAccount) {
+        submitHandler();
+        setError({ state: false, message: "" });
+      } else {
+        setError({ state: true, message: "Nie masz tyle środków na koncie!" });
+      }
+    } else if (Number(value) <= 0) {
+      setError({
+        state: true,
+        message: "Wprowadzona kwota musi być większa od 0!",
+      });
     } else {
-      setError({ state: true, message: "Nie masz tyle środków na koncie!" });
+      setError({
+        state: true,
+        message: "Wprowadzona wartość nie jest liczbą!",
+      });
     }
   };
   return (
@@ -104,13 +144,17 @@ const ModalAddExpense: React.FC<{
             keyboardType="numeric"
             placeholder="Podaj kwotę"
             placeholderTextColor={COLORS_STYLE.labelGrey}
+            autoFocus={true}
           />
           {error.state && (
             <>
               <Text style={styles.error}>{error.message}</Text>
-              <Text style={styles.error}>
-                Dostępne środki: {(totalBankAccount - 1).toFixed(2)} {currency}
-              </Text>
+              {error.message === "Nie masz tyle środków na koncie!" && (
+                <Text style={styles.error}>
+                  Dostępne środki: {(totalBankAccount - 1).toFixed(2)}{" "}
+                  {currency}
+                </Text>
+              )}
             </>
           )}
           <View style={styles.modalButtonsBox}>
@@ -161,7 +205,7 @@ const styles = StyleSheet.create({
   },
   error: {
     color: COLORS_STYLE.red,
-    marginBottom: 10,
+    marginVertical: 10,
     fontWeight: "700",
     width: "100%",
     textAlign: "center",
@@ -174,9 +218,9 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 0,
     color: "white",
-    marginBottom: 20,
   },
   modalButtonsBox: {
+    marginTop: 10,
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",

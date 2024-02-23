@@ -6,6 +6,7 @@ import pieChartColors from "../../utils/styles/pieChartColors";
 import { MONTHS } from "../../utils/months";
 import MonthIncomesBox from "../../components/incomes/yearIncomes/MonthIncomesBox";
 import GoldenFrame from "../../utils/ui/GoldenFrame";
+import randomId from "../../utils/randomIdFunction";
 
 const YearIncomesScreen = () => {
   //TEST
@@ -15,12 +16,29 @@ const YearIncomesScreen = () => {
     (state) => state.incomes.categoriesIncomes
   );
   const yearIncomes = useAppSelector((state) => state.incomes.yearIncomes);
-  const sumOfCurrentMonthIncomes = currentMonthIncomes
-    .map((item) => Number(item.value))
-    .reduce((partialSum, a) => partialSum + a, 0);
-  const sumOfYearIncomes = yearIncomes
-    .map((item) => Number(item.sumOfAllIncomes))
-    .reduce((partialSum, a) => partialSum + a, 0);
+  const activeBankAccountStore = useAppSelector(
+    (state) => state.bankAccounts.activeAccount
+  );
+  const currentMonthIncomesActiveAccountIdIndex = currentMonthIncomes.findIndex(
+    (item) => item.bankAccountId === activeBankAccountStore.accountId
+  );
+  const yearIncomesActiveAccountIdIndex = yearIncomes.findIndex(
+    (item) => item.bankAccountId === activeBankAccountStore.accountId
+  );
+
+  const sumOfCurrentMonthIncomes =
+    currentMonthIncomes.length > 0
+      ? currentMonthIncomes[currentMonthIncomesActiveAccountIdIndex].categories
+          .map((item) => Number(item.value))
+          .reduce((partialSum, a) => partialSum + a, 0)
+      : 0;
+  const sumOfYearIncomes =
+    yearIncomes[yearIncomesActiveAccountIdIndex] !== undefined
+      ? yearIncomes[yearIncomesActiveAccountIdIndex].months
+          .map((item) => Number(item.sumOfAllIncomes))
+          .reduce((partialSum, a) => partialSum + a, 0)
+      : 0;
+
   const sumOfAllIncomes = sumOfYearIncomes + sumOfCurrentMonthIncomes;
   const currentMonthIncomesBoxData = {
     //TEST
@@ -29,15 +47,21 @@ const YearIncomesScreen = () => {
     month: new Date().getMonth(),
 
     sumOfAllIncomes: sumOfCurrentMonthIncomes,
-    categoriesIncomes: currentMonthIncomes.map((item) => ({
-      catId: item.catId,
-      value: item.value,
-      stillExsists: true,
-    })),
+    categoriesIncomes:
+      currentMonthIncomes.length > 0
+        ? currentMonthIncomes[
+            currentMonthIncomesActiveAccountIdIndex
+          ].categories.map((item) => ({
+            catId: item.catId,
+            value: item.value,
+            stillExsists: true,
+          }))
+        : [],
   };
+
   return (
     <ScrollView style={styles.container}>
-      {yearIncomes.length === 0 && (
+      {yearIncomes[yearIncomesActiveAccountIdIndex] === undefined && (
         <View style={styles.informationBox}>
           <Text style={styles.informationText}>
             Tutaj będą wyświetlane informacje o przychodach z poszczególnych
@@ -45,29 +69,45 @@ const YearIncomesScreen = () => {
           </Text>
         </View>
       )}
-      {yearIncomes.length > 0 && (
+      {yearIncomes[yearIncomesActiveAccountIdIndex] !== undefined && (
         <>
           <GoldenFrame name="SUMA" value={sumOfAllIncomes} />
           <View style={styles.yearChart}>
             <PieChart
               widthAndHeight={200}
               series={[
-                ...yearIncomes.map((item) =>
-                  item.sumOfAllIncomes === 0 ? 1 : item.sumOfAllIncomes
+                ...yearIncomes[yearIncomesActiveAccountIdIndex].months.map(
+                  (item) =>
+                    item.sumOfAllIncomes === 0 ? 1 : item.sumOfAllIncomes
                 ),
                 sumOfCurrentMonthIncomes === 0 ? 1 : sumOfCurrentMonthIncomes,
               ]}
-              sliceColor={pieChartColors.slice(0, yearIncomes.length + 1)}
+              sliceColor={pieChartColors.slice(
+                0,
+                yearIncomes[yearIncomesActiveAccountIdIndex].months.length + 1
+              )}
               coverRadius={0.6}
               coverFill={COLORS_STYLE.backgroundBlack}
             />
             <View style={styles.yearChartLegend}>
-              {yearIncomes.map((item, index) => (
-                <Text style={{ color: pieChartColors[index] }} key={item.month}>
-                  {MONTHS[item.month]}
-                </Text>
-              ))}
-              <Text style={{ color: pieChartColors[yearIncomes.length] }}>
+              {yearIncomes[yearIncomesActiveAccountIdIndex].months.map(
+                (item, index) => (
+                  <Text
+                    style={{ color: pieChartColors[index] }}
+                    key={randomId()}
+                  >
+                    {MONTHS[item.month]}
+                  </Text>
+                )
+              )}
+              <Text
+                style={{
+                  color:
+                    pieChartColors[
+                      yearIncomes[yearIncomesActiveAccountIdIndex].months.length
+                    ],
+                }}
+              >
                 {/*TEST*/}
                 {/* {MONTHS[new Date(dateCheck).getMonth()]} */}
                 {MONTHS[new Date().getMonth()]}
@@ -75,9 +115,11 @@ const YearIncomesScreen = () => {
             </View>
           </View>
           <View style={styles.monthIncomesBox}>
-            {yearIncomes.map((month) => (
-              <MonthIncomesBox monthIncomes={month} key={month.month} />
-            ))}
+            {yearIncomes[yearIncomesActiveAccountIdIndex].months.map(
+              (month) => (
+                <MonthIncomesBox monthIncomes={month} key={randomId()} />
+              )
+            )}
             <MonthIncomesBox monthIncomes={currentMonthIncomesBoxData} />
           </View>
         </>

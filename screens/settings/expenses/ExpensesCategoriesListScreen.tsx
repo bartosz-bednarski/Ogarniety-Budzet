@@ -23,6 +23,7 @@ const ExpensesCategoriesListScreen: React.FC<{ navigation: any }> = ({
             <CategoryItemRow
               catId={item.catId}
               iconName={item.iconName}
+              index={index}
               name={item.name}
               type="expenses"
               color={index}

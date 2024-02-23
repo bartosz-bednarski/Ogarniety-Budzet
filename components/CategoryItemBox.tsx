@@ -9,8 +9,8 @@ const CategoryItemBox: React.FC<CategoryItemBoxProps> = ({
   category,
   onPressHandler,
 }) => {
-  const currency = useAppSelector(
-    (state) => state.currency.currentCurrency.currencyCode
+  const activeBankAccount = useAppSelector(
+    (state) => state.bankAccounts.activeAccount
   );
   return (
     <View style={styles.container}>
@@ -19,7 +19,7 @@ const CategoryItemBox: React.FC<CategoryItemBoxProps> = ({
         <Text style={styles.text}>{category.name}</Text>
       </Pressable>
       <Text style={styles.value}>
-        {category.value} {currency}
+        {category.value} {activeBankAccount.currency}
       </Text>
     </View>
   );

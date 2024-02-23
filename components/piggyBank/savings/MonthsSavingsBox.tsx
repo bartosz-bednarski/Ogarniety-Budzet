@@ -10,8 +10,8 @@ const MonthsSavingsBox: React.FC<{
   yearSavings: MonthSavings[];
   onPress: () => void;
 }> = ({ yearSavings, onPress }) => {
-  const currency = useAppSelector(
-    (state) => state.currency.currentCurrency.currencyCode
+  const activeBankAccount = useAppSelector(
+    (state) => state.bankAccounts.activeAccount
   );
   return (
     <Pressable style={styles.container} onPress={onPress}>
@@ -21,11 +21,12 @@ const MonthsSavingsBox: React.FC<{
             <Ionicons
               name="calendar"
               size={64}
-              color={COLORS_STYLE.basicGold}
+              color={item.savings > 0 ? COLORS_STYLE.green : COLORS_STYLE.red}
             />
             <Text style={styles.monthName}>{MONTHS[Number(item.month)]}</Text>
             <Text style={styles.monthSavings}>
-              {numberWithSpaces(item.savings)} {currency}
+              {numberWithSpaces(Number(item.savings.toFixed(2)))}{" "}
+              {activeBankAccount.currency}
             </Text>
           </View>
         ))}

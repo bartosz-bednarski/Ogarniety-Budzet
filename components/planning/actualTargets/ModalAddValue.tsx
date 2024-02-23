@@ -1,7 +1,7 @@
 import { Modal, View, Text, TextInput, Alert, StyleSheet } from "react-native";
 import CustomButton from "../../../utils/ui/CustomButton";
 import { useState, useEffect } from "react";
-import { useAppDispatch } from "../../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { addValueToFinantialTarget } from "../../../redux/piggyBank-slice";
 import { ModalAddValueProps } from "../../../types/piggyBank";
 const ModalAddValue: React.FC<ModalAddValueProps> = ({
@@ -12,6 +12,11 @@ const ModalAddValue: React.FC<ModalAddValueProps> = ({
   addValueModalVisible,
 }) => {
   const dispatch = useAppDispatch();
+
+  const activeBankAccountId = useAppSelector(
+    (state) => state.bankAccounts.activeAccount.accountId
+  );
+
   const [addedValue, setAddedValue] = useState("");
   const [addedValueError, setAddedValueError] = useState({
     status: false,
@@ -25,8 +30,6 @@ const ModalAddValue: React.FC<ModalAddValueProps> = ({
   const addValueSubmitHandler = () => {
     const reg = new RegExp(/^\d*(\.\d+)?$/);
     const maxIncomeValue = targetValue - sumOfIncomes;
-    console.log(addedValue);
-    console.log(reg.test(addedValue));
     if (Number(addedValue) > 0 && reg.test(addedValue)) {
       setAddedValueError({ status: false, message: "" });
       if (Number(addedValue) <= maxIncomeValue) {
@@ -42,6 +45,7 @@ const ModalAddValue: React.FC<ModalAddValueProps> = ({
             id: id,
             value: addedValue,
             incomeId: incomeId,
+            bankAccountId: activeBankAccountId,
           })
         );
         setAddValueModalVisible(!addValueModalVisible);

@@ -11,7 +11,7 @@ const ModalDeleteTarget: React.FC<ModalDeleteTargetProps> = ({
 }) => {
   const dispatch = useAppDispatch();
   const deleteTargetSubmitHandler = () => {
-    dispatch(deleteFinantialTarget({ id }));
+    dispatch(deleteFinantialTarget({ id: id }));
     setDeleteTargetModalVisible(false);
   };
   return (

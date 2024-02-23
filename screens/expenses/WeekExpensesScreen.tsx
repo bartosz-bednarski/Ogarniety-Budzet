@@ -20,15 +20,42 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   const categories = useAppSelector(
     (state) => state.expensesCategories.categoriesList
   );
-  const categoriesExpenses = useAppSelector(
+  const weekCategoriesExpensesStore = useAppSelector(
     (state) => state.expenses.weekCategoriesExpenses
+  );
+  const activeBankAccountStoreId = useAppSelector(
+    (state) => state.bankAccounts.activeAccount.accountId
+  );
+
+  const weekExpensesStore = useAppSelector(
+    (state) => state.expenses.weekExpenses
   );
   const plannedExpenses = useAppSelector(
     (state) => state.expenses.plannedExpenses
   );
-  const bankAccountStatus = useAppSelector(
-    (state) => state.piggyBank.bankAccountStatus
+  const bankAccounts = useAppSelector((state) => state.bankAccounts.accounts);
+
+  const bankAccountsActiveAccountIndexId = bankAccounts.findIndex(
+    (item) => item.accountId === activeBankAccountStoreId
   );
+  const weekCategoriesExpensesIndexOfCurrentId =
+    weekCategoriesExpensesStore.findIndex(
+      (item) => item.bankAccountId === activeBankAccountStoreId
+    );
+
+  const categoriesExpenses =
+    weekCategoriesExpensesIndexOfCurrentId !== -1
+      ? weekCategoriesExpensesStore[weekCategoriesExpensesIndexOfCurrentId]
+          .categories
+      : [
+          {
+            catId: "null",
+            sum: 0,
+          },
+        ];
+  // console.log("activeID", activeBankAccountStoreId);
+  // console.log("weekCategoriesExpensesStore", weekCategoriesExpensesStore);
+  console.log("CATEGORIESeXPENSES", categoriesExpenses);
 
   const categoriesExpensesWithNames: CategoriesExpensesWithNames =
     categoriesExpenses.map((category, index) => ({
@@ -36,14 +63,16 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
       color: pieChartColors[index],
       ...categories.find((item) => item.catId === category.catId),
     }));
-  const lastExpenses = useAppSelector((state) => state.expenses.weekExpenses);
+
+  const lastExpenses = weekExpensesStore.filter(
+    (item) => item.bankAccountId === activeBankAccountStoreId
+  );
 
   const lastExpensesToShow = lastExpenses.map((item) => ({
     ...item,
     ...categories.find((cat) => cat.catId === item.catId),
     iconColorNumber: categories.findIndex((cat) => cat.catId === item.catId),
   }));
-  console.log("!!!!!!!!", lastExpensesToShow);
   let stripsColumnData = categoriesExpenses.map((category) => ({
     ...category,
     ...plannedExpenses.find((item) => item.catId === category.catId),
@@ -62,11 +91,13 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
       ...plannedExpenses.find((item) => item.catId === category.catId),
     }));
   }, [plannedExpenses, categoriesExpenses]);
-  console.log(sumOfAllExpenses);
+  // console.log(sumOfAllExpenses);
   return (
     <>
       <View style={styles.container}>
-        {bankAccountStatus === 0 && (
+        {(bankAccounts.length === 0 ||
+          bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus ===
+            0) && (
           <View style={styles.buttonBox}>
             <CustomButton
               title="Uzupełnij stan konta"
@@ -74,7 +105,7 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
             />
           </View>
         )}
-        {bankAccountStatus > 0 &&
+        {bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus > 0 &&
           sumOfAllExpenses === 0 &&
           categories.length > 0 && (
             <InfoDateUpdate
@@ -83,7 +114,8 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
               arrow="down"
             />
           )}
-        {bankAccountStatus > 0 && (
+        {bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus >
+          0 && (
           <ScrollView style={styles.scrollView}>
             {categories.length === 0 && (
               <View style={styles.informationBox}>
@@ -143,7 +175,8 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
             )}
           </ScrollView>
         )}
-        {bankAccountStatus > 0 && (
+        {bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus >
+          0 && (
           <AddCircleButton
             onPress={() => navigation.navigate("addExpense")}
             name="Dodaj wydatek"

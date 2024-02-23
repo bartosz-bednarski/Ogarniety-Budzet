@@ -8,11 +8,15 @@ import {
 import { useAppDispatch } from "../../../redux/hooks";
 import { addIncomesCategory } from "../../../redux/incomesCategories-slice";
 import { setIncome } from "../../../redux/incomes-slice";
+import { useAppSelector } from "../../../redux/hooks";
 const AddNewIncomesCategoryScreen: React.FC<{
   route: any;
   navigation: any;
 }> = ({ route, navigation }) => {
   const dispatch = useAppDispatch();
+  const activeBankAccountStore = useAppSelector(
+    (state) => state.bankAccounts.activeAccount
+  );
   const [inputText, setInputText] = useState("");
   const [categoryIcon, setCategoryIcon] = useState("add-circle-outline");
   const onSetCategoryIcon: OnSetCategoryIcon = (icon) => {
@@ -36,7 +40,12 @@ const AddNewIncomesCategoryScreen: React.FC<{
           catId: catId,
         })
       );
-      dispatch(setIncome({ catId: catId }));
+      dispatch(
+        setIncome({
+          catId: catId,
+          bankAccountId: activeBankAccountStore.accountId,
+        })
+      );
 
       navigation.navigate("incomesCategoriesList");
     }

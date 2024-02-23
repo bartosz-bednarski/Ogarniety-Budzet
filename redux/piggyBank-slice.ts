@@ -13,10 +13,10 @@ import { PiggyBankInitialState } from "../types/piggyBank";
 //   curentYear: new Date(dateCheck).getFullYear(),
 // };
 const piggyBankInitialState: PiggyBankInitialState = {
-  bankAccountStatus: 0,
+  // bankAccountStatus: 0,
   finantialTargets: [],
-  yearSavings: [],
-  yearsSavings: [],
+  // yearSavings: [],
+  // yearsSavings: [],
   realisedTargets: [],
   curentYear: new Date().getFullYear(),
 };
@@ -24,70 +24,70 @@ const piggyBankSlice = createSlice({
   name: "piggyBank",
   initialState: piggyBankInitialState,
   reducers: {
-    setBankAccountStatus: (state, action) => {
-      state.bankAccountStatus = action.payload;
-      state.yearSavings = [];
-    },
-    updateMonth: (state, action) => {
-      state.bankAccountStatus =
-        Number(state.bankAccountStatus) + Number(action.payload.savings);
-      if (state.yearSavings.length === 0) {
-        state.yearSavings = [
-          {
-            month: action.payload.month,
-            savings: action.payload.savings,
-          },
-        ];
-      } else if (state.yearSavings.length > 0) {
-        state.yearSavings = [
-          ...state.yearSavings,
-          {
-            month: action.payload.month,
-            savings: action.payload.savings,
-          },
-        ];
-      }
-      //wyzeruj wartości przychodów w tablicy z przychodami z aktualnego miesiąca
+    // setBankAccountStatus: (state, action) => {
+    //   state.bankAccountStatus = action.payload;
+    //   state.yearSavings = [];
+    // },
+    // updateMonth: (state, action) => {
+    //   state.bankAccountStatus =
+    //     Number(state.bankAccountStatus) + Number(action.payload.savings);
+    //   if (state.yearSavings.length === 0) {
+    //     state.yearSavings = [
+    //       {
+    //         month: action.payload.month,
+    //         savings: action.payload.savings,
+    //       },
+    //     ];
+    //   } else if (state.yearSavings.length > 0) {
+    //     state.yearSavings = [
+    //       ...state.yearSavings,
+    //       {
+    //         month: action.payload.month,
+    //         savings: action.payload.savings,
+    //       },
+    //     ];
+    //   }
+    //   //wyzeruj wartości przychodów w tablicy z przychodami z aktualnego miesiąca
 
-      //TEST
-      // if (new Date(dateCheck).getFullYear() > state.curentYear) {
-      //         const yearToSet = new Date(dateCheck).getFullYear() - 1;
-      if (new Date().getFullYear() > state.curentYear) {
-        const yearToSet = new Date().getFullYear() - 1;
-        if (state.yearSavings.length > 0) {
-          const sumOfSavings = state.yearSavings
-            .map((item) => Number(item.savings))
-            .reduce((partialSum, a) => partialSum + a, 0);
-          if (
-            state.yearsSavings.length === 0 ||
-            state.yearsSavings === undefined
-          ) {
-            state.yearsSavings = [
-              {
-                year: yearToSet,
-                sumOfSavings: sumOfSavings,
-                months: state.yearSavings,
-              },
-            ];
-          } else if (state.yearsSavings.length > 0) {
-            state.yearsSavings = [
-              ...state.yearsSavings,
-              {
-                year: yearToSet,
-                sumOfSavings: sumOfSavings,
-                months: state.yearSavings,
-              },
-            ];
-          }
+    //   //TEST
+    //   // if (new Date(dateCheck).getFullYear() > state.curentYear) {
+    //   //         const yearToSet = new Date(dateCheck).getFullYear() - 1;
+    //   if (new Date().getFullYear() > state.curentYear) {
+    //     const yearToSet = new Date().getFullYear() - 1;
+    //     if (state.yearSavings.length > 0) {
+    //       const sumOfSavings = state.yearSavings
+    //         .map((item) => Number(item.savings))
+    //         .reduce((partialSum, a) => partialSum + a, 0);
+    //       if (
+    //         state.yearsSavings.length === 0 ||
+    //         state.yearsSavings === undefined
+    //       ) {
+    //         state.yearsSavings = [
+    //           {
+    //             year: yearToSet,
+    //             sumOfSavings: sumOfSavings,
+    //             months: state.yearSavings,
+    //           },
+    //         ];
+    //       } else if (state.yearsSavings.length > 0) {
+    //         state.yearsSavings = [
+    //           ...state.yearsSavings,
+    //           {
+    //             year: yearToSet,
+    //             sumOfSavings: sumOfSavings,
+    //             months: state.yearSavings,
+    //           },
+    //         ];
+    //       }
 
-          //wyzeruj wartości przychodów w tablicy z przychodami z poprzedniego roku
-          state.yearSavings = [];
-        }
-        //TEST
-        // state.curentYear = new Date(dateCheck).getFullYear();
-        state.curentYear = new Date().getFullYear();
-      }
-    },
+    //       //wyzeruj wartości przychodów w tablicy z przychodami z poprzedniego roku
+    //       state.yearSavings = [];
+    //     }
+    //     //TEST
+    //     // state.curentYear = new Date(dateCheck).getFullYear();
+    //     state.curentYear = new Date().getFullYear();
+    //   }
+    // },
     setFinantialTarget: (state, action) => {
       state.finantialTargets = [
         ...state.finantialTargets,
@@ -107,6 +107,7 @@ const piggyBankSlice = createSlice({
               dateMonth: new Date().getMonth(),
               value: 0,
               id: action.payload.incomeId,
+              bankAccountId: action.payload.bankAccountId,
             },
           ],
         },
@@ -128,6 +129,7 @@ const piggyBankSlice = createSlice({
           dateMonth: new Date().getMonth(),
           value: Number(action.payload.value),
           id: action.payload.incomeId,
+          bankAccountId: action.payload.bankAccountId,
         },
       ];
     },
@@ -197,8 +199,8 @@ const piggyBankSlice = createSlice({
   },
 });
 
-export const setBankAccountStatus = piggyBankSlice.actions.setBankAccountStatus;
-export const updateMonthPiggyBank = piggyBankSlice.actions.updateMonth;
+// export const setBankAccountStatus = piggyBankSlice.actions.setBankAccountStatus;
+// export const updateMonthPiggyBank = piggyBankSlice.actions.updateMonth;
 export const setFinantialTarget = piggyBankSlice.actions.setFinantialTarget;
 export const addValueToFinantialTarget =
   piggyBankSlice.actions.addValueToFinantialTarget;

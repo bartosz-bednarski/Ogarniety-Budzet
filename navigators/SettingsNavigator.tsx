@@ -8,6 +8,7 @@ import IncomesCategoriesListScreen from "../screens/settings/incomes/IncomesCate
 import AddNewIncomesCategoryScreen from "../screens/settings/incomes/AddNewIncomesCategoryScreen";
 import EditIncomesCategoryScreen from "../screens/settings/incomes/EditIncomesCategoryScreen";
 import CurrencyScreen from "../screens/settings/currency/CurrencyScreen";
+
 const SettingsNavigator = () => {
   const Stack = createNativeStackNavigator();
   return (

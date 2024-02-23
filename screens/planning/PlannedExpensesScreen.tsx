@@ -17,8 +17,9 @@ const PlannedExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   const plannedExpenses = useAppSelector(
     (state) => state.expenses.plannedExpenses
   );
-  const bankAccountStatus = useAppSelector(
-    (state) => state.piggyBank.bankAccountStatus
+  const bankAccounts = useAppSelector((state) => state.bankAccounts.accounts);
+  const activeBankAccountStoreId = useAppSelector(
+    (state) => state.bankAccounts.activeAccount.accountId
   );
   const categoriesExpenses = useAppSelector(
     (state) => state.expensesCategories.categoriesList
@@ -28,8 +29,10 @@ const PlannedExpensesScreen: React.FC<{ navigation: Navigation }> = ({
 
   const [selectedCatId, setSelectedCatId] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
-  const [value, setValue] = useState("");
 
+  const bankAccountsActiveAccountIndexId = bankAccounts.findIndex(
+    (item) => item.accountId === activeBankAccountStoreId
+  );
   const sumOfPlannedExpenses = plannedExpenses
     .map((item) => Number(item.value))
     .reduce((partialSum, a) => partialSum + a, 0);
@@ -47,30 +50,25 @@ const PlannedExpensesScreen: React.FC<{ navigation: Navigation }> = ({
     setModalVisible(true);
   };
 
-  const submitHandler = () => {
-    if (value !== "" && value !== "0") {
-      dispatch(addPlannedExpense({ catId: selectedCatId, value: value }));
-      setValue("");
-    }
-    setModalVisible(!modalVisible);
-  };
-
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollView}>
-        {categoriesExpenses.length === 0 && bankAccountStatus > 0 && (
-          <View style={styles.informationBox}>
-            <CustomButton
-              title="Dodaj kategorię wydatków"
-              onPress={() =>
-                navigation.navigate("settingsNavigator", {
-                  screen: "addNewCategory",
-                })
-              }
-            />
-          </View>
-        )}
-        {bankAccountStatus === 0 && (
+        {categoriesExpenses.length === 0 &&
+          bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus >
+            0 && (
+            <View style={styles.informationBox}>
+              <CustomButton
+                title="Dodaj kategorię wydatków"
+                onPress={() =>
+                  navigation.navigate("settingsNavigator", {
+                    screen: "addNewCategory",
+                  })
+                }
+              />
+            </View>
+          )}
+        {bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus ===
+          0 && (
           <View style={styles.buttonBox}>
             <CustomButton
               title="Uzupełnij stan konta"
@@ -81,11 +79,9 @@ const PlannedExpensesScreen: React.FC<{ navigation: Navigation }> = ({
         {plannedExpenses.length > 0 && (
           <>
             <ModalSetPlannedExpense
+              selectedCatId={selectedCatId}
               modalVisible={modalVisible}
               setModalVisible={(value) => setModalVisible(value)}
-              value={value}
-              setValue={(value) => setValue(value)}
-              submitHandler={submitHandler}
             />
             <GoldenFrame name="SUMA" value={sumOfPlannedExpenses} />
             <Text style={styles.label}>Edytuj zaplanowane wydatki</Text>

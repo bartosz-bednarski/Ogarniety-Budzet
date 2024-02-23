@@ -1,16 +1,21 @@
-import AddTargetForm from "../../components/piggyBank/actualTargets/AddTargetForm";
+import AddTargetForm from "../../components/planning/actualTargets/AddTargetForm";
 import { useState } from "react";
 import { OnPressHandler } from "../../types/settings";
-import { useAppDispatch } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { setFinantialTarget } from "../../redux/piggyBank-slice";
 const AddTargetScreen: React.FC<{
   route: any;
   navigation: any;
 }> = ({ route, navigation }) => {
   const dispatch = useAppDispatch();
+  const activeBankAccountId = useAppSelector(
+    (state) => state.bankAccounts.activeAccount.accountId
+  );
+
   const [targetName, setTargetName] = useState("");
   const [targetValue, setTargetValue] = useState("");
   const [targetIcon, setTargetIcon] = useState("add-circle-outline");
+
   const onSetTargetIcon = (icon: string) => {
     setTargetIcon(icon);
   };
@@ -42,6 +47,7 @@ const AddTargetScreen: React.FC<{
           targetValue: targetValue,
           id: id,
           incomeId: incomeId,
+          bankAccountId: activeBankAccountId,
         })
       );
       navigation.navigate("actualTargets");

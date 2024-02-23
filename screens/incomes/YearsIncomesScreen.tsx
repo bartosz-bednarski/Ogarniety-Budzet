@@ -7,9 +7,18 @@ import YearIncomesBox from "../../components/incomes/yearsIncomes/YearIncomesBox
 import GoldenFrame from "../../utils/ui/GoldenFrame";
 const YearsIncomesScreen = () => {
   const yearsIncomes = useAppSelector((state) => state.incomes.yearsIncomes);
-  const sumOfAllIncomes = yearsIncomes
-    .map((item) => Number(item.sumOfAllIncomes))
-    .reduce((partialSum, a) => partialSum + a, 0);
+  const activeBankAccountStore = useAppSelector(
+    (state) => state.bankAccounts.activeAccount
+  );
+  const yearsIncomesActiveAccountIdIndex = yearsIncomes.findIndex(
+    (item) => item.bankAccountId === activeBankAccountStore.accountId
+  );
+  const sumOfAllIncomes =
+    yearsIncomes.length > 0
+      ? yearsIncomes[yearsIncomesActiveAccountIdIndex].years
+          .map((item) => Number(item.sumOfAllIncomes))
+          .reduce((partialSum, a) => partialSum + a, 0)
+      : 0;
   return (
     <ScrollView style={styles.container}>
       {yearsIncomes.length === 0 && (
@@ -22,27 +31,39 @@ const YearsIncomesScreen = () => {
       )}
       {yearsIncomes.length > 0 && (
         <>
-          <GoldenFrame name="SUMA" value={sumOfAllIncomes} />
+          <GoldenFrame name="SUMA" value={Number(sumOfAllIncomes.toFixed(2))} />
           <View style={styles.yearChart}>
             <PieChart
               widthAndHeight={200}
-              series={yearsIncomes.map((item) => item.sumOfAllIncomes)}
-              sliceColor={pieChartColors.slice(0, yearsIncomes.length)}
+              series={yearsIncomes[yearsIncomesActiveAccountIdIndex].years.map(
+                (item) => item.sumOfAllIncomes
+              )}
+              sliceColor={pieChartColors.slice(
+                0,
+                yearsIncomes[yearsIncomesActiveAccountIdIndex].years.length
+              )}
               coverRadius={0.6}
               coverFill={COLORS_STYLE.backgroundBlack}
             />
             <View style={styles.yearChartLegend}>
-              {yearsIncomes.map((item, index) => (
-                <Text style={{ color: pieChartColors[index] }} key={item.year}>
-                  {item.year}
-                </Text>
-              ))}
+              {yearsIncomes[yearsIncomesActiveAccountIdIndex].years.map(
+                (item, index) => (
+                  <Text
+                    style={{ color: pieChartColors[index] }}
+                    key={item.year}
+                  >
+                    {item.year}
+                  </Text>
+                )
+              )}
             </View>
           </View>
           <View style={styles.monthIncomesBox}>
-            {yearsIncomes.map((year) => (
-              <YearIncomesBox yearIncomes={year} key={year.year} />
-            ))}
+            {yearsIncomes[yearsIncomesActiveAccountIdIndex].years.map(
+              (year) => (
+                <YearIncomesBox yearIncomes={year} key={year.year} />
+              )
+            )}
           </View>
         </>
       )}

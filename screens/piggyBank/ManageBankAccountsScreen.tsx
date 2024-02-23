@@ -14,19 +14,53 @@ const ManageBankAccountsScreen = () => {
   const activeBankAccountStore = useAppSelector(
     (state) => state.bankAccounts.activeAccount
   );
-  console.log(bankAccountsStore);
-  console.log(activeBankAccountStore);
+  const categoriesExpenses = useAppSelector(
+    (state) => state.expenses.monthCategoriesExpenses
+  );
+  const incomes = useAppSelector((state) => state.incomes.categoriesIncomes);
+
   return (
     <View style={styles.container}>
-      {bankAccountsStore.map((item) => (
-        <BankAccountGrayBox
-          key={item.accountId}
-          accountName={item.accountName}
-          accountValue={item.bankAccountStatus}
-          accountId={item.accountId}
-          accountCurrency={item.currency}
-        />
-      ))}
+      {bankAccountsStore.map((item, index) => {
+        const incomesAccountIdIndex = incomes.findIndex(
+          (income) => income.bankAccountId === item.accountId
+        );
+        const monthIncomesSum =
+          incomesAccountIdIndex !== -1
+            ? incomes[incomesAccountIdIndex].categories
+                .map((item) => Number(item.value))
+                .reduce((partialSum, a) => partialSum + a, 0)
+            : 0;
+        const categoriesExpensesAccountIdIndex = categoriesExpenses.findIndex(
+          (catExp) => catExp.bankAccountId === item.accountId
+        );
+        const monthExpensesSum =
+          categoriesExpensesAccountIdIndex !== -1
+            ? categoriesExpenses[categoriesExpensesAccountIdIndex].categories
+                .map((item) => Number(item.sum))
+                .reduce((partialSum, a) => partialSum + a, 0)
+            : 0;
+
+        console.log(
+          "incomesSum",
+          monthIncomesSum,
+          "expensesSum",
+          monthExpensesSum
+        );
+        return (
+          <BankAccountGrayBox
+            key={item.accountId}
+            accountName={item.accountName}
+            accountValue={
+              Number(item.bankAccountStatus) +
+              Number(monthIncomesSum) -
+              Number(monthExpensesSum)
+            }
+            accountId={item.accountId}
+            accountCurrency={item.currency}
+          />
+        );
+      })}
 
       <AddBankAccountBox onPress={() => setModalVisible(true)} />
       {modalVisible && (
