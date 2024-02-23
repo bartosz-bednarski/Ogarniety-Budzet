@@ -8,10 +8,15 @@ import {
 import { useAppDispatch } from "../../../redux/hooks";
 import { addExpensesCategory } from "../../../redux/expensesCategories-slice";
 import { setExpense, setPlannedExpense } from "../../../redux/expenses-slice";
+import { useAppSelector } from "../../../redux/hooks";
+
 const AddNewExpensesCategoryScreen: React.FC<{
   route: any;
   navigation: any;
 }> = ({ route, navigation }) => {
+  const activeBankAccountStore = useAppSelector(
+    (state) => state.bankAccounts.activeAccount
+  );
   const dispatch = useAppDispatch();
   const [inputText, setInputText] = useState("");
   const [categoryIcon, setCategoryIcon] = useState("add-circle-outline");
@@ -41,9 +46,15 @@ const AddNewExpensesCategoryScreen: React.FC<{
           name: inputText,
           iconName: categoryIcon,
           catId: catId,
+          bankAccountId: activeBankAccountStore.accountId,
         })
       );
-      dispatch(setExpense({ catId: catId }));
+      dispatch(
+        setExpense({
+          catId: catId,
+          bankAccountId: activeBankAccountStore.accountId,
+        })
+      );
       navigation.navigate("editCategories");
     }
   };

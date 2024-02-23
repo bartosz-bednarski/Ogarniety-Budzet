@@ -16,8 +16,8 @@ const TargetGoldFrame: React.FC<FinantialTarget> = ({
   incomes,
   targetValue,
 }) => {
-  const currency = useAppSelector(
-    (state) => state.currency.currentCurrency.currencyCode
+  const activeBankAccount = useAppSelector(
+    (state) => state.bankAccounts.activeAccount
   );
   const [addValueModalVisible, setAddValueModalVisible] = useState(false);
   const [editModalVisible, setEditModalVisible] = useState(false);
@@ -64,7 +64,7 @@ const TargetGoldFrame: React.FC<FinantialTarget> = ({
                 {((sumOfIncomes / targetValue) * 100).toFixed(2)} %
               </Text>
               <Text style={styles.targetText}>
-                {sumOfIncomes}/{targetValue} {currency}
+                {sumOfIncomes}/{targetValue} {activeBankAccount.currency}
               </Text>
             </View>
           </View>

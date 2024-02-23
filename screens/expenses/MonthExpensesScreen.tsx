@@ -18,15 +18,36 @@ const MonthExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   const categories = useAppSelector(
     (state) => state.expensesCategories.categoriesList
   );
-  const categoriesExpenses = useAppSelector(
+  const monthCategoriesExpensesStore = useAppSelector(
     (state) => state.expenses.monthCategoriesExpenses
   );
+
   const plannedExpenses = useAppSelector(
     (state) => state.expenses.plannedExpenses
   );
-  const bankAccountStatus = useAppSelector(
-    (state) => state.piggyBank.bankAccountStatus
+  const bankAccounts = useAppSelector((state) => state.bankAccounts.accounts);
+  const activeBankAccountStoreId = useAppSelector(
+    (state) => state.bankAccounts.activeAccount.accountId
   );
+  const bankAccountsActiveAccountIndexId = bankAccounts.findIndex(
+    (item) => item.accountId === activeBankAccountStoreId
+  );
+  const monthCategoriesExpensesIndexOfCurrentId =
+    monthCategoriesExpensesStore.findIndex(
+      (item) => item.bankAccountId === activeBankAccountStoreId
+    );
+  const categoriesExpenses =
+    monthCategoriesExpensesIndexOfCurrentId !== -1
+      ? monthCategoriesExpensesStore[monthCategoriesExpensesIndexOfCurrentId]
+          .categories
+      : [
+          {
+            catId: "null",
+            sum: 0,
+          },
+        ];
+  console.log(monthCategoriesExpensesStore);
+  console.log(activeBankAccountStoreId);
   const categoriesExpensesWithNames: CategoriesExpensesWithNames =
     categoriesExpenses.map((category, index) => ({
       ...category,
@@ -47,15 +68,18 @@ const MonthExpensesScreen: React.FC<{ navigation: Navigation }> = ({
     .reduce((partialSum, a) => partialSum + a, 0);
   const toSpend = sumOfPlannedExpenses - sumOfAllExpenses;
 
-  useEffect(() => {
-    stripsColumnData = categoriesExpenses.map((category) => ({
-      ...category,
-      ...plannedExpenses.find((item) => item.catId === category.catId),
-    }));
-  }, [plannedExpenses, categoriesExpenses]);
+  // useEffect(() => {
+  //   stripsColumnData = categoriesExpenses.map((category) => ({
+  //     ...category,
+  //     ...plannedExpenses.find((item) => item.catId === category.catId),
+  //   }));
+  // }, [plannedExpenses, categoriesExpenses]);
+
   return (
     <View style={styles.container}>
-      {bankAccountStatus === 0 && (
+      {(bankAccounts.length === 0 ||
+        bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus ===
+          0) && (
         <View style={styles.buttonBox}>
           <CustomButton
             title="Uzupełnij stan konta"
@@ -63,7 +87,7 @@ const MonthExpensesScreen: React.FC<{ navigation: Navigation }> = ({
           />
         </View>
       )}
-      {bankAccountStatus > 0 &&
+      {bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus > 0 &&
         sumOfAllExpenses === 0 &&
         categoriesExpenses.length > 0 && (
           <InfoDateUpdate
@@ -72,7 +96,7 @@ const MonthExpensesScreen: React.FC<{ navigation: Navigation }> = ({
             arrow="back"
           />
         )}
-      {bankAccountStatus > 0 && (
+      {bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus > 0 && (
         <>
           <ScrollView>
             {categoriesExpenses.length === 0 && (

@@ -8,13 +8,44 @@ import {
   Alert,
 } from "react-native";
 import COLORS_STYLE from "../../utils/styles/colors";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { updateIncome } from "../../redux/incomes-slice";
+import { useState } from "react";
+
 const ModalSetIncome: React.FC<{
   modalVisible: boolean;
+  selectedCatId: string;
   setModalVisible: (value: boolean) => void;
-  value: string;
-  setValue: (value: string) => void;
-  submitHandler: () => void;
-}> = ({ modalVisible, setModalVisible, value, setValue, submitHandler }) => {
+}> = ({ modalVisible, setModalVisible, selectedCatId }) => {
+  const dispatch = useAppDispatch();
+  const activeBankAccountStore = useAppSelector(
+    (state) => state.bankAccounts.activeAccount
+  );
+  const [value, setValue] = useState("");
+  const [inputError, setInputError] = useState({ status: false, message: "" });
+
+  const submitHandler = () => {
+    console.log("INPUT!!!!!!!!!!!!!", typeof value);
+    if (value !== "" && value !== "0" && isNaN(Number(value)) === false) {
+      dispatch(
+        updateIncome({
+          catId: selectedCatId,
+          value: Number(value).toFixed(2),
+          bankAccountId: activeBankAccountStore.accountId,
+        })
+      );
+      setValue("");
+      setModalVisible(!modalVisible);
+    } else if (value === "") {
+      setInputError({ status: true, message: "Kwota nie może być pusta!" });
+    } else {
+      setInputError({
+        status: true,
+        message: "Wprowadzona wartość nie jest liczbą!",
+      });
+    }
+  };
+
   return (
     <Modal
       animationType="slide"
@@ -36,6 +67,9 @@ const ModalSetIncome: React.FC<{
             placeholder="Podaj kwotę"
             placeholderTextColor={COLORS_STYLE.labelGrey}
           />
+          {inputError.status && (
+            <Text style={styles.errorText}>{inputError.message}</Text>
+          )}
           <View style={styles.modalButtonsBox}>
             <Pressable
               style={styles.modalButton}
@@ -92,9 +126,9 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 0,
     color: "white",
-    marginBottom: 20,
   },
   modalButtonsBox: {
+    marginTop: 10,
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
@@ -111,6 +145,14 @@ const styles = StyleSheet.create({
   textGold: {
     color: COLORS_STYLE.basicGold,
     fontSize: 20,
+  },
+  errorText: {
+    marginVertical: 10,
+    fontSize: 12,
+    color: COLORS_STYLE.red,
+    width: "100%",
+    textAlign: "left",
+    fontWeight: "700",
   },
 });
 export default ModalSetIncome;

@@ -11,9 +11,10 @@ const CircleNumberColorButton: React.FC<{
   catId: string;
   onPressHandler: () => void;
 }> = ({ iconName, value, color, catId, onPressHandler }) => {
-  const currency = useAppSelector(
-    (state) => state.currency.currentCurrency.currencyCode
+  const activeBankAccount = useAppSelector(
+    (state) => state.bankAccounts.activeAccount
   );
+
   return (
     <View style={styles.container}>
       <Pressable
@@ -23,7 +24,7 @@ const CircleNumberColorButton: React.FC<{
         <Ionicons name={iconName} size={50} color={pieChartColors[color]} />
       </Pressable>
       <Text style={styles.value}>
-        {numberWithSpaces(value)} {currency}
+        {numberWithSpaces(value)} {activeBankAccount.currency}
       </Text>
     </View>
   );

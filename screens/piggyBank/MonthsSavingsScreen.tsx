@@ -6,27 +6,38 @@ import { MONTHS } from "../../utils/months";
 import { numberWithSpaces } from "../../utils/numberWithSpaces";
 import GoldenFrame from "../../utils/ui/GoldenFrame";
 const MonthsSavingsScreen = () => {
-  const currency = useAppSelector(
-    (state) => state.currency.currentCurrency.currencyCode
+  const bankAccounts = useAppSelector((state) => state.bankAccounts.accounts);
+  const activeBankAccout = useAppSelector(
+    (state) => state.bankAccounts.activeAccount
   );
-  const yearSavings = useAppSelector((state) => state.piggyBank.yearSavings);
-  const sum = yearSavings
-    .map((item) => item.savings)
-    .reduce((partialSum, a) => partialSum + a, 0);
+  const activeBankAccountIdIndex = bankAccounts.findIndex(
+    (item) => item.accountId === activeBankAccout.accountId
+  );
+  const yearSavings =
+    activeBankAccountIdIndex !== -1
+      ? bankAccounts[activeBankAccountIdIndex].yearSavings
+      : [];
+  const sumOfYearSavings =
+    activeBankAccountIdIndex !== -1
+      ? yearSavings
+          .map((item) => Number(item.savings))
+          .reduce((partialSum, a) => partialSum + a, 0)
+      : 0;
   return (
     <ScrollView style={styles.container}>
-      <GoldenFrame name="SUMA" value={sum} />
+      <GoldenFrame name="SUMA" value={sumOfYearSavings} />
       <View style={styles.columnListBox}>
         {yearSavings.map((item) => (
           <View style={styles.item} key={item.month}>
             <Ionicons
               name="calendar"
               size={44}
-              color={COLORS_STYLE.basicGold}
+              color={item.savings > 0 ? COLORS_STYLE.green : COLORS_STYLE.red}
             />
             <Text style={styles.monthName}>{MONTHS[Number(item.month)]}</Text>
             <Text style={styles.value}>
-              {numberWithSpaces(item.savings)} {currency}
+              {numberWithSpaces(Number(item.savings.toFixed(2)))}{" "}
+              {activeBankAccout.currency}
             </Text>
           </View>
         ))}

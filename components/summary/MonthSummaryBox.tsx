@@ -4,14 +4,15 @@ import { useState } from "react";
 import COLORS_STYLE from "../../utils/styles/colors";
 import YearSummaryStrip from "./YearSummaryStrip";
 import randomId from "../../utils/randomIdFunction";
+import { MONTHS } from "../../utils/months";
 import { numberWithSpaces } from "../../utils/numberWithSpaces";
-const YearsSummaryBox: React.FC<{
+const MonthSummaryBox: React.FC<{
   data: {
-    year: number;
+    month: number;
     currency: {
       currency: string;
-      sumOfAllExpenses: number;
-      sumOfAllIncomes: number;
+      sumOfExpenses: number;
+      sumOfIncomes: number;
     }[];
   };
 }> = ({ data }) => {
@@ -29,11 +30,11 @@ const YearsSummaryBox: React.FC<{
             size={48}
             style={{ marginLeft: 10 }}
           />
-          <Text style={styles.monthName}>{data.year}</Text>
+          <Text style={styles.monthName}>{MONTHS[data.month]}</Text>
           <View style={styles.details}>
             {data.currency.map((item) => {
               const balanse =
-                Number(item.sumOfAllIncomes) - Number(item.sumOfAllExpenses);
+                Number(item.sumOfIncomes) - Number(item.sumOfExpenses);
               return (
                 <View style={styles.rowBox} key={randomId()}>
                   <Text
@@ -75,13 +76,13 @@ const YearsSummaryBox: React.FC<{
                 key={"Przychody"}
                 name="Przychody"
                 currency={item.currency}
-                value={item.sumOfAllIncomes}
+                value={item.sumOfIncomes}
               />
               <YearSummaryStrip
                 key={"Wydatki"}
                 name="Wydatki"
                 currency={item.currency}
-                value={item.sumOfAllExpenses}
+                value={item.sumOfExpenses}
               />
             </>
           ))}
@@ -155,4 +156,4 @@ const styles = StyleSheet.create({
     borderColor: COLORS_STYLE.basicGold,
   },
 });
-export default YearsSummaryBox;
+export default MonthSummaryBox;

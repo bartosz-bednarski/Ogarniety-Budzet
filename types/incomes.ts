@@ -1,22 +1,15 @@
 import { CategoryItem } from "./settings";
 export type CategoriesIncomes = {
-  catId: string;
-  date: string;
-  dateString: string;
-  value: number;
-}[];
-export type YearIncomes = {
-  month: number;
-  sumOfAllIncomes: number;
-  categoriesIncomes: {
+  bankAccountId: string;
+  categories: {
     catId: string;
+    date: string;
+    dateString: string;
     value: number;
-    stillExsists: boolean;
   }[];
 }[];
-export type YearsIncomes = {
-  year: number;
-  sumOfAllIncomes: number;
+export type YearIncomes = {
+  bankAccountId: string;
   months: {
     month: number;
     sumOfAllIncomes: number;
@@ -24,6 +17,24 @@ export type YearsIncomes = {
       catId: string;
       value: number;
       stillExsists: boolean;
+      bankAccountId: string;
+    }[];
+  }[];
+}[];
+export type YearsIncomes = {
+  bankAccountId: string;
+  years: {
+    year: number;
+    sumOfAllIncomes: number;
+    months: {
+      month: number;
+      sumOfAllIncomes: number;
+      categoriesIncomes: {
+        catId: string;
+        value: number;
+        stillExsists: boolean;
+        bankAccountId: string;
+      }[];
     }[];
   }[];
 }[];

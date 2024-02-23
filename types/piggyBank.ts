@@ -5,10 +5,7 @@ export type YearSavings = {
   months: MonthSavings[];
 };
 export type PiggyBankInitialState = {
-  bankAccountStatus: number;
   finantialTargets: FinantialTarget[];
-  yearSavings: MonthSavings[];
-  yearsSavings: YearSavings[];
   realisedTargets: RealisedTarget[];
   curentYear: number;
 };
@@ -40,6 +37,7 @@ export type FinantialTarget = {
     dateMonth: number;
     value: number;
     id: string;
+    bankAccountId: string;
   }[];
 };
 export type ModalAddValueProps = {

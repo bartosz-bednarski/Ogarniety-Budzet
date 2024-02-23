@@ -7,14 +7,15 @@ const FrameUnderlineSmall: React.FC<{
   textUp: string;
   textDown: number;
 }> = ({ mainColor, textUp, textDown }) => {
-  const currency = useAppSelector(
-    (state) => state.currency.currentCurrency.currencyCode
+  const activeBankAccount = useAppSelector(
+    (state) => state.bankAccounts.activeAccount
   );
   return (
     <View style={[styles.frame, { borderColor: mainColor }]}>
       <Text style={[styles.frameText, { color: "white" }]}>{textUp}</Text>
       <Text style={[styles.frameText, { color: mainColor }]}>
-        {numberWithSpaces(textDown)} {currency}
+        {numberWithSpaces(Math.abs(Number(textDown.toFixed(2))))}{" "}
+        {activeBankAccount.currency}
       </Text>
     </View>
   );

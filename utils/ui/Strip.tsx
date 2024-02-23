@@ -17,8 +17,8 @@ const Strip: React.FC<{
   plannedExpenses,
   pieChartColorsNum,
 }) => {
-  const currency = useAppSelector(
-    (state) => state.currency.currentCurrency.currencyCode
+  const activeBankAccount = useAppSelector(
+    (state) => state.bankAccounts.activeAccount
   );
   let percentage;
   if (realExpenses > 0) {
@@ -39,7 +39,7 @@ const Strip: React.FC<{
       <View style={styles.stripBoxTop}>
         <Text style={styles.name}>{categoryName}</Text>
         <Text style={styles.price}>
-          {numberWithSpaces(realExpenses)} {currency}
+          {numberWithSpaces(realExpenses)} {activeBankAccount.currency}
         </Text>
       </View>
       <View style={styles.stripBoxBottom}>

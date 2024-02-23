@@ -16,18 +16,21 @@ const ActualTargetsScreen: React.FC<{ navigation: Navigation }> = ({
   const targetsIncomesArray = finantialTargets.map((item) =>
     item.incomes.map((value) => value.value)
   );
-  const categoriesIncomes = useAppSelector(
-    (state) => state.incomesCategories.categoriesList
+  const bankAccounts = useAppSelector((state) => state.bankAccounts.accounts);
+  const activeBankAccountStoreId = useAppSelector(
+    (state) => state.bankAccounts.activeAccount.accountId
   );
-  const bankAccountStatus = useAppSelector(
-    (state) => state.piggyBank.bankAccountStatus
+  const bankAccountsActiveAccountIndexId = bankAccounts.findIndex(
+    (item) => item.accountId === activeBankAccountStoreId
   );
   const sumOfFinantialIncomes = targetsIncomesArray
     .flat(1)
     .reduce((partialSum, a) => partialSum + a, 0);
   return (
     <View style={styles.container}>
-      {bankAccountStatus === 0 && (
+      {(bankAccounts.length === 0 ||
+        bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus ===
+          0) && (
         <View style={styles.buttonBox}>
           <CustomButton
             title="Uzupełnij stan konta"
@@ -35,7 +38,7 @@ const ActualTargetsScreen: React.FC<{ navigation: Navigation }> = ({
           />
         </View>
       )}
-      {bankAccountStatus > 0 && (
+      {bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus > 0 && (
         <>
           <ScrollView style={styles.scrollView}>
             <GoldenFrame name="CELE FINANSOWE" value={sumOfFinantialIncomes} />

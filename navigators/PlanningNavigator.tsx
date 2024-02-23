@@ -7,8 +7,9 @@ import PlanningTabNavigator from "./planning/PlanningTabNavigator";
 import { useAppSelector } from "../redux/hooks";
 import AddTargetScreen from "../screens/planning/AddTargetScreen";
 const PlanningNavigator = () => {
-  const bankAccountStatus = useAppSelector(
-    (state) => state.piggyBank.bankAccountStatus
+  const bankAccounts = useAppSelector((state) => state.bankAccounts.accounts);
+  const activeBankAccount = useAppSelector(
+    (state) => state.bankAccounts.activeAccount.accountName
   );
   const Stack = createNativeStackNavigator();
 
@@ -25,10 +26,10 @@ const PlanningNavigator = () => {
           headerTintColor: COLORS_STYLE.basicGold,
           headerPressColor: COLORS_STYLE.basicGold,
           headerPressOpacity: 1,
-          headerTitle: "Planowanie",
+          headerTitle: activeBankAccount,
           headerTitleAlign: "center",
           headerRight: () => {
-            if (bankAccountStatus !== 0) {
+            if (bankAccounts.findIndex((i) => i.accountId === "0") === -1) {
               return (
                 <Pressable
                   onPress={() => navigation.navigate("settingsNavigator")}

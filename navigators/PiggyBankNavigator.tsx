@@ -9,8 +9,9 @@ import MonthsSavingsScreen from "../screens/piggyBank/MonthsSavingsScreen";
 import RealisedTargetsScreen from "../screens/planning/RealisedTargetsScreen";
 import { useAppSelector } from "../redux/hooks";
 const PiggyBankNavigator = () => {
-  const bankAccountStatus = useAppSelector(
-    (state) => state.piggyBank.bankAccountStatus
+  const bankAccounts = useAppSelector((state) => state.bankAccounts.accounts);
+  const activeBankAccount = useAppSelector(
+    (state) => state.bankAccounts.activeAccount.accountName
   );
   const Stack = createNativeStackNavigator();
   return (
@@ -26,10 +27,10 @@ const PiggyBankNavigator = () => {
           headerTintColor: COLORS_STYLE.basicGold,
           headerPressColor: COLORS_STYLE.basicGold,
           headerPressOpacity: 1,
-          headerTitle: "Oszczędności",
+          headerTitle: activeBankAccount,
           headerTitleAlign: "center",
           headerRight: () => {
-            if (bankAccountStatus !== 0) {
+            if (bankAccounts.findIndex((i) => i.accountId === "0") === -1) {
               return (
                 <Pressable
                   onPress={() => navigation.navigate("settingsNavigator")}

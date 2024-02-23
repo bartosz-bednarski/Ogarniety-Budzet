@@ -9,9 +9,8 @@ export type WeekExpenses = {
   bankAccountId: string;
 }[];
 export type WeekCategoriesExpenses = {
-  catId: string;
-  sum: number;
   bankAccountId: string;
+  categories: { catId: string; sum: number }[];
 }[];
 export type MonthExpenses = {
   catId: string;
@@ -22,23 +21,11 @@ export type MonthExpenses = {
   bankAccountId: string;
 }[];
 export type MonthCategoriesExpenses = {
-  catId: string;
-  sum: number;
   bankAccountId: string;
+  categories: { catId: string; sum: number }[];
 }[];
 export type YearExpenses = {
-  month: number;
-  sumOfAllExpenses: number;
-  categoriesExpenses: {
-    catId: string;
-    sum: number;
-    stillExsists: boolean;
-    bankAccountId: string;
-  }[];
-}[];
-export type YearsExpenses = {
-  year: number;
-  sumOfAllExpenses: number;
+  bankAccountId: string;
   months: {
     month: number;
     sumOfAllExpenses: number;
@@ -47,6 +34,23 @@ export type YearsExpenses = {
       sum: number;
       stillExsists: boolean;
       bankAccountId: string;
+    }[];
+  }[];
+}[];
+export type YearsExpenses = {
+  bankAccountId: string;
+  years: {
+    year: number;
+    sumOfAllExpenses: number;
+    months: {
+      month: number;
+      sumOfAllExpenses: number;
+      categoriesExpenses: {
+        catId: string;
+        sum: number;
+        stillExsists: boolean;
+        bankAccountId: string;
+      }[];
     }[];
   }[];
 }[];

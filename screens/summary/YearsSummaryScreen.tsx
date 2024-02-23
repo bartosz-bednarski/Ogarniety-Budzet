@@ -5,70 +5,193 @@ import PieChart from "react-native-pie-chart";
 import GrayBox50 from "../../utils/ui/GrayBox50";
 import GrayBox100 from "../../utils/ui/GrayBox100";
 import YearsSummaryBox from "../../components/summary/YearsSummaryBox";
+import SquareBorderBox from "../../components/summary/SquareBorderBox";
+import YearBalanceGoldFrame from "../../components/summary/YearBalanceGoldFrame";
 const YearsSummaryScreen = () => {
-  const yearsExpenses = useAppSelector((state) => state.expenses.yearsExpenses);
-  const yearsIncomes = useAppSelector((state) => state.incomes.yearsIncomes);
-  const yearsSavings = useAppSelector((state) => state.piggyBank.yearsSavings);
-  const sumOfAllIncomes = yearsIncomes
-    .map((item) => item.sumOfAllIncomes)
-    .reduce((partialSum, a) => partialSum + a, 0);
-  const sumOfAllExpenses = yearsExpenses
-    .map((item) => item.sumOfAllExpenses)
-    .reduce((partialSum, a) => partialSum + a, 0);
-  const sumOfAllSavings = yearsSavings
-    .map((item) => item.sumOfSavings)
-    .reduce((partialSum, a) => partialSum + a, 0);
-  const pieChartData = [
-    sumOfAllIncomes !== 0
-      ? Number(((sumOfAllExpenses / sumOfAllIncomes) * 100).toFixed(2))
-      : 1,
-    100 - Number(((sumOfAllExpenses / sumOfAllIncomes) * 100).toFixed(2)) < 0
-      ? 0
-      : 100 - Number(((sumOfAllExpenses / sumOfAllIncomes) * 100).toFixed(2)),
-  ];
-  const grayBoxData = yearsExpenses.map((item) => ({
-    year: item.year,
-    expenses: item.sumOfAllExpenses,
-    incomes:
-      yearsIncomes[yearsIncomes.findIndex((k) => k.year === item.year)]
-        .sumOfAllIncomes,
-    savings:
-      yearsSavings[yearsSavings.findIndex((k) => k.year === item.year)]
-        .sumOfSavings,
-  }));
+  const bankAccountsStore = useAppSelector(
+    (state) => state.bankAccounts.accounts
+  );
+  const yearsIncomesStore = useAppSelector(
+    (state) => state.incomes.yearsIncomes
+  );
+  const yearIncomes = useAppSelector((state) => state.incomes.yearIncomes);
+
+  console.log("YEARRRRRiNCOMES", yearIncomes);
+  console.log(
+    "YEARSINCOMES",
+    yearsIncomesStore.map((item) => item.bankAccountId)
+  );
+  const yearsExpensesStore = useAppSelector(
+    (state) => state.expenses.yearsExpenses
+  );
+  console.log(
+    "YEARSExpenses",
+    yearsExpensesStore.map((item) => item.bankAccountId)
+  );
+  const yearsExpensesWithIncomes = yearsIncomesStore.map((item) => {
+    const expensesAccountIndex = yearsExpensesStore.findIndex(
+      (i) => i.bankAccountId === item.bankAccountId
+    );
+    return {
+      bankAccount: item.bankAccountId,
+      currency:
+        bankAccountsStore[
+          bankAccountsStore.findIndex((i) => i.accountId === item.bankAccountId)
+        ].currency,
+      years: item.years.map((year) => {
+        const expensesAccountYearIndex = yearsExpensesStore[
+          expensesAccountIndex
+        ].years.findIndex((i) => i.year === year.year);
+        return {
+          year: year.year,
+          sumOfAllExpenses:
+            expensesAccountYearIndex !== -1
+              ? yearsExpensesStore[expensesAccountIndex].years[
+                  expensesAccountYearIndex
+                ].sumOfAllExpenses
+              : 0,
+          sumOfAllIncomes: year.sumOfAllIncomes,
+          months: year.months.map((month) => {
+            const expensesAccountMonthIndex = yearsExpensesStore[
+              expensesAccountIndex
+            ].years[expensesAccountYearIndex].months.findIndex(
+              (i) => i.month === month.month
+            );
+            return {
+              month: month.month,
+              sumOfAllExpenses:
+                yearsExpensesStore[expensesAccountIndex].years[
+                  expensesAccountYearIndex
+                ].months[expensesAccountMonthIndex].sumOfAllExpenses,
+              sumOfAllIncomes: month.sumOfAllIncomes,
+            };
+          }),
+        };
+      }),
+    };
+  });
+  console.log("YEARSbALANSE", yearsExpensesWithIncomes);
+  const yearsExpensesWithIncomesByYears: {
+    year: number;
+    currency: {
+      currency: string;
+      sumOfAllExpenses: number;
+      sumOfAllIncomes: number;
+    }[];
+  }[] = [];
+  for (let i = 0; i < yearsExpensesWithIncomes.length; i++) {
+    for (let x = 0; x < yearsExpensesWithIncomes[i].years.length; x++) {
+      const yearIndex = yearsExpensesWithIncomesByYears.findIndex(
+        (item) => item.year === yearsExpensesWithIncomes[i].years[x].year
+      );
+      if (yearIndex === -1) {
+        const objToPush = {
+          year: yearsExpensesWithIncomes[i].years[x].year,
+          currency: [
+            {
+              currency: yearsExpensesWithIncomes[i].currency,
+              sumOfAllExpenses:
+                yearsExpensesWithIncomes[i].years[x].sumOfAllExpenses,
+              sumOfAllIncomes:
+                yearsExpensesWithIncomes[i].years[x].sumOfAllIncomes,
+            },
+          ],
+        };
+        yearsExpensesWithIncomesByYears.push(objToPush);
+      } else if (yearIndex !== -1) {
+        const currencyExsists = yearsExpensesWithIncomesByYears[
+          yearIndex
+        ].currency.findIndex(
+          (item) => item.currency === yearsExpensesWithIncomes[i].currency
+        );
+        if (currencyExsists === -1) {
+          yearsExpensesWithIncomesByYears[yearIndex].currency = [
+            ...yearsExpensesWithIncomesByYears[yearIndex].currency,
+            {
+              currency: yearsExpensesWithIncomes[i].currency,
+              sumOfAllExpenses:
+                yearsExpensesWithIncomes[i].years[x].sumOfAllExpenses,
+              sumOfAllIncomes:
+                yearsExpensesWithIncomes[i].years[x].sumOfAllIncomes,
+            },
+          ];
+        } else if (currencyExsists !== -1) {
+          yearsExpensesWithIncomesByYears[yearIndex].currency[currencyExsists] =
+            {
+              currency: yearsExpensesWithIncomes[i].currency,
+              sumOfAllExpenses:
+                yearsExpensesWithIncomesByYears[yearIndex].currency[
+                  currencyExsists
+                ].sumOfAllExpenses +
+                yearsExpensesWithIncomes[i].years[x].sumOfAllExpenses,
+              sumOfAllIncomes:
+                yearsExpensesWithIncomesByYears[yearIndex].currency[
+                  currencyExsists
+                ].sumOfAllIncomes +
+                yearsExpensesWithIncomes[i].years[x].sumOfAllIncomes,
+            };
+        }
+      }
+    }
+  }
+  const yearsExpensesWithIncomesByCurrency = [];
+  for (let i = 0; i < yearsExpensesWithIncomesByYears.length; i++) {
+    const arrToPush = yearsExpensesWithIncomesByYears[i].currency.map(
+      (item) => ({
+        currency: item.currency,
+        sumOfAllExpenses: item.sumOfAllExpenses,
+        sumOfAllIncomes: item.sumOfAllIncomes,
+      })
+    );
+    yearsExpensesWithIncomesByCurrency.push(...arrToPush);
+  }
+  console.log("xdxdxdxd", yearsExpensesWithIncomesByCurrency);
   return (
     <View style={styles.container}>
-      <ScrollView>
-        {yearsIncomes.length === 0 && (
-          <View style={styles.informationBox}>
-            <Text style={styles.informationText}>
-              Tutaj będą wyświetlane informacje o przychodach z poszczególnych
-              lat.
-            </Text>
+      {yearsIncomesStore.length === 0 && (
+        <View style={styles.informationBox}>
+          <Text style={styles.informationText}>
+            Tutaj będzie wyświetlane podsumowanie ze wszystkich lat.
+          </Text>
+        </View>
+      )}
+      {yearsIncomesStore.length > 0 && (
+        <ScrollView
+          contentContainerStyle={{
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <View style={styles.rowBoxTop}>
+            <SquareBorderBox
+              values={yearsExpensesWithIncomesByCurrency.map((i) => ({
+                value: i.sumOfAllIncomes,
+                currency: i.currency,
+              }))}
+              name="Suma przychodów"
+              color="green"
+            />
+            <SquareBorderBox
+              values={yearsExpensesWithIncomesByCurrency.map((i) => ({
+                value: i.sumOfAllExpenses,
+                currency: i.currency,
+              }))}
+              name="Suma wydatków"
+              color="red"
+            />
           </View>
-        )}
-        {yearsIncomes.length > 0 && (
-          <>
-            <GrayBox100 name="Oszczędzono" value={sumOfAllSavings} />
-            <View style={styles.pieChart}>
-              <PieChart
-                widthAndHeight={200}
-                series={pieChartData}
-                sliceColor={["red", "green"]}
-                coverRadius={0.6}
-                coverFill={COLORS_STYLE.backgroundBlack}
-              />
-            </View>
-            <View style={styles.rowBox}>
-              <GrayBox50 name="Przychody" value={sumOfAllIncomes} />
-              <GrayBox50 name="Wydatki" value={sumOfAllExpenses} />
-            </View>
-            {grayBoxData.map((item) => (
-              <YearsSummaryBox data={item} key={item.year} />
-            ))}
-          </>
-        )}
-      </ScrollView>
+          <YearBalanceGoldFrame
+            data={yearsExpensesWithIncomesByCurrency.map((item) => ({
+              currency: item.currency,
+              value:
+                Number(item.sumOfAllIncomes) - Number(item.sumOfAllExpenses),
+            }))}
+          />
+          {yearsExpensesWithIncomesByYears.map((item) => (
+            <YearsSummaryBox data={item} />
+          ))}
+        </ScrollView>
+      )}
     </View>
   );
 };
@@ -109,6 +232,12 @@ const styles = StyleSheet.create({
   },
   monthIncomesBox: {
     gap: 15,
+  },
+  rowBoxTop: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "flex-start",
+    gap: 10,
   },
 });
 export default YearsSummaryScreen;

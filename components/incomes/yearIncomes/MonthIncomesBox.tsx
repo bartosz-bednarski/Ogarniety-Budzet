@@ -12,8 +12,8 @@ import { numberWithSpaces } from "../../../utils/numberWithSpaces";
 const MonthIncomesBox: React.FC<{ monthIncomes: MonthIncomesBoxProps }> = ({
   monthIncomes,
 }) => {
-  const currency = useAppSelector(
-    (state) => state.currency.currentCurrency.currencyCode
+  const activeBankAccount = useAppSelector(
+    (state) => state.bankAccounts.activeAccount
   );
   const incomesCategories = useAppSelector(
     (state) => state.incomesCategories.categoriesList
@@ -84,7 +84,8 @@ const MonthIncomesBox: React.FC<{ monthIncomes: MonthIncomesBoxProps }> = ({
           <View style={styles.details}>
             <Text style={styles.textWhiteBig}>SUMA</Text>
             <Text style={styles.value}>
-              {numberWithSpaces(monthIncomes.sumOfAllIncomes)} {currency}
+              {numberWithSpaces(monthIncomes.sumOfAllIncomes)}{" "}
+              {activeBankAccount.currency}
             </Text>
           </View>
           <View style={styles.calendarBox}>

@@ -7,8 +7,8 @@ const GrayBox100: React.FC<{ name: string; value: number }> = ({
   name,
   value,
 }) => {
-  const currency = useAppSelector(
-    (state) => state.currency.currentCurrency.currencyCode
+  const activeBankAccount = useAppSelector(
+    (state) => state.bankAccounts.activeAccount
   );
   const valueWithSpaces = numberWithSpaces(value);
   return (
@@ -20,7 +20,7 @@ const GrayBox100: React.FC<{ name: string; value: number }> = ({
       <Text style={styles.textUp}>{name}</Text>
 
       <Text style={styles.textDown}>
-        {valueWithSpaces} {currency}
+        {valueWithSpaces} {activeBankAccount.currency}
       </Text>
     </View>
   );

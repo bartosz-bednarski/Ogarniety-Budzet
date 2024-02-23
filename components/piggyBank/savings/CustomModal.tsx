@@ -1,10 +1,7 @@
 import { Text, View, Modal, Alert, TextInput, StyleSheet } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { useEffect, useState } from "react";
-import {
-  setBankAccountStatus,
-  setCurrentYearPiggyBank,
-} from "../../../redux/piggyBank-slice";
+import { setCurrentYearPiggyBank } from "../../../redux/piggyBank-slice";
 import { setBankAccount } from "../../../redux/bankAccounts-slice";
 import {
   setCurrentYearIncomes,
@@ -24,7 +21,7 @@ import CustomButton from "../../../utils/ui/CustomButton";
 import { addExpensesCategory } from "../../../redux/expensesCategories-slice";
 import { addIncomesCategory } from "../../../redux/incomesCategories-slice";
 import COLORS_STYLE from "../../../utils/styles/colors";
-
+import randomId from "../../../utils/randomIdFunction";
 const CustomModal: React.FC<{
   modalVisible: boolean;
   setModalVisible: (value: boolean) => void;
@@ -41,31 +38,51 @@ const CustomModal: React.FC<{
   }, [bankAccountInput]);
 
   const submitHandler = () => {
+    const bankAccountId = randomId();
+    const incomeCatId = randomId();
+    const catId = randomId();
     dispatch(setCurrentMonthExpenses());
     dispatch(setDateToUpdateWeek());
     dispatch(setCurrentYearIncomes());
     dispatch(setCurrentYearPiggyBank());
     dispatch(setCurrentYearExpenses());
 
-    const randomId = function (length = 6) {
-      return Math.random()
-        .toString(36)
-        .substring(2, length + 2);
-    };
-
-    const incomeCatId = randomId(5);
-    const catId = randomId(4);
-
-    if (Number(bankAccountInput) === 0) {
-      setInputError({
-        status: true,
-        message: "Wartość stanu konta powinna być większa niż 0.",
-      });
-    }
+    // const catIdExpenses = randomId();
+    // dispatch(
+    //   addExpensesCategory({
+    //     name: "Inne",
+    //     iconName: "star",
+    //     catId: catIdExpenses,
+    //   })
+    // );
+    // dispatch(
+    //   setPlannedExpense({
+    //     name: "Inne",
+    //     iconName: "star",
+    //     catId: catIdExpenses,
+    //     bankAccountId: bankAccountId,
+    //   })
+    // );
+    // dispatch(
+    //   setExpense({
+    //     catId: catIdExpenses,
+    //     bankAccountId: bankAccountId,
+    //   })
+    // );
+    // if (Number(bankAccountInput) === 0) {
+    //   setInputError({
+    //     status: true,
+    //     message: "Wartość stanu konta powinna być większa niż 0.",
+    //   });
+    // }
 
     if (Number(bankAccountInput) > 0 && Number(incomesInput) === 0) {
-      dispatch(setBankAccountStatus(bankAccountInput));
-      dispatch(setBankAccount(bankAccountInput));
+      dispatch(
+        setBankAccount({
+          bankAccountStatus: bankAccountInput,
+          accountId: bankAccountId,
+        })
+      );
       dispatch(
         addIncomesCategory({
           name: "Inne",
@@ -73,8 +90,14 @@ const CustomModal: React.FC<{
           catId: incomeCatId,
         })
       );
-      dispatch(setIncome({ catId: incomeCatId }));
-      dispatch(updateIncome({ catId: incomeCatId, value: 0 }));
+      dispatch(setIncome({ catId: incomeCatId, bankAccountId: bankAccountId }));
+      dispatch(
+        updateIncome({
+          catId: incomeCatId,
+          value: 0,
+          bankAccountId: bankAccountId,
+        })
+      );
       setModalVisible(false);
     } else if (
       Number(bankAccountInput) > 0 &&
@@ -86,8 +109,9 @@ const CustomModal: React.FC<{
       const difference = Number(incomesInput) - Number(bankAccountInput) + 1;
       const income = Number(incomesInput);
 
-      dispatch(setBankAccountStatus(1));
-      dispatch(setBankAccount(1));
+      dispatch(
+        setBankAccount({ bankAccountStatus: 1, accountId: bankAccountId })
+      );
       dispatch(
         addIncomesCategory({
           name: "Inne",
@@ -95,8 +119,14 @@ const CustomModal: React.FC<{
           catId: incomeCatId,
         })
       );
-      dispatch(setIncome({ catId: incomeCatId }));
-      dispatch(updateIncome({ catId: incomeCatId, value: income }));
+      dispatch(setIncome({ catId: incomeCatId, bankAccountId: bankAccountId }));
+      dispatch(
+        updateIncome({
+          catId: incomeCatId,
+          value: income,
+          bankAccountId: bankAccountId,
+        })
+      );
       dispatch(
         addExpensesCategory({
           name: "Inne",
@@ -107,9 +137,16 @@ const CustomModal: React.FC<{
       dispatch(
         setExpense({
           catId: catId,
+          bankAccountId: bankAccountId,
         })
       );
-      dispatch(addExpense({ catId: catId, value: difference }));
+      dispatch(
+        addExpense({
+          catId: catId,
+          value: difference,
+          bankAccountId: bankAccountId,
+        })
+      );
       dispatch(
         setPlannedExpense({
           name: "Inne",
@@ -126,8 +163,12 @@ const CustomModal: React.FC<{
     ) {
       const difference = Number(bankAccountInput) - Number(incomesInput);
       const income = Number(incomesInput) - 1;
-      dispatch(setBankAccountStatus(difference));
-      dispatch(setBankAccount(difference));
+      dispatch(
+        setBankAccount({
+          bankAccountStatus: difference,
+          accountId: bankAccountId,
+        })
+      );
       dispatch(
         addIncomesCategory({
           name: "Inne",
@@ -135,8 +176,14 @@ const CustomModal: React.FC<{
           catId: incomeCatId,
         })
       );
-      dispatch(setIncome({ catId: incomeCatId }));
-      dispatch(updateIncome({ catId: incomeCatId, value: income }));
+      dispatch(setIncome({ catId: incomeCatId, bankAccountId: bankAccountId }));
+      dispatch(
+        updateIncome({
+          catId: incomeCatId,
+          value: income,
+          bankAccountId: bankAccountId,
+        })
+      );
       setModalVisible(false);
     }
   };

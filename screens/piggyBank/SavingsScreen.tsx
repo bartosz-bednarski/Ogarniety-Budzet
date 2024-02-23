@@ -14,15 +14,13 @@ import RealisedTargetsBox from "../../components/piggyBank/savings/RealisedTarge
 const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {
-  const currency = useAppSelector(
-    (state) => state.currency.currentCurrency.currencyCode
-  );
   const finantialTargets = useAppSelector(
     (state) => state.piggyBank.finantialTargets
   );
   const bankAccountsStore = useAppSelector(
     (state) => state.bankAccounts.accounts
   );
+  console.log("bankaccounts", bankAccountsStore[0].yearsSavings);
   const activeBankAccountStore = useAppSelector(
     (state) => state.bankAccounts.activeAccount
   );
@@ -38,7 +36,14 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
   const realisedTargets = useAppSelector(
     (state) => state.piggyBank.realisedTargets
   );
-  const yearSavings = useAppSelector((state) => state.piggyBank.yearSavings);
+  const monthIncomesActiveAccountIndex = monthIncomes.findIndex(
+    (item) => item.bankAccountId === activeBankAccountStore.accountId
+  );
+  const currentBankAccountInStoreIndex = bankAccountsStore.findIndex(
+    (item) => item.accountId === activeBankAccountStore.accountId
+  );
+  const yearSavings =
+    bankAccountsStore[currentBankAccountInStoreIndex].yearSavings;
   const monthsSavings = yearSavings.slice(0, 3);
   let monthIncomesSum;
   let bankAccountPlusIncomes;
@@ -56,21 +61,38 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
   } else {
     sumOfRealisedTargets = 0;
   }
-  if (monthIncomes.length > 0 && categoriesExpenses.length > 0) {
-    monthIncomesSum = monthIncomes
-      .map((item) => Number(item.value))
-      .reduce((partialSum, a) => partialSum + a, 0);
-    monthExpensesSum = categoriesExpenses
-      .map((item) => Number(item.sum))
-      .reduce((partialSum, a) => partialSum + a, 0);
+
+  if (monthIncomesActiveAccountIndex !== -1 && categoriesExpenses.length > 0) {
+    monthIncomesSum =
+      monthIncomesActiveAccountIndex !== -1
+        ? monthIncomes[monthIncomesActiveAccountIndex].categories
+            .map((item) => Number(item.value))
+            .reduce((partialSum, a) => partialSum + a, 0)
+        : 0;
+    const monthExpensesActiveBankAccountIdIndex = categoriesExpenses.findIndex(
+      (item) => item.bankAccountId === activeBankAccountStore.accountId
+    );
+    monthExpensesSum =
+      monthExpensesActiveBankAccountIdIndex !== -1
+        ? categoriesExpenses[monthExpensesActiveBankAccountIdIndex].categories
+            .map((item) => Number(item.sum))
+            .reduce((partialSum, a) => partialSum + a, 0)
+        : 0;
+    console.log(
+      "categoriesExpenses",
+      categoriesExpenses[monthExpensesActiveBankAccountIdIndex]
+    );
     bankAccountPlusIncomes =
       Number(monthIncomesSum) + Number(bankAccountStatus);
     totalBankAccount =
       bankAccountPlusIncomes - monthExpensesSum - sumOfRealisedTargets;
-  } else if (monthIncomes.length > 0) {
-    monthIncomesSum = monthIncomes
-      .map((item) => Number(item.value))
-      .reduce((partialSum, a) => partialSum + a, 0);
+  } else if (monthIncomesActiveAccountIndex !== -1) {
+    monthIncomesSum =
+      monthIncomesActiveAccountIndex !== -1
+        ? monthIncomes[monthIncomesActiveAccountIndex].categories
+            .map((item) => Number(item.value))
+            .reduce((partialSum, a) => partialSum + a, 0)
+        : 0;
     bankAccountPlusIncomes = bankAccountStatus;
     bankAccountPlusIncomes =
       Number(monthIncomesSum) + Number(bankAccountStatus);
@@ -131,11 +153,13 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
               <View style={styles.greyBoxDetails}>
                 <Text style={styles.greyBoxLabel}>Wolne oszczędności</Text>
                 <Text style={styles.greyBoxGreenText}>
-                  {numberWithSpaces(Number(freeSavings.toFixed(2)))} {currency}
+                  {numberWithSpaces(Number(freeSavings.toFixed(2)))}{" "}
+                  {activeBankAccountStore.currency}
                 </Text>
                 <Text style={styles.greyBoxLabel}>Cele finansowe</Text>
                 <Text style={styles.greyBoxGoldText}>
-                  {numberWithSpaces(sumOfFinantialIncomes)} {currency}
+                  {numberWithSpaces(sumOfFinantialIncomes)}{" "}
+                  {activeBankAccountStore.currency}
                 </Text>
               </View>
             </View>

@@ -18,12 +18,19 @@ const SingleExpense: React.FC<SingleExpenseProps> = ({
   catId,
 }) => {
   const dispatch = useAppDispatch();
-  const currency = useAppSelector(
-    (state) => state.currency.currentCurrency.currencyCode
+  const activeBankAccount = useAppSelector(
+    (state) => state.bankAccounts.activeAccount
   );
   const [deleteModeVisible, setDeleteModeVisible] = useState(false);
   const onDeleteHandler = () => {
-    dispatch(deleteSingleExpense({ id: id, catId: catId, value: price }));
+    dispatch(
+      deleteSingleExpense({
+        id: id,
+        catId: catId,
+        value: price,
+        bankAccountId: activeBankAccount.accountId,
+      })
+    );
     setDeleteModeVisible(false);
   };
   return (
@@ -54,7 +61,7 @@ const SingleExpense: React.FC<SingleExpenseProps> = ({
           <View style={styles.boxRight}>
             <Text style={[styles.greyText, { width: 100 }]}>{name}</Text>
             <Text style={styles.goldText}>
-              {numberWithSpaces(price)} {currency}
+              {numberWithSpaces(price)} {activeBankAccount.currency}
             </Text>
             <Text style={styles.greyText}>{date}</Text>
           </View>

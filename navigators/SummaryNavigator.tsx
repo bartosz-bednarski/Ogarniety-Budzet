@@ -6,8 +6,9 @@ import COLORS_STYLE from "../utils/styles/colors";
 import SummaryTabNavigator from "./summary/SummaryTabNavigator";
 import { useAppSelector } from "../redux/hooks";
 const SummaryNavigator = () => {
-  const bankAccountStatus = useAppSelector(
-    (state) => state.piggyBank.bankAccountStatus
+  const bankAccounts = useAppSelector((state) => state.bankAccounts.accounts);
+  const activeBankAccount = useAppSelector(
+    (state) => state.bankAccounts.activeAccount.accountName
   );
   const Stack = createNativeStackNavigator();
 
@@ -24,10 +25,10 @@ const SummaryNavigator = () => {
           headerTintColor: COLORS_STYLE.basicGold,
           headerPressColor: COLORS_STYLE.basicGold,
           headerPressOpacity: 1,
-          headerTitle: "Podsumowanie",
+          headerTitle: activeBankAccount,
           headerTitleAlign: "center",
           headerRight: () => {
-            if (bankAccountStatus !== 0) {
+            if (bankAccounts.findIndex((i) => i.accountId === "0") === -1) {
               return (
                 <Pressable
                   onPress={() => navigation.navigate("settingsNavigator")}

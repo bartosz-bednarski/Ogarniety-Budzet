@@ -21,7 +21,7 @@ const PieChartWithFrames: React.FC<{
       <View style={styles.topFramesBox}>
         <FrameUnderlineSmall
           textUp="SUMA"
-          textDown={sumOfAllExpenses}
+          textDown={Number(sumOfAllExpenses.toFixed(2))}
           mainColor={COLORS_STYLE.basicGold}
         />
         {toSpend > 0 ? (

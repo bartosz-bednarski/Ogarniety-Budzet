@@ -16,16 +16,49 @@ const YearExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   //TEST
   // const dateCheck = "2025-03-15T08:06:22.626Z";
 
-  const monthExpenses = useAppSelector(
+  const activeBankAccountStoreId = useAppSelector(
+    (state) => state.bankAccounts.activeAccount.accountId
+  );
+  const monthCategoriesExpensesStore = useAppSelector(
     (state) => state.expenses.monthCategoriesExpenses
   );
-
-  console.log(monthExpenses);
-  const yearExpenses = useAppSelector((state) => state.expenses.yearExpenses);
-  console.log("YEAReXPENSES", yearExpenses[0]);
-  const sumOfYearExpenses = yearExpenses
-    .map((item) => Number(item.sumOfAllExpenses))
-    .reduce((partialSum, a) => partialSum + a, 0);
+  const yearExpensesStore = useAppSelector(
+    (state) => state.expenses.yearExpenses
+  );
+  const yearExpensesIndexOfCurrentId = yearExpensesStore.findIndex(
+    (item) => item.bankAccountId === activeBankAccountStoreId
+  );
+  const currentYearStore = useAppSelector((state) => state.expenses.curentYear);
+  const yearExpenses =
+    yearExpensesIndexOfCurrentId !== -1
+      ? yearExpensesStore[yearExpensesIndexOfCurrentId].months
+      : [];
+  const monthCategoriesExpensesIndexOfCurrentId =
+    monthCategoriesExpensesStore.findIndex(
+      (item) => item.bankAccountId === activeBankAccountStoreId
+    );
+  const monthExpenses =
+    monthCategoriesExpensesIndexOfCurrentId !== -1
+      ? monthCategoriesExpensesStore[monthCategoriesExpensesIndexOfCurrentId]
+          .categories
+      : [
+          {
+            catId: "null",
+            sum: 0,
+          },
+        ];
+  console.log(
+    "YEAReXPENSES",
+    yearExpensesStore,
+    "CURRENTYEARSTOREEXP",
+    currentYearStore
+  );
+  const sumOfYearExpenses =
+    yearExpenses !== null
+      ? yearExpenses
+          .map((item) => Number(item.sumOfAllExpenses))
+          .reduce((partialSum, a) => partialSum + a, 0)
+      : 0;
   const sumOfMonthExpenses = monthExpenses
     .map((item) => Number(item.sum))
     .reduce((partialSum, a) => partialSum + a, 0);
@@ -54,7 +87,10 @@ const YearExpensesScreen: React.FC<{ navigation: Navigation }> = ({
       )}
       {yearExpenses.length > 0 && (
         <>
-          <GoldenFrame name="SUMA" value={sumOfAllExpenses} />
+          <GoldenFrame
+            name="SUMA"
+            value={Math.abs(Number(sumOfAllExpenses.toFixed(2)))}
+          />
           <View style={styles.yearChart}>
             <PieChart
               widthAndHeight={200}

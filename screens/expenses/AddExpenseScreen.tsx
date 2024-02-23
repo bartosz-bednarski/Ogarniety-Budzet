@@ -1,7 +1,7 @@
 import { View, StyleSheet, ScrollView } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { useState } from "react";
-import { addExpense } from "../../redux/expenses-slice";
+import { addExpense, setExpense } from "../../redux/expenses-slice";
 import CustomButton from "../../utils/ui/CustomButton";
 import { Navigation } from "../../types/global";
 import CircleStringColorButton from "../../utils/ui/CircleStringColorButton";
@@ -10,8 +10,14 @@ const AddExpenseScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {
   const dispatch = useAppDispatch();
+  const activeBankAccountStore = useAppSelector(
+    (state) => state.bankAccounts.activeAccount.accountId
+  );
   const categories = useAppSelector(
     (state) => state.expensesCategories.categoriesList
+  );
+  const categoriesExpenses = useAppSelector(
+    (state) => state.expenses.monthCategoriesExpenses
   );
   const [selectedCatId, setSelectedCatId] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
@@ -20,9 +26,36 @@ const AddExpenseScreen: React.FC<{ navigation: Navigation }> = ({
     setSelectedCatId(catId);
     setModalVisible(true);
   };
+  const monthExpensesActiveBankAccountIdIndex = categoriesExpenses.findIndex(
+    (item) => item.bankAccountId === activeBankAccountStore
+  );
+  console.log("activeBankAccount", activeBankAccountStore);
   const submitHandler = () => {
     if (value !== "" && value !== "0") {
-      dispatch(addExpense({ catId: selectedCatId, value: value }));
+      if (monthExpensesActiveBankAccountIdIndex === -1) {
+        dispatch(
+          setExpense({
+            catId: selectedCatId,
+            bankAccountId: activeBankAccountStore,
+          })
+        );
+        dispatch(
+          addExpense({
+            catId: selectedCatId,
+            value: value,
+            bankAccountId: activeBankAccountStore,
+          })
+        );
+      } else {
+        dispatch(
+          addExpense({
+            catId: selectedCatId,
+            value: value,
+            bankAccountId: activeBankAccountStore,
+          })
+        );
+      }
+
       setValue("");
     }
     setModalVisible(!modalVisible);

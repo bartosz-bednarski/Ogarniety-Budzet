@@ -12,8 +12,8 @@ import StripsColumn from "../../../utils/ui/StripsColumn";
 const MonthExpensesBox: React.FC<{ monthExpenses: MonthExpensesBoxProps }> = ({
   monthExpenses,
 }) => {
-  const currency = useAppSelector(
-    (state) => state.currency.currentCurrency.currencyCode
+  const activeBankAccount = useAppSelector(
+    (state) => state.bankAccounts.activeAccount
   );
   const expensesCategories = useAppSelector(
     (state) => state.expensesCategories.categoriesList
@@ -46,7 +46,6 @@ const MonthExpensesBox: React.FC<{ monthExpenses: MonthExpensesBoxProps }> = ({
       }
     }
   );
-  console.log("BOXI", stripsColumnsData);
   return (
     <View style={styles.container}>
       <Text style={styles.monthName}>{MONTHS[monthExpenses.month]}</Text>
@@ -72,7 +71,10 @@ const MonthExpensesBox: React.FC<{ monthExpenses: MonthExpensesBoxProps }> = ({
           <View style={styles.details}>
             <Text style={styles.textWhiteBig}>SUMA</Text>
             <Text style={styles.value}>
-              {numberWithSpaces(sumOfMonthExpenses)} {currency}
+              {numberWithSpaces(
+                Math.abs(Number(sumOfMonthExpenses.toFixed(2)))
+              )}{" "}
+              {activeBankAccount.currency}
             </Text>
           </View>
           <View style={styles.calendarBox}>

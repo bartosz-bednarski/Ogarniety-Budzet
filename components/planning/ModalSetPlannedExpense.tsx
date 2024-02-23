@@ -8,13 +8,38 @@ import {
   Alert,
 } from "react-native";
 import COLORS_STYLE from "../../utils/styles/colors";
+import { useState } from "react";
+import { useAppDispatch } from "../../redux/hooks";
+import { addPlannedExpense } from "../../redux/expenses-slice";
 const ModalSetPlannedExpense: React.FC<{
   modalVisible: boolean;
   setModalVisible: (value: boolean) => void;
-  value: string;
-  setValue: (value: string) => void;
-  submitHandler: () => void;
-}> = ({ modalVisible, setModalVisible, value, setValue, submitHandler }) => {
+  selectedCatId: string;
+}> = ({ modalVisible, setModalVisible, selectedCatId }) => {
+  const dispatch = useAppDispatch();
+  const [value, setValue] = useState("");
+  const [error, setError] = useState({ status: false, message: "" });
+
+  const submitHandler = () => {
+    if (value !== "" && isNaN(Number(value)) === false) {
+      if (Number(value) > 0) {
+        dispatch(addPlannedExpense({ catId: selectedCatId, value: value }));
+        setValue("");
+        setError({ status: false, message: "" });
+        setModalVisible(false);
+      } else if (Number(value) <= 0) {
+        setError({
+          status: true,
+          message: "Wprowadzona kwota musi być większa od 0!",
+        });
+      }
+    } else {
+      setError({
+        status: true,
+        message: "Wprowadzona wartość nie jest liczbą!",
+      });
+    }
+  };
   return (
     <Modal
       animationType="slide"
@@ -36,6 +61,7 @@ const ModalSetPlannedExpense: React.FC<{
             placeholder="Podaj kwotę"
             placeholderTextColor={COLORS_STYLE.labelGrey}
           />
+          {error.status && <Text style={styles.error}>{error.message}</Text>}
           <View style={styles.modalButtonsBox}>
             <Pressable
               style={styles.modalButton}
@@ -91,7 +117,6 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 0,
     color: "white",
-    marginBottom: 20,
   },
   label: {
     color: COLORS_STYLE.labelGrey,
@@ -104,6 +129,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   modalButtonsBox: {
+    marginTop: 10,
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
@@ -120,6 +146,13 @@ const styles = StyleSheet.create({
   textGold: {
     color: COLORS_STYLE.basicGold,
     fontSize: 20,
+  },
+  error: {
+    color: COLORS_STYLE.red,
+    marginVertical: 10,
+    fontWeight: "700",
+    width: "100%",
+    textAlign: "center",
   },
 });
 export default ModalSetPlannedExpense;

@@ -1,15 +1,33 @@
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, Pressable } from "react-native";
 import COLORS_STYLE from "../../../utils/styles/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { numberWithSpaces } from "../../../utils/numberWithSpaces";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { setActiveBankAccount } from "../../../redux/bankAccounts-slice";
+
 const BankAccountGrayBox: React.FC<{
   accountName: string;
   accountValue: number;
   accountId: string;
   accountCurrency: string;
 }> = ({ accountName, accountValue, accountId, accountCurrency }) => {
+  const dispatch = useAppDispatch();
+  const activeBankAccountStoreId = useAppSelector(
+    (state) => state.bankAccounts.activeAccount.accountId
+  );
   return (
-    <View style={styles.grayBox}>
+    <Pressable
+      style={styles.grayBox}
+      onPress={() =>
+        dispatch(
+          setActiveBankAccount({
+            accountName: accountName,
+            accountId: accountId,
+            currency: accountCurrency,
+          })
+        )
+      }
+    >
       <View style={styles.rowBox}>
         <Text style={styles.accountName}>{accountName}</Text>
         <Ionicons name="cog" size={30} color={COLORS_STYLE.basicGold} />
@@ -22,14 +40,17 @@ const BankAccountGrayBox: React.FC<{
         >
           <Text style={styles.textWhite}>Dostępne środki:</Text>
           <Text style={styles.value}>
-            {numberWithSpaces(accountValue)} {accountCurrency}
+            {numberWithSpaces(Math.abs(Number(accountValue.toFixed(2))))}{" "}
+            {accountCurrency}
           </Text>
         </View>
-        <View style={styles.greenBox}>
-          <Text style={styles.textGreen}>WYBRANY RACHUNEK</Text>
-        </View>
+        {accountId === activeBankAccountStoreId && (
+          <View style={styles.greenBox}>
+            <Text style={styles.textGreen}>WYBRANY RACHUNEK</Text>
+          </View>
+        )}
       </View>
-    </View>
+    </Pressable>
   );
 };
 const styles = StyleSheet.create({

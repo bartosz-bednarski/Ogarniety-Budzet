@@ -8,20 +8,250 @@ import {
   StyleSheet,
 } from "react-native";
 import COLORS_STYLE from "../../../utils/styles/colors";
-import { useAppSelector } from "../../../redux/hooks";
-import { useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { useEffect, useState } from "react";
+import { addBankAccount } from "../../../redux/bankAccounts-slice";
+import randomId from "../../../utils/randomIdFunction";
+import {
+  addExpense,
+  addPlannedExpense,
+  createNewBankAccountInitialExpensesSetup,
+  setExpense,
+  setPlannedExpense,
+} from "../../../redux/expenses-slice";
+import { addIncomesCategory } from "../../../redux/incomesCategories-slice";
+import { setIncome, updateIncome } from "../../../redux/incomes-slice";
+import { addExpensesCategory } from "../../../redux/expensesCategories-slice";
+
 const ModalAddBankAccount: React.FC<{
   modalVisible: boolean;
   setModalVisible: (value: boolean) => void;
 }> = ({ modalVisible, setModalVisible }) => {
-  const [error, setError] = useState({ state: false, message: "" });
-  const [value, setValue] = useState("");
-  const submitCheck = () => {
-    if (Number(value)) {
-      setError({ state: false, message: "" });
-    } else {
-      setError({ state: true, message: "Nie masz tyle środków na koncie!" });
+  const dispatch = useAppDispatch();
+  const monthCategoriesExpensesStore = useAppSelector(
+    (state) => state.expenses.monthCategoriesExpenses
+  );
+  const [errorAccountName, setErrorAccountName] = useState({
+    state: false,
+    message: "",
+  });
+  const [errorBankAccount, setErrorBankAccount] = useState({
+    state: false,
+    message: "",
+  });
+  const [errorIncome, setErrorIncome] = useState({ state: false, message: "" });
+  const [errorCurrency, setErrorCurrency] = useState({
+    state: false,
+    message: "",
+  });
+  const [bankAccoutInput, setBankAccoutInput] = useState("");
+  const [accountName, setAccountName] = useState("");
+  const [currency, setCurrency] = useState("");
+  const [incomesInput, setIncomesInput] = useState("");
+
+  useEffect(() => {
+    if (Number(bankAccoutInput) > 0) {
+      setErrorBankAccount({ state: false, message: "" });
     }
+    if (accountName.length > 0) {
+      setErrorAccountName({ state: false, message: "" });
+    }
+    if (currency.length > 0) {
+      setErrorCurrency({ state: false, message: "" });
+    }
+    if (Number(incomesInput.length) >= 0) {
+      setErrorIncome({ state: false, message: "" });
+    }
+  }, [accountName, bankAccoutInput, currency, incomesInput]);
+  const submitCheck = () => {
+    const bankAccountId = randomId();
+    const incomeCatId = randomId();
+    const catId = randomId();
+    if (
+      Number(bankAccoutInput) > 0 &&
+      accountName.length > 0 &&
+      currency.length > 0 &&
+      Number(incomesInput) === 0
+    ) {
+      dispatch(
+        addBankAccount({
+          accountName: accountName,
+          accountId: bankAccountId,
+          currency: currency.toUpperCase(),
+          bankAccountStatus: Number(bankAccoutInput),
+        })
+      );
+      dispatch(
+        addIncomesCategory({
+          name: "Inne",
+          iconName: "star",
+          catId: incomeCatId,
+        })
+      );
+      dispatch(setIncome({ catId: incomeCatId, bankAccountId: bankAccountId }));
+      dispatch(
+        updateIncome({
+          catId: incomeCatId,
+          value: 0,
+          bankAccountId: bankAccountId,
+        })
+      );
+      if (monthCategoriesExpensesStore.length > 0) {
+        dispatch(
+          createNewBankAccountInitialExpensesSetup({
+            bankAccountId: bankAccountId,
+          })
+        );
+      }
+
+      setModalVisible(false);
+    } else if (
+      Number(bankAccoutInput) > 0 &&
+      accountName.length > 0 &&
+      currency.length > 0 &&
+      Number(incomesInput) > 0 &&
+      Number(incomesInput) > Number(bankAccoutInput)
+    ) {
+      const difference = Number(incomesInput) - Number(bankAccoutInput) + 1;
+      const income = Number(incomesInput);
+      dispatch(
+        addBankAccount({
+          accountName: accountName,
+          accountId: bankAccountId,
+          currency: currency.toUpperCase(),
+          bankAccountStatus: Number(1),
+        })
+      );
+      dispatch(
+        addIncomesCategory({
+          name: "Inne",
+          iconName: "star",
+          catId: incomeCatId,
+        })
+      );
+      dispatch(setIncome({ catId: incomeCatId, bankAccountId: bankAccountId }));
+      dispatch(
+        updateIncome({
+          catId: incomeCatId,
+          value: income,
+          bankAccountId: bankAccountId,
+        })
+      );
+      if (monthCategoriesExpensesStore.length > 0) {
+        dispatch(
+          createNewBankAccountInitialExpensesSetup({
+            bankAccountId: bankAccountId,
+          })
+        );
+      }
+      dispatch(
+        addExpensesCategory({
+          name: "Inne",
+          iconName: "star",
+          catId: catId,
+        })
+      );
+      dispatch(
+        setExpense({
+          catId: catId,
+          bankAccountId: bankAccountId,
+        })
+      );
+      dispatch(
+        addExpense({
+          catId: catId,
+          value: difference,
+          bankAccountId: bankAccountId,
+        })
+      );
+      dispatch(
+        setPlannedExpense({
+          name: "Inne",
+          iconName: "star",
+          catId: catId,
+        })
+      );
+      dispatch(addPlannedExpense({ catId: catId, value: difference }));
+
+      setModalVisible(false);
+    } else if (
+      Number(bankAccoutInput) > 0 &&
+      accountName.length > 0 &&
+      currency.length > 0 &&
+      Number(incomesInput) > 0 &&
+      Number(incomesInput) < Number(bankAccoutInput)
+    ) {
+      const difference = Number(bankAccoutInput) - Number(incomesInput);
+      const income = Number(incomesInput) - 1;
+      dispatch(
+        addBankAccount({
+          accountName: accountName,
+          accountId: bankAccountId,
+          currency: currency.toUpperCase(),
+          bankAccountStatus: difference,
+        })
+      );
+      dispatch(
+        addIncomesCategory({
+          name: "Inne",
+          iconName: "star",
+          catId: incomeCatId,
+        })
+      );
+      dispatch(setIncome({ catId: incomeCatId, bankAccountId: bankAccountId }));
+      dispatch(
+        updateIncome({
+          catId: incomeCatId,
+          value: income,
+          bankAccountId: bankAccountId,
+        })
+      );
+      if (monthCategoriesExpensesStore.length > 0) {
+        dispatch(
+          createNewBankAccountInitialExpensesSetup({
+            bankAccountId: bankAccountId,
+          })
+        );
+      }
+      setModalVisible(false);
+    } else if (Number(bankAccoutInput) <= 0) {
+      setErrorBankAccount({
+        state: true,
+        message: "Kwota rachunku musi być większa od 0 !",
+      });
+    } else if (accountName.length === 0) {
+      setErrorAccountName({
+        state: true,
+        message: "Nazwa rachunku nie może być pusta !",
+      });
+    } else if (currency.length === 0) {
+      setErrorCurrency({
+        state: true,
+        message: "Nazwa waluty nie może być pusta !",
+      });
+    } else if (Number(incomesInput) < 0) {
+      setErrorIncome({
+        message: "Kwota powinna być równa 0 lub większa od 0 !",
+        state: true,
+      });
+    }
+
+    // if (Number(bankAccoutInput) > 0 && accountName.length > 0 && currency.length > 0&& Number(incomesInput) === 0) {
+    //   dispatch(
+    //     addBankAccount({
+    //       accountName: accountName,
+    //       accountId: bankAccountId,
+    //       currency: currency.toUpperCase(),
+    //       bankAccountStatus: Number(bankAccoutInput),
+    //     })
+    //   );
+    //   dispatch(
+    //     createNewBankAccountInitialExpensesSetup({
+    //       bankAccountId: bankAccountId,
+    //     })
+    //   );
+    //   setModalVisible(false);
+    // }
   };
   return (
     <Modal
@@ -35,16 +265,64 @@ const ModalAddBankAccount: React.FC<{
     >
       <View style={styles.modalLayout}>
         <View style={styles.modalView}>
-          <Text style={styles.label}>Dodajesz nowy wydatek</Text>
+          <Text style={styles.header}>Dodajesz nowy rachunek</Text>
+          <Text style={styles.label}>Podaj nazwę rachunku:</Text>
           <TextInput
             style={styles.textInput}
-            value={value}
-            onChangeText={(text) => setValue(text)}
-            keyboardType="numeric"
-            placeholder="Podaj kwotę"
+            value={accountName}
+            onChangeText={(text) => setAccountName(text)}
+            keyboardType="default"
+            placeholder="Rachunek 2"
             placeholderTextColor={COLORS_STYLE.labelGrey}
           />
-
+          {errorAccountName.state && (
+            <Text style={styles.error}>{errorAccountName.message}</Text>
+          )}
+          <Text style={styles.label}>
+            Podaj stan rachunku na dzień dzisiejszy:
+          </Text>
+          <TextInput
+            style={styles.textInput}
+            value={bankAccoutInput}
+            onChangeText={(text) => setBankAccoutInput(text)}
+            keyboardType="numeric"
+            placeholder="12 000"
+            placeholderTextColor={COLORS_STYLE.labelGrey}
+          />
+          {errorIncome.state && (
+            <Text style={styles.error}>{errorIncome.message}</Text>
+          )}
+          <Text style={styles.label}>
+            Podaj kwotę przychodów uzyskanych w tym miesiącu
+          </Text>
+          <TextInput
+            style={styles.textInput}
+            value={incomesInput}
+            onChangeText={(text) => setIncomesInput(text)}
+            keyboardType="numeric"
+            placeholder="12 000"
+            placeholderTextColor={COLORS_STYLE.labelGrey}
+          />
+          <Text style={styles.modalInfo}>
+            Jeżeli nie uzyskałeś jeszcze przychodów w tym miesiącu wpisz 0. Po
+            ich otrzymaniu wprowadź kwotę w zakładce "Przychody".
+          </Text>
+          {errorBankAccount.state && (
+            <Text style={styles.error}>{errorBankAccount.message}</Text>
+          )}
+          <Text style={styles.label}>Podaj walutę:</Text>
+          <TextInput
+            style={styles.textInput}
+            value={currency}
+            onChangeText={(text) => setCurrency(text)}
+            keyboardType="default"
+            placeholder="PLN"
+            maxLength={5}
+            placeholderTextColor={COLORS_STYLE.labelGrey}
+          />
+          {errorCurrency.state && (
+            <Text style={styles.error}>{errorCurrency.message}</Text>
+          )}
           <View style={styles.modalButtonsBox}>
             <Pressable
               style={styles.modalButton}
@@ -86,6 +364,12 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   label: {
+    color: "white",
+    fontSize: 14,
+    textAlign: "left",
+    width: "100%",
+  },
+  header: {
     fontSize: 20,
     marginBottom: 20,
     color: COLORS_STYLE.basicGold,
@@ -125,6 +409,11 @@ const styles = StyleSheet.create({
   textGold: {
     color: COLORS_STYLE.basicGold,
     fontSize: 20,
+  },
+  modalInfo: {
+    fontSize: 12,
+    marginBottom: 20,
+    textAlign: "center",
   },
 });
 
