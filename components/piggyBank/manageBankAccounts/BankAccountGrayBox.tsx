@@ -4,6 +4,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { numberWithSpaces } from "../../../utils/numberWithSpaces";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { setActiveBankAccount } from "../../../redux/bankAccounts-slice";
+import ModalEditBankAccount from "./ModalEditBankAccount";
+import { useState } from "react";
 
 const BankAccountGrayBox: React.FC<{
   accountName: string;
@@ -15,24 +17,27 @@ const BankAccountGrayBox: React.FC<{
   const activeBankAccountStoreId = useAppSelector(
     (state) => state.bankAccounts.activeAccount.accountId
   );
+  const [showModalEdit, setShowModalEdit] = useState(false);
   return (
-    <Pressable
-      style={styles.grayBox}
-      onPress={() =>
-        dispatch(
-          setActiveBankAccount({
-            accountName: accountName,
-            accountId: accountId,
-            currency: accountCurrency,
-          })
-        )
-      }
-    >
+    <View style={styles.grayBox}>
       <View style={styles.rowBox}>
         <Text style={styles.accountName}>{accountName}</Text>
-        <Ionicons name="cog" size={30} color={COLORS_STYLE.basicGold} />
+        <Pressable onPress={() => setShowModalEdit(true)}>
+          <Ionicons name="cog" size={30} color={COLORS_STYLE.basicGold} />
+        </Pressable>
       </View>
-      <View style={styles.rowBox}>
+      <Pressable
+        style={styles.rowBox}
+        onPress={() =>
+          dispatch(
+            setActiveBankAccount({
+              accountName: accountName,
+              accountId: accountId,
+              currency: accountCurrency,
+            })
+          )
+        }
+      >
         <View
           style={{
             width: "50%",
@@ -49,8 +54,17 @@ const BankAccountGrayBox: React.FC<{
             <Text style={styles.textGreen}>WYBRANY RACHUNEK</Text>
           </View>
         )}
-      </View>
-    </Pressable>
+      </Pressable>
+      {showModalEdit && (
+        <ModalEditBankAccount
+          modalVisible={showModalEdit}
+          setModalVisible={(value) => setShowModalEdit(value)}
+          accountId={accountId}
+          accountCurrency={accountCurrency}
+          accountName={accountName}
+        />
+      )}
+    </View>
   );
 };
 const styles = StyleSheet.create({

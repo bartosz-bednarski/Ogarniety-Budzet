@@ -65,7 +65,7 @@ const IncomesNavigator = () => {
 
     const currentMonth = new Date().getMonth();
     const currentYear = new Date().getFullYear();
-
+    console.log("categoriesIncomes", categoriesIncomes);
     //INCOMES
     if (categoriesIncomes.length > 0) {
       //if jest po to żeby kod się nie  wysypał jak nie ma zdefiniowanych żadnych wydatków
@@ -97,31 +97,45 @@ const IncomesNavigator = () => {
                   .reduce((partialSum, a) => partialSum + a, 0),
               }))
             : 0;
-        console.log("CKEKING", sumOfMonthExpenses, sumOfMonthIncomes);
+
         // const sumOfMonthExpenses = categoriesExpenses
         //   .map((item) => Number(item.value))
         //   .reduce((partialSum, a) => partialSum + a, 0);
+        console.log("CKEKINGfasf", sumOfMonthIncomes);
         const savings = sumOfMonthIncomes.map((item) => {
-          const sumOfExpenses =
+          const index =
             sumOfMonthExpenses !== 0
-              ? sumOfMonthExpenses[
-                  sumOfMonthExpenses.findIndex(
-                    (expense) => expense.bankAccountId === item.bankAccountId
-                  )
-                ].sum
-              : 0;
+              ? sumOfMonthExpenses.findIndex(
+                  (expense) => expense.bankAccountId === item.bankAccountId
+                )
+              : -1;
+          let sumOfExpenses = 0;
+          if (sumOfMonthExpenses !== 0) {
+            sumOfExpenses = index !== -1 ? sumOfMonthExpenses[index].sum : 0;
+          }
+
+          // const sumOfExpenses =
+          //   sumOfMonthExpenses !== 0
+          //     ? sumOfMonthExpenses[
+
+          //       ].sum
+          //     : 0;
+
           return {
             bankAccountId: item.bankAccountId,
             savings: item.sum - sumOfExpenses,
           };
         });
+
         // const savings = Number(sumOfMonthIncomes) - Number(sumOfMonthExpenses);
+
         dispatch(
           updateMonthBankAccounts({
             month: currentMonthStore,
             savings: savings,
           })
         );
+
         dispatch(updateMonthIncomes());
         //EXPENSES
         dispatch(updateWeekExpenses());

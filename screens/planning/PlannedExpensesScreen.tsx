@@ -25,8 +25,6 @@ const PlannedExpensesScreen: React.FC<{ navigation: Navigation }> = ({
     (state) => state.expensesCategories.categoriesList
   );
 
-  const dispatch = useAppDispatch();
-
   const [selectedCatId, setSelectedCatId] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
 

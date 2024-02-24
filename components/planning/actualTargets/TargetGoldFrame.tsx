@@ -15,6 +15,7 @@ const TargetGoldFrame: React.FC<FinantialTarget> = ({
   id,
   incomes,
   targetValue,
+  currency,
 }) => {
   const activeBankAccount = useAppSelector(
     (state) => state.bankAccounts.activeAccount
@@ -64,7 +65,7 @@ const TargetGoldFrame: React.FC<FinantialTarget> = ({
                 {((sumOfIncomes / targetValue) * 100).toFixed(2)} %
               </Text>
               <Text style={styles.targetText}>
-                {sumOfIncomes}/{targetValue} {activeBankAccount.currency}
+                {sumOfIncomes}/{targetValue} {currency}
               </Text>
             </View>
           </View>
@@ -148,6 +149,7 @@ const TargetGoldFrame: React.FC<FinantialTarget> = ({
         name={name}
         iconName={iconName}
         targetValue={targetValue}
+        incomes={incomes}
       />
     </>
   );

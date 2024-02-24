@@ -274,9 +274,11 @@ const YearSummaryScreen: React.FC<{ navigation: Navigation }> = ({
               value: Number(item.incomes) - Number(item.expenses),
             }))}
           />
-          {yearExpensesWithIncomesByMonths.map((item) => (
-            <MonthSummaryBox data={item} key={item.month} />
-          ))}
+          <View style={{ width: "98%" }}>
+            {yearExpensesWithIncomesByMonths.map((item) => (
+              <MonthSummaryBox data={item} key={item.month} />
+            ))}
+          </View>
         </ScrollView>
       )}
     </View>
@@ -312,10 +314,11 @@ const styles = StyleSheet.create({
   },
 
   rowBoxTop: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "flex-start",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "flex-start",
     gap: 10,
+    width: "96%",
   },
   buttonBox: {
     width: "100%",

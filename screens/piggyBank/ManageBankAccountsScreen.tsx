@@ -18,10 +18,12 @@ const ManageBankAccountsScreen = () => {
     (state) => state.expenses.monthCategoriesExpenses
   );
   const incomes = useAppSelector((state) => state.incomes.categoriesIncomes);
-
+  const bankAccounts = bankAccountsStore.filter(
+    (item) => item.status === "OPEN"
+  );
   return (
     <View style={styles.container}>
-      {bankAccountsStore.map((item, index) => {
+      {bankAccounts.map((item, index) => {
         const incomesAccountIdIndex = incomes.findIndex(
           (income) => income.bankAccountId === item.accountId
         );

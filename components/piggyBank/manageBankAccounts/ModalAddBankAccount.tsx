@@ -414,6 +414,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginBottom: 20,
     textAlign: "center",
+    color: COLORS_STYLE.basicGold,
   },
 });
 

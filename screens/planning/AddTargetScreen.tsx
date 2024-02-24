@@ -8,8 +8,8 @@ const AddTargetScreen: React.FC<{
   navigation: any;
 }> = ({ route, navigation }) => {
   const dispatch = useAppDispatch();
-  const activeBankAccountId = useAppSelector(
-    (state) => state.bankAccounts.activeAccount.accountId
+  const activeBankAccount = useAppSelector(
+    (state) => state.bankAccounts.activeAccount
   );
 
   const [targetName, setTargetName] = useState("");
@@ -47,7 +47,8 @@ const AddTargetScreen: React.FC<{
           targetValue: targetValue,
           id: id,
           incomeId: incomeId,
-          bankAccountId: activeBankAccountId,
+          bankAccountId: activeBankAccount.accountId,
+          currency: activeBankAccount.currency,
         })
       );
       navigation.navigate("actualTargets");

@@ -11,6 +11,7 @@ const bankAccountsInitialState: BankAccountsInitialState = {
       yearSavings: [],
       yearsSavings: [],
       currentYear: new Date().getFullYear(),
+      status: "OPEN",
     },
   ],
   activeAccount: { accountName: "Rachunek 1", accountId: "0", currency: "PLN" },
@@ -24,12 +25,13 @@ const bankAccountsSlice = createSlice({
       state.accounts = [
         {
           accountName: "Rachunek 1",
-          accountId: action.payload.accountId,
+          accountId: "UNIQUE",
           currency: "PLN",
           bankAccountStatus: action.payload.bankAccountStatus,
           yearSavings: [],
           yearsSavings: [],
           currentYear: new Date().getFullYear(),
+          status: "OPEN",
         },
       ];
       state.activeAccount = {
@@ -49,6 +51,7 @@ const bankAccountsSlice = createSlice({
           yearSavings: [],
           yearsSavings: [],
           currentYear: new Date().getFullYear(),
+          status: "OPEN",
         },
       ];
       state.activeAccount = {
@@ -97,6 +100,7 @@ const bankAccountsSlice = createSlice({
         ],
         yearsSavings: item.yearsSavings,
         currentYear: item.currentYear,
+        status: "OPEN",
       }));
 
       // toUpdate[0].bankAccountStatus =
@@ -129,6 +133,7 @@ const bankAccountsSlice = createSlice({
           accountName: item.accountName,
           accountId: item.accountId,
           currency: item.currency,
+          status: "OPEN",
           bankAccountStatus: Number(item.bankAccountStatus),
           yearSavings: [],
           yearsSavings: [
@@ -182,6 +187,18 @@ const bankAccountsSlice = createSlice({
       //   ...state.accounts.filter((item) => item !== action.payload.accountId),
       // ];
     },
+    updateBankAccountStatusRealisedFinantialTarget: (state, action) => {
+      state.accounts[
+        state.accounts.findIndex(
+          (item) => item.accountId === action.payload.accountId
+        )
+      ].bankAccountStatus =
+        state.accounts[
+          state.accounts.findIndex(
+            (item) => item.accountId === action.payload.accountId
+          )
+        ].bankAccountStatus - action.payload.value;
+    },
     setCurrentYear: (state) => {
       //TEST
       // state.curentYear = new Date(dateCheck).getFullYear();
@@ -192,8 +209,36 @@ const bankAccountsSlice = createSlice({
         bankAccountStatus: item.bankAccountStatus,
         yearSavings: item.yearSavings,
         yearsSavings: item.yearsSavings,
+        status: "OPEN",
         currentYear: new Date().getFullYear(),
       }));
+    },
+    editBankAccount: (state, action) => {
+      const accountIndex = state.accounts.findIndex(
+        (item) => item.accountId === action.payload.accountId
+      );
+      state.accounts[accountIndex].accountName = action.payload.accountName;
+      state.accounts[accountIndex].currency =
+        action.payload.currency.toUpperCase();
+    },
+    deleteBankAccount: (state, action) => {
+      if (action.payload.accountId !== "UNIQUE") {
+        const accountIndex = state.accounts.findIndex(
+          (item) => item.accountId === action.payload.accountId
+        );
+        state.accounts[accountIndex].status = "CLOSED";
+        if (state.activeAccount.accountId === action.payload.accountId) {
+          const openAccounts = state.accounts.filter(
+            (item) => item.status === "OPEN"
+          );
+
+          state.activeAccount = {
+            accountName: openAccounts[0].accountName,
+            accountId: openAccounts[0].accountId,
+            currency: openAccounts[0].currency,
+          };
+        }
+      }
     },
   },
 });
@@ -203,4 +248,8 @@ export const addBankAccount = bankAccountsSlice.actions.addBankAccount;
 export const setActiveBankAccount =
   bankAccountsSlice.actions.setActiveBankAccount;
 export const updateMonthBankAccounts = bankAccountsSlice.actions.updateMonth;
+export const updateBankAccountStatusRealisedFinantialTarget =
+  bankAccountsSlice.actions.updateBankAccountStatusRealisedFinantialTarget;
+export const editBankAccount = bankAccountsSlice.actions.editBankAccount;
+export const deleteBankAccount = bankAccountsSlice.actions.deleteBankAccount;
 export default bankAccountsSlice.reducer;

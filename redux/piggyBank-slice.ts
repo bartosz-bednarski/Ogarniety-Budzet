@@ -96,6 +96,7 @@ const piggyBankSlice = createSlice({
           iconName: action.payload.iconName,
           targetValue: Number(action.payload.targetValue),
           id: action.payload.id,
+          currency: action.payload.currency,
           incomes: [
             //TEST
             // {
@@ -162,6 +163,12 @@ const piggyBankSlice = createSlice({
             targetValue: Number(action.payload.targetValue),
             id: action.payload.id,
             dateMonth: new Date().getMonth(),
+            incomes:
+              state.finantialTargets[
+                state.finantialTargets.findIndex(
+                  (item) => item.id === action.payload.id
+                )
+              ].incomes,
           },
         ];
         state.finantialTargets = state.finantialTargets.filter(
@@ -184,6 +191,12 @@ const piggyBankSlice = createSlice({
             targetValue: Number(action.payload.targetValue),
             id: action.payload.id,
             dateMonth: new Date().getMonth(),
+            incomes:
+              state.finantialTargets[
+                state.finantialTargets.findIndex(
+                  (item) => item.id === action.payload.id
+                )
+              ].incomes,
           },
         ];
         state.finantialTargets = state.finantialTargets.filter(
