@@ -18,6 +18,7 @@ export type BankAccountsInitialState = {
     yearSavings: MonthSavings[];
     yearsSavings: YearSavings[];
     currentYear: number;
+    status: string;
   }[];
   activeAccount: { accountName: string; accountId: string; currency: string };
 };
@@ -27,12 +28,19 @@ export type RealisedTarget = {
   targetValue: number;
   id: string;
   dateMonth: number;
+  incomes: {
+    dateMonth: number;
+    value: number;
+    id: string;
+    bankAccountId: string;
+  }[];
 };
 export type FinantialTarget = {
   name: string;
   iconName: string;
   targetValue: number;
   id: string;
+  currency: string;
   incomes: {
     dateMonth: number;
     value: number;
@@ -64,6 +72,12 @@ export type ModalRealisedTargetProps = {
   name: string;
   iconName: string;
   targetValue: number;
+  incomes: {
+    dateMonth: number;
+    value: number;
+    id: string;
+    bankAccountId: string;
+  }[];
 };
 export type AddTargetFormProps = {
   onSetTargetIcon: (icon: string) => void;

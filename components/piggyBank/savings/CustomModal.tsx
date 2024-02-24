@@ -38,7 +38,7 @@ const CustomModal: React.FC<{
   }, [bankAccountInput]);
 
   const submitHandler = () => {
-    const bankAccountId = randomId();
+    const bankAccountId = "UNIQUE";
     const incomeCatId = randomId();
     const catId = randomId();
     dispatch(setCurrentMonthExpenses());

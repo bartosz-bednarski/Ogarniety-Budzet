@@ -7,6 +7,7 @@ import GrayBox100 from "../../utils/ui/GrayBox100";
 import YearsSummaryBox from "../../components/summary/YearsSummaryBox";
 import SquareBorderBox from "../../components/summary/SquareBorderBox";
 import YearBalanceGoldFrame from "../../components/summary/YearBalanceGoldFrame";
+import YearsSummaryInfo from "../../components/informations/YearsSummaryInfo";
 const YearsSummaryScreen = () => {
   const bankAccountsStore = useAppSelector(
     (state) => state.bankAccounts.accounts
@@ -148,13 +149,7 @@ const YearsSummaryScreen = () => {
   console.log("xdxdxdxd", yearsExpensesWithIncomesByCurrency);
   return (
     <View style={styles.container}>
-      {yearsIncomesStore.length === 0 && (
-        <View style={styles.informationBox}>
-          <Text style={styles.informationText}>
-            Tutaj będzie wyświetlane podsumowanie ze wszystkich lat.
-          </Text>
-        </View>
-      )}
+      {yearsIncomesStore.length === 0 && <YearsSummaryInfo />}
       {yearsIncomesStore.length > 0 && (
         <ScrollView
           contentContainerStyle={{

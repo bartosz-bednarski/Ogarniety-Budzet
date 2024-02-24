@@ -49,6 +49,7 @@ const ActualTargetsScreen: React.FC<{ navigation: Navigation }> = ({
                 id={item.id}
                 incomes={item.incomes}
                 targetValue={item.targetValue}
+                currency={item.currency}
                 key={item.id}
               />
             ))}

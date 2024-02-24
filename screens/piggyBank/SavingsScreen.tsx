@@ -44,12 +44,14 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
   );
   const yearSavings =
     bankAccountsStore[currentBankAccountInStoreIndex].yearSavings;
+  console.log("yearSavings", yearSavings);
   const monthsSavings = yearSavings.slice(0, 3);
   let monthIncomesSum;
   let bankAccountPlusIncomes;
   let monthExpensesSum;
   let totalBankAccount: number;
   let sumOfRealisedTargets;
+  console.log("realisedTargets", realisedTargets);
   if (realisedTargets !== undefined) {
     if (realisedTargets.length > 0) {
       sumOfRealisedTargets = realisedTargets
@@ -84,8 +86,7 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
     );
     bankAccountPlusIncomes =
       Number(monthIncomesSum) + Number(bankAccountStatus);
-    totalBankAccount =
-      bankAccountPlusIncomes - monthExpensesSum - sumOfRealisedTargets;
+    totalBankAccount = bankAccountPlusIncomes - monthExpensesSum;
   } else if (monthIncomesActiveAccountIndex !== -1) {
     monthIncomesSum =
       monthIncomesActiveAccountIndex !== -1
@@ -96,13 +97,17 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
     bankAccountPlusIncomes = bankAccountStatus;
     bankAccountPlusIncomes =
       Number(monthIncomesSum) + Number(bankAccountStatus);
-    totalBankAccount = bankAccountPlusIncomes - sumOfRealisedTargets;
+    totalBankAccount = bankAccountPlusIncomes;
   } else {
-    totalBankAccount = bankAccountStatus - sumOfRealisedTargets;
+    totalBankAccount = bankAccountStatus;
   }
 
   const targetsIncomesArray = finantialTargets.map((item) =>
-    item.incomes.map((value) => Number(value.value))
+    item.incomes.map((value) =>
+      value.bankAccountId === activeBankAccountStore.accountId
+        ? Number(value.value)
+        : 0
+    )
   );
 
   const sumOfFinantialIncomes = targetsIncomesArray

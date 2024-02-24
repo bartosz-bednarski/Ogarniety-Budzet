@@ -38,7 +38,6 @@ const YearIncomesScreen = () => {
           .map((item) => Number(item.sumOfAllIncomes))
           .reduce((partialSum, a) => partialSum + a, 0)
       : 0;
-
   const sumOfAllIncomes = sumOfYearIncomes + sumOfCurrentMonthIncomes;
   const currentMonthIncomesBoxData = {
     //TEST

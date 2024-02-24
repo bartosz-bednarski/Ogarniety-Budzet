@@ -22,8 +22,10 @@ const MonthSummaryScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const activeBankAccount = useAppSelector(
     (state) => state.bankAccounts.activeAccount
   );
-
-  const squareBoxesData = bankAccountsStore.map((item) => {
+  const bankAccounts = bankAccountsStore.filter(
+    (item) => item.status === "OPEN"
+  );
+  const squareBoxesData = bankAccounts.map((item) => {
     const weekExpensesIndex = weekExpensesStore.findIndex(
       (i) => i.bankAccountId === item.accountId
     );
@@ -60,7 +62,7 @@ const MonthSummaryScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
         Number(item.bankAccountStatus) + incomesSum - monthExpensesSum,
     };
   });
-  const pieChartData = bankAccountsStore.map((item) =>
+  const pieChartData = bankAccounts.map((item) =>
     item.bankAccountStatus !== 0 ? item.bankAccountStatus : 1
   );
   const balanceGoldFrameData: {
@@ -69,19 +71,19 @@ const MonthSummaryScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
     incomes: number;
   }[] = [];
   if (monthExpensesStore.length > 0 && monthIncomesStore.length > 0) {
-    for (let i = 0; i < bankAccountsStore.length; i++) {
+    for (let i = 0; i < bankAccounts.length; i++) {
       const weekExpensesIndex = weekExpensesStore.findIndex(
-        (item) => item.bankAccountId === bankAccountsStore[i].accountId
+        (item) => item.bankAccountId === bankAccounts[i].accountId
       );
       const monthExpensesIndex = monthExpensesStore.findIndex(
-        (item) => item.bankAccountId === bankAccountsStore[i].accountId
+        (item) => item.bankAccountId === bankAccounts[i].accountId
       );
       const incomesIndex = monthIncomesStore.findIndex(
-        (item) => item.bankAccountId === bankAccountsStore[i].accountId
+        (item) => item.bankAccountId === bankAccounts[i].accountId
       );
       if (
         balanceGoldFrameData.find(
-          (item) => item.currency === bankAccountsStore[i].currency
+          (item) => item.currency === bankAccounts[i].currency
         ) === undefined
       ) {
         const sumOfMonthExpenses =
@@ -103,17 +105,17 @@ const MonthSummaryScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
                 .reduce((partialSum, a) => partialSum + a, 0)
             : 0;
         balanceGoldFrameData.push({
-          currency: bankAccountsStore[i].currency,
+          currency: bankAccounts[i].currency,
           expenses: sumOfMonthExpenses,
           incomes: sumOfMonthIncomes,
         });
       } else if (
         balanceGoldFrameData.find(
-          (item) => item.currency === bankAccountsStore[i].currency
+          (item) => item.currency === bankAccounts[i].currency
         ) !== undefined
       ) {
         const index = balanceGoldFrameData.findIndex(
-          (arrItem) => arrItem.currency === bankAccountsStore[i].currency
+          (arrItem) => arrItem.currency === bankAccounts[i].currency
         );
         const sumOfMonthExpenses =
           monthExpensesIndex !== -1
@@ -151,9 +153,9 @@ const MonthSummaryScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <ScrollView>
-        {bankAccountsStore.length === 0 ||
-          (bankAccountsStore[
-            bankAccountsStore.findIndex(
+        {bankAccounts.length === 0 ||
+          (bankAccounts[
+            bankAccounts.findIndex(
               (i) => i.accountId === activeBankAccount.accountId
             )
           ].bankAccountStatus === 0 && (
@@ -164,8 +166,8 @@ const MonthSummaryScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
               />
             </View>
           ))}
-        {bankAccountsStore[
-          bankAccountsStore.findIndex(
+        {bankAccounts[
+          bankAccounts.findIndex(
             (i) => i.accountId === activeBankAccount.accountId
           )
         ].bankAccountStatus > 0 && (

@@ -413,11 +413,9 @@ const expensesSlice = createSlice({
 
     updateMonth: (state) => {
       const monthToSet = new Date(state.monthExpenses[0].date).getMonth();
-
+      console.log("storeCheck!!!!");
       //TEST
       // state.currentMonth = new Date(dateCheck).getMonth();
-
-      state.currentMonth = new Date().getMonth();
 
       if (state.yearExpenses.length === 0) {
         state.yearExpenses = state.monthCategoriesExpenses.map((item) => ({
@@ -595,6 +593,7 @@ const expensesSlice = createSlice({
       state.weekCategoriesExpenses = state.weekCategoriesExpenses.map(
         (item) => ({ bankAccountId: item.bankAccountId, categories: [] })
       );
+      state.currentMonth = new Date().getMonth();
     },
 
     setCurrentYear: (state) => {
