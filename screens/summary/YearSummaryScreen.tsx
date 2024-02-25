@@ -13,6 +13,8 @@ import YearBalanceGoldFrame from "../../components/summary/YearBalanceGoldFrame"
 import MonthSummaryBox from "../../components/summary/MonthSummaryBox";
 import CustomButton from "../../utils/ui/CustomButton";
 import { Navigation } from "../../types/global";
+import AnaliseGrayBox from "../../components/summary/AnaliseGrayBox";
+import Label from "../../utils/ui/Label";
 
 const YearSummaryScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
@@ -244,13 +246,18 @@ const YearSummaryScreen: React.FC<{ navigation: Navigation }> = ({
         </View>
       )}
       {yearIncomesStore.length > 0 && (
-        <ScrollView
-          contentContainerStyle={{
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <View style={styles.rowBoxTop}>
+        <ScrollView>
+          {expensesWithIncomesByCurrency.map((item) => (
+            <>
+              <Label value={`Analiza finansowa w ${item.currency}`} />
+              <AnaliseGrayBox
+                incomes={item.incomes}
+                expenses={item.expenses}
+                currency={item.currency}
+              />
+            </>
+          ))}
+          {/* <View style={styles.rowBoxTop}>
             <SquareBorderBox
               values={expensesWithIncomesByCurrency.map((i) => ({
                 value: i.incomes,
@@ -267,13 +274,21 @@ const YearSummaryScreen: React.FC<{ navigation: Navigation }> = ({
               name="Suma wydatków"
               color="red"
             />
+          </View> */}
+          <View
+            style={{
+              width: "100%",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <YearBalanceGoldFrame
+              data={expensesWithIncomesByCurrency.map((item) => ({
+                currency: item.currency,
+                value: Number(item.incomes) - Number(item.expenses),
+              }))}
+            />
           </View>
-          <YearBalanceGoldFrame
-            data={expensesWithIncomesByCurrency.map((item) => ({
-              currency: item.currency,
-              value: Number(item.incomes) - Number(item.expenses),
-            }))}
-          />
           <View style={{ width: "98%" }}>
             {yearExpensesWithIncomesByMonths.map((item) => (
               <MonthSummaryBox data={item} key={item.month} />
@@ -292,7 +307,6 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     paddingHorizontal: 30,
     backgroundColor: COLORS_STYLE.backgroundBlack,
-    alignItems: "center",
   },
   rowBox: {
     width: "100%",

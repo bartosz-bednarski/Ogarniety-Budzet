@@ -7,76 +7,82 @@ import { MONTHS } from "../../../utils/months";
 import { numberWithSpaces } from "../../../utils/numberWithSpaces";
 import { useAppSelector } from "../../../redux/hooks";
 const MonthsSavingsBox: React.FC<{
-  yearSavings: MonthSavings[];
+  realised: boolean;
   onPress: () => void;
-}> = ({ yearSavings, onPress }) => {
+}> = ({ realised, onPress }) => {
   const activeBankAccount = useAppSelector(
     (state) => state.bankAccounts.activeAccount
   );
   return (
-    <Pressable style={styles.container} onPress={onPress}>
-      <View style={styles.leftBox}>
-        {yearSavings.map((item) => (
-          <View style={styles.item} key={item.month}>
-            <Ionicons
-              name="calendar"
-              size={64}
-              color={item.savings > 0 ? COLORS_STYLE.green : COLORS_STYLE.red}
-            />
-            <Text style={styles.monthName}>{MONTHS[Number(item.month)]}</Text>
-            <Text style={styles.monthSavings}>
-              {numberWithSpaces(Number(item.savings.toFixed(2)))}{" "}
-              {activeBankAccount.currency}
-            </Text>
-          </View>
-        ))}
-      </View>
-      <View style={styles.rightBox}>
-        <Ionicons name="caret-forward" color={COLORS_STYLE.tabGrey} size={24} />
+    <Pressable
+      style={styles.goldenContainer}
+      onPress={realised ? onPress : null}
+    >
+      <View style={styles.goldenBox}>
+        <View style={styles.goldenBoxTop}>
+          <Ionicons name="wallet" size={64} color={COLORS_STYLE.basicGold} />
+          <Text style={styles.textWhiteL}>
+            {realised
+              ? "Oszczędności"
+              : "Oszczędności dostępne w następnym miesiącu"}
+          </Text>
+        </View>
+        <View style={styles.goldenBoxBottom}>
+          {realised && (
+            <>
+              <Ionicons
+                name={"arrow-forward-circle"}
+                size={20}
+                color={COLORS_STYLE.basicGold}
+              />
+              <Text style={styles.textWhiteSm}>Przejdź do podsumowania</Text>
+            </>
+          )}
+        </View>
       </View>
     </Pressable>
   );
 };
 const styles = StyleSheet.create({
-  container: {
+  goldenContainer: {
     width: "100%",
-    backgroundColor: COLORS_STYLE.tabGrey,
-    flexDirection: "row",
-
-    borderRadius: 15,
-  },
-  rightBox: {
-    paddingVertical: 15,
-    width: "5%",
-    backgroundColor: COLORS_STYLE.basicGold,
     alignItems: "center",
-    justifyContent: "center",
-    borderBottomRightRadius: 15,
-    borderTopRightRadius: 15,
   },
-  leftBox: {
-    paddingVertical: 15,
-    flexDirection: "row",
-    width: "95%",
-    paddingLeft: 15,
-  },
-  item: {
+  goldenBox: {
     flexDirection: "column",
-    gap: 5,
+    borderColor: COLORS_STYLE.basicGold,
+    borderWidth: 1,
+    borderRadius: 15,
+    width: "100%",
+  },
+  goldenBoxTop: {
+    flexDirection: "row",
+    gap: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     justifyContent: "center",
     alignItems: "center",
+    width: "100%",
   },
-  monthName: {
-    fontSize: 13,
+  goldenBoxBottom: {
+    paddingVertical: 10,
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 10,
+    borderTopColor: COLORS_STYLE.basicGold,
+    borderTopWidth: 1,
+    alignItems: "center",
+  },
+  textWhiteL: {
     color: "white",
+    fontSize: 20,
+    width: "70%",
     fontWeight: "600",
     textAlign: "center",
-    width: 58,
   },
-  monthSavings: {
-    color: COLORS_STYLE.basicGold,
-    width: 100,
-    textAlign: "center",
+  textWhiteSm: {
+    color: "white",
+    fontSize: 14,
   },
 });
 export default MonthsSavingsBox;

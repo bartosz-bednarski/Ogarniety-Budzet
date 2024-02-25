@@ -8,6 +8,7 @@ import { Navigation } from "../../types/global";
 import { MONTHS } from "../../utils/months";
 import MonthExpensesBox from "../../components/expenses/yearExpenses/MonthExpensesBox";
 import GoldenFrame from "../../utils/ui/GoldenFrame";
+import YearsExpensesInfo from "../../components/informations/YearsExpensesInfo";
 MONTHS;
 
 const YearExpensesScreen: React.FC<{ navigation: Navigation }> = ({
@@ -77,14 +78,7 @@ const YearExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   };
   return (
     <ScrollView style={styles.container}>
-      {yearExpenses.length === 0 && (
-        <View style={styles.informationBox}>
-          <Text style={styles.informationText}>
-            Tutaj będą wyświetlane informacje o wydatkach z poszczególnych
-            miesięcy.
-          </Text>
-        </View>
-      )}
+      {yearExpenses.length === 0 && <YearsExpensesInfo />}
       {yearExpenses.length > 0 && (
         <>
           <GoldenFrame

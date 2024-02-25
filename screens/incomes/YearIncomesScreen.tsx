@@ -7,6 +7,7 @@ import { MONTHS } from "../../utils/months";
 import MonthIncomesBox from "../../components/incomes/yearIncomes/MonthIncomesBox";
 import GoldenFrame from "../../utils/ui/GoldenFrame";
 import randomId from "../../utils/randomIdFunction";
+import YearIncomesInfo from "../../components/informations/YearIncomesInfo";
 
 const YearIncomesScreen = () => {
   //TEST
@@ -61,12 +62,7 @@ const YearIncomesScreen = () => {
   return (
     <ScrollView style={styles.container}>
       {yearIncomes[yearIncomesActiveAccountIdIndex] === undefined && (
-        <View style={styles.informationBox}>
-          <Text style={styles.informationText}>
-            Tutaj będą wyświetlane informacje o przychodach z poszczególnych
-            miesięcy.
-          </Text>
-        </View>
+        <YearIncomesInfo />
       )}
       {yearIncomes[yearIncomesActiveAccountIdIndex] !== undefined && (
         <>
