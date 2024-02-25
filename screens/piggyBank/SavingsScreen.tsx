@@ -11,6 +11,7 @@ import { numberWithSpaces } from "../../utils/numberWithSpaces";
 import CustomModal from "../../components/piggyBank/savings/CustomModal";
 import MonthsSavingsBox from "../../components/piggyBank/savings/MonthsSavingsBox";
 import RealisedTargetsBox from "../../components/piggyBank/savings/RealisedTargetsBox";
+import Label from "../../utils/ui/Label";
 const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {
@@ -170,26 +171,25 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
             </View>
           </>
         )}
-        {yearSavings.length > 0 && (
+        {realisedTargets.length > 0 && (
           <>
-            <Text style={styles.label}>
-              Oszczędności w poszczególnych miesiącach
-            </Text>
-            <MonthsSavingsBox
-              yearSavings={monthsSavings}
-              onPress={() => navigation.navigate("monthsSavings")}
+            <Label value="Zrealizowane cele finansowe" />
+            <RealisedTargetsBox
+              realised={realisedTargets.length > 0 ? true : false}
+              onPress={() => {
+                realisedTargets.length > 0
+                  ? navigation.navigate("realisedTargets")
+                  : navigation.navigate("planning");
+              }}
             />
-            {realisedTargets.length > 0 && (
-              <>
-                <Text style={styles.label}>Zrealizowane cele finansowe</Text>
-                <RealisedTargetsBox
-                  realisedTargets={realisedTargets.slice(0, 3)}
-                  onPress={() => navigation.navigate("realisedTargets")}
-                />
-              </>
-            )}
           </>
         )}
+        <Label value="Zestawienie oszczędności" />
+        <MonthsSavingsBox
+          realised={yearSavings.length > 0 ? true : false}
+          onPress={() => navigation.navigate("monthsSavings")}
+        />
+
         {bankAccountStatus === 0 && (
           <CustomModal
             modalVisible={modalVisible}

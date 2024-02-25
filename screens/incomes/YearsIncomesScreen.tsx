@@ -5,6 +5,7 @@ import COLORS_STYLE from "../../utils/styles/colors";
 import { useAppSelector } from "../../redux/hooks";
 import YearIncomesBox from "../../components/incomes/yearsIncomes/YearIncomesBox";
 import GoldenFrame from "../../utils/ui/GoldenFrame";
+import YearsIncomesInfo from "../../components/informations/YearsIncomesInfo";
 const YearsIncomesScreen = () => {
   const yearsIncomes = useAppSelector((state) => state.incomes.yearsIncomes);
   const activeBankAccountStore = useAppSelector(
@@ -21,14 +22,7 @@ const YearsIncomesScreen = () => {
       : 0;
   return (
     <ScrollView style={styles.container}>
-      {yearsIncomes.length === 0 && (
-        <View style={styles.informationBox}>
-          <Text style={styles.informationText}>
-            Tutaj będą wyświetlane informacje o przychodach z poszczególnych
-            lat.
-          </Text>
-        </View>
-      )}
+      {yearsIncomes.length === 0 && <YearsIncomesInfo />}
       {yearsIncomes.length > 0 && (
         <>
           <GoldenFrame name="SUMA" value={Number(sumOfAllIncomes.toFixed(2))} />

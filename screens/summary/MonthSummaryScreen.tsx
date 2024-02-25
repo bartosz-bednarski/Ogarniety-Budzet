@@ -6,6 +6,10 @@ import pieChartColors from "../../utils/styles/pieChartColors";
 import SquareGrayBox from "../../components/summary/SquareGrayBox";
 import BalanceGoldFrame from "../../components/summary/BalanceGoldFrame";
 import CustomButton from "../../utils/ui/CustomButton";
+import AnaliseGrayBox from "../../components/summary/AnaliseGrayBox";
+import Label from "../../utils/ui/Label";
+import randomId from "../../utils/randomIdFunction";
+import RealisedTargetsBox from "../../components/piggyBank/savings/RealisedTargetsBox";
 const MonthSummaryScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const bankAccountsStore = useAppSelector(
     (state) => state.bankAccounts.accounts
@@ -25,6 +29,9 @@ const MonthSummaryScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const bankAccounts = bankAccountsStore.filter(
     (item) => item.status === "OPEN"
   );
+  const realisedTargetsStore = useAppSelector(
+    (state) => state.piggyBank.realisedTargets
+  );
   const squareBoxesData = bankAccounts.map((item) => {
     const weekExpensesIndex = weekExpensesStore.findIndex(
       (i) => i.bankAccountId === item.accountId
@@ -35,6 +42,7 @@ const MonthSummaryScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
     const incomesIndex = monthIncomesStore.findIndex(
       (i) => i.bankAccountId === item.accountId
     );
+
     console.log("expenses", weekExpensesIndex);
     const weekExpensesSum =
       weekExpensesIndex !== -1
@@ -181,28 +189,35 @@ const MonthSummaryScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
                   accountName={item.accountName}
                   accountStatus={item.accountStatus}
                   currency={item.currency}
+                  widthStyle={squareBoxesData.length > 1 ? "48%" : "100%"}
                 />
               ))}
             </View>
-            <View style={styles.pieChart}>
-              <PieChart
-                widthAndHeight={200}
-                series={pieChartData}
-                sliceColor={pieChartColors.slice(0, pieChartData.length)}
-                coverRadius={0.6}
-                coverFill={COLORS_STYLE.backgroundBlack}
-              />
-            </View>
             {balanceGoldFrameData.map((item) => (
-              <BalanceGoldFrame
-                key={item.currency}
-                expenses={item.expenses}
-                incomes={item.incomes}
-                currency={item.currency}
-              />
+              <>
+                <Label
+                  value={`Analiza finansowa w ${item.currency}`}
+                  key={randomId()}
+                />
+                <AnaliseGrayBox
+                  key={item.currency}
+                  expenses={item.expenses}
+                  incomes={item.incomes}
+                  currency={item.currency}
+                />
+              </>
             ))}
           </>
         )}
+        <Label value="Zrealizowane cele finansowe" />
+        <RealisedTargetsBox
+          realised={realisedTargetsStore.length > 0 ? true : false}
+          onPress={() => {
+            realisedTargetsStore.length > 0
+              ? navigation.navigate("Oszczędności")
+              : navigation.navigate("planning");
+          }}
+        />
       </ScrollView>
     </View>
   );

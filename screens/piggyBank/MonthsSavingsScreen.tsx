@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 20,
     fontWeight: "600",
-    width: 100,
+    width: 120,
   },
   value: {
     color: COLORS_STYLE.basicGold,

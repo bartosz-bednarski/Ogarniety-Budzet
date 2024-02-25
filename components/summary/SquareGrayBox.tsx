@@ -10,14 +10,28 @@ const SquareGrayBox: React.FC<{
   accountName: string;
   accountStatus: number;
   currency: string;
-}> = ({ accountId, index, accountName, accountStatus, currency }) => {
+  widthStyle: any;
+}> = ({
+  accountId,
+  index,
+  accountName,
+  accountStatus,
+  currency,
+  widthStyle,
+}) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { width: widthStyle }]}>
+      <Text style={[styles.accountName, { color: pieChartColors[index] }]}>
+        {accountName}
+      </Text>
       <View style={styles.boxRow}>
-        <Ionicons name="wallet" size={24} color={COLORS_STYLE.basicGold} />
-        <Text style={[styles.accountName, { color: pieChartColors[index] }]}>
-          {accountName}
-        </Text>
+        <Ionicons
+          name="journal"
+          size={20}
+          color="white"
+          style={{ transform: [{ rotate: "90deg" }] }}
+        />
+        <Text style={styles.whiteText}>Dostępne środki:</Text>
       </View>
       <View style={styles.boxRow}>
         <Text style={styles.value}>
@@ -31,13 +45,12 @@ const SquareGrayBox: React.FC<{
 
 const styles = StyleSheet.create({
   container: {
-    width: "48%",
     backgroundColor: COLORS_STYLE.tabGrey,
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 10,
-    paddingHorizontal: 5,
-    gap: 10,
+    paddingHorizontal: 15,
+    gap: 0,
     borderRadius: 10,
     minHeight: 100,
   },
@@ -45,21 +58,27 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "100%",
     gap: 5,
-    justifyContent: "center",
-    alignItems: "flex-start",
-    paddingHorizontal: 5,
+    justifyContent: "flex-start",
+    alignItems: "center",
   },
   accountName: {
     fontSize: 20,
     color: "red",
-    width: "80%",
+    width: "100%",
     fontWeight: "600",
+    marginBottom: 5,
   },
   value: {
     color: COLORS_STYLE.basicGold,
     fontSize: 22,
     fontWeight: "600",
     textAlign: "center",
+  },
+  whiteText: {
+    color: "white",
+    fontSize: 12,
+    textAlign: "left",
+    fontWeight: "600",
   },
 });
 export default SquareGrayBox;

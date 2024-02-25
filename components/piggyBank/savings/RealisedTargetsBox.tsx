@@ -6,95 +6,74 @@ import { Ionicons } from "@expo/vector-icons";
 import { RealisedTarget } from "../../../types/piggyBank";
 import { numberWithSpaces } from "../../../utils/numberWithSpaces";
 const RealisedTargetsBox: React.FC<{
-  realisedTargets: RealisedTarget[];
+  realised: boolean;
   onPress: () => void;
-}> = ({ realisedTargets, onPress }) => {
+}> = ({ realised, onPress }) => {
   return (
-    <Pressable style={styles.container} onPress={onPress}>
-      <View style={styles.leftBox}>
-        {realisedTargets.map((item) => (
-          <View style={styles.item} key={item.id}>
-            <View style={styles.pieChartBox}>
-              <PieChart
-                widthAndHeight={80}
-                series={[1]}
-                sliceColor={[COLORS_STYLE.green]}
-                coverRadius={0.6}
-                coverFill={COLORS_STYLE.tabGrey}
-              />
-              <Text style={styles.absoluteIcon}>
-                <Ionicons
-                  name={item.iconName}
-                  color={COLORS_STYLE.basicGold}
-                  size={24}
-                />
-              </Text>
-            </View>
-            <Text style={styles.name}>{item.name}</Text>
-          </View>
-        ))}
-      </View>
-      <View style={styles.rightBox}>
-        <Ionicons name="caret-forward" color={COLORS_STYLE.tabGrey} size={24} />
+    <Pressable style={styles.goldenContainer} onPress={onPress}>
+      <View style={styles.goldenBox}>
+        <View style={styles.goldenBoxTop}>
+          <Ionicons name="book" size={64} color={COLORS_STYLE.basicGold} />
+          <Text style={styles.textWhiteL}>
+            {realised
+              ? "Zrealizowane cele finansowe"
+              : "Brak zrealizowanych celów finansowych"}
+          </Text>
+        </View>
+        <View style={styles.goldenBoxBottom}>
+          <Ionicons
+            name={realised ? "arrow-forward-circle" : "add-circle-outline"}
+            size={20}
+            color={COLORS_STYLE.basicGold}
+          />
+          <Text style={styles.textWhiteSm}>
+            {realised ? "Przejdź do podsumowania" : "Dodaj nowy"}
+          </Text>
+        </View>
       </View>
     </Pressable>
   );
 };
 const styles = StyleSheet.create({
-  container: {
+  goldenContainer: {
     width: "100%",
-    backgroundColor: COLORS_STYLE.tabGrey,
-    flexDirection: "row",
-    borderRadius: 15,
-  },
-  rightBox: {
-    paddingVertical: 15,
-    width: "5%",
-    backgroundColor: COLORS_STYLE.basicGold,
     alignItems: "center",
-    justifyContent: "center",
-    borderBottomRightRadius: 15,
-    borderTopRightRadius: 15,
   },
-  leftBox: {
-    paddingVertical: 15,
-    flexDirection: "row",
-    width: "95%",
-    paddingLeft: 25,
-    gap: 15,
-  },
-  item: {
+  goldenBox: {
     flexDirection: "column",
-    gap: 5,
+    borderColor: COLORS_STYLE.basicGold,
+    borderWidth: 1,
+    borderRadius: 15,
+    width: "100%",
+  },
+  goldenBoxTop: {
+    flexDirection: "row",
+    gap: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     justifyContent: "center",
     alignItems: "center",
+    width: "100%",
   },
-  pieChartBox: {
-    width: 80,
-    height: 80,
-    position: "relative",
+  goldenBoxBottom: {
+    paddingVertical: 10,
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 10,
+    borderTopColor: COLORS_STYLE.basicGold,
+    borderTopWidth: 1,
+    alignItems: "center",
   },
-  absoluteIcon: {
-    position: "absolute",
-    left: 10,
-    top: 25,
+  textWhiteL: {
     color: "white",
     fontSize: 20,
+    width: "70%",
     fontWeight: "600",
-    width: 60,
     textAlign: "center",
   },
-  name: {
-    fontSize: 13,
+  textWhiteSm: {
     color: "white",
-    fontWeight: "600",
-    textAlign: "center",
-    width: 58,
-  },
-  value: {
-    color: COLORS_STYLE.basicGold,
-    width: 100,
-    textAlign: "center",
+    fontSize: 14,
   },
 });
 export default RealisedTargetsBox;
