@@ -33,19 +33,21 @@ const YearIncomesScreen = () => {
           .map((item) => Number(item.value))
           .reduce((partialSum, a) => partialSum + a, 0)
       : 0;
+
   const sumOfYearIncomes =
     yearIncomes[yearIncomesActiveAccountIdIndex] !== undefined
       ? yearIncomes[yearIncomesActiveAccountIdIndex].months
           .map((item) => Number(item.sumOfAllIncomes))
           .reduce((partialSum, a) => partialSum + a, 0)
       : 0;
+
   const sumOfAllIncomes = sumOfYearIncomes + sumOfCurrentMonthIncomes;
+
   const currentMonthIncomesBoxData = {
     //TEST
     // month: new Date(dateCheck).getMonth(),
 
     month: new Date().getMonth(),
-
     sumOfAllIncomes: sumOfCurrentMonthIncomes,
     categoriesIncomes:
       currentMonthIncomes.length > 0

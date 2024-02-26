@@ -1,9 +1,6 @@
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import COLORS_STYLE from "../../../utils/styles/colors";
-import {
-  MonthIncomesBoxProps,
-  YearIncomesBoxProps,
-} from "../../../types/incomes";
+import { YearIncomesBoxProps } from "../../../types/incomes";
 import { MONTHS } from "../../../utils/months";
 import PieChart from "react-native-pie-chart";
 import pieChartColors from "../../../utils/styles/pieChartColors";
@@ -12,13 +9,16 @@ import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import { numberWithSpaces } from "../../../utils/numberWithSpaces";
 import StripsColumn from "../../../utils/ui/StripsColumn";
+
 const YearIncomesBox: React.FC<{ yearIncomes: YearIncomesBoxProps }> = ({
   yearIncomes,
 }) => {
   const activeBankAccount = useAppSelector(
     (state) => state.bankAccounts.activeAccount
   );
+
   const [showDropdown, setShowDropdown] = useState(false);
+
   const stripsColumnsData: any[] = yearIncomes.months.map((item) => ({
     catId: item.month,
     iconName: "calendar-outline",

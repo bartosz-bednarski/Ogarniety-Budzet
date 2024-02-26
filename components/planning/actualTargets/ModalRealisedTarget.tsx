@@ -5,6 +5,7 @@ import { ModalRealisedTargetProps } from "../../../types/piggyBank";
 import { useAppDispatch } from "../../../redux/hooks";
 import { setTargetRealised } from "../../../redux/piggyBank-slice";
 import { updateBankAccountStatusRealisedFinantialTarget } from "../../../redux/bankAccounts-slice";
+
 const ModalRealisedTarget: React.FC<ModalRealisedTargetProps> = ({
   realisedTargetModalVisible,
   setRealisedTargetModalVisible,
@@ -15,7 +16,9 @@ const ModalRealisedTarget: React.FC<ModalRealisedTargetProps> = ({
   incomes,
 }) => {
   const dispatch = useAppDispatch();
+
   const sumOfIncomesByAccoutId: { accountId: string; value: number }[] = [];
+
   for (let i = 0; i < incomes.length; i++) {
     const accountIndex = sumOfIncomesByAccoutId.findIndex(
       (item) => item.accountId === incomes[i].bankAccountId
@@ -30,6 +33,7 @@ const ModalRealisedTarget: React.FC<ModalRealisedTargetProps> = ({
         sumOfIncomesByAccoutId[accountIndex].value + incomes[i].value;
     }
   }
+
   const realisedTargetSubmitHandler = () => {
     dispatch(
       setTargetRealised({

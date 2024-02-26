@@ -1,13 +1,11 @@
-import { Text, View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
 import COLORS_STYLE from "../../utils/styles/colors";
 import { useAppSelector } from "../../redux/hooks";
-import PieChart from "react-native-pie-chart";
-import GrayBox50 from "../../utils/ui/GrayBox50";
-import GrayBox100 from "../../utils/ui/GrayBox100";
 import YearsSummaryBox from "../../components/summary/YearsSummaryBox";
 import SquareBorderBox from "../../components/summary/SquareBorderBox";
 import YearBalanceGoldFrame from "../../components/summary/YearBalanceGoldFrame";
 import YearsSummaryInfo from "../../components/informations/YearsSummaryInfo";
+
 const YearsSummaryScreen = () => {
   const bankAccountsStore = useAppSelector(
     (state) => state.bankAccounts.accounts
@@ -15,20 +13,10 @@ const YearsSummaryScreen = () => {
   const yearsIncomesStore = useAppSelector(
     (state) => state.incomes.yearsIncomes
   );
-  const yearIncomes = useAppSelector((state) => state.incomes.yearIncomes);
-
-  console.log("YEARRRRRiNCOMES", yearIncomes);
-  console.log(
-    "YEARSINCOMES",
-    yearsIncomesStore.map((item) => item.bankAccountId)
-  );
   const yearsExpensesStore = useAppSelector(
     (state) => state.expenses.yearsExpenses
   );
-  console.log(
-    "YEARSExpenses",
-    yearsExpensesStore.map((item) => item.bankAccountId)
-  );
+
   const yearsExpensesWithIncomes = yearsIncomesStore.map((item) => {
     const expensesAccountIndex = yearsExpensesStore.findIndex(
       (i) => i.bankAccountId === item.bankAccountId
@@ -71,7 +59,7 @@ const YearsSummaryScreen = () => {
       }),
     };
   });
-  console.log("YEARSbALANSE", yearsExpensesWithIncomes);
+
   const yearsExpensesWithIncomesByYears: {
     year: number;
     currency: {
@@ -80,6 +68,7 @@ const YearsSummaryScreen = () => {
       sumOfAllIncomes: number;
     }[];
   }[] = [];
+
   for (let i = 0; i < yearsExpensesWithIncomes.length; i++) {
     for (let x = 0; x < yearsExpensesWithIncomes[i].years.length; x++) {
       const yearIndex = yearsExpensesWithIncomesByYears.findIndex(
@@ -135,6 +124,7 @@ const YearsSummaryScreen = () => {
       }
     }
   }
+
   const yearsExpensesWithIncomesByCurrency = [];
   for (let i = 0; i < yearsExpensesWithIncomesByYears.length; i++) {
     const arrToPush = yearsExpensesWithIncomesByYears[i].currency.map(
@@ -146,7 +136,6 @@ const YearsSummaryScreen = () => {
     );
     yearsExpensesWithIncomesByCurrency.push(...arrToPush);
   }
-  console.log("xdxdxdxd", yearsExpensesWithIncomesByCurrency);
   return (
     <View style={styles.container}>
       {yearsIncomesStore.length === 0 && <YearsSummaryInfo />}

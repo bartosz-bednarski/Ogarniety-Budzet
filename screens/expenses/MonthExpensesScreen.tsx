@@ -1,8 +1,6 @@
-import { Text, View, StyleSheet, ScrollView, Pressable } from "react-native";
+import { Text, View, StyleSheet, ScrollView } from "react-native";
 import { useAppSelector } from "../../redux/hooks";
-import { Ionicons } from "@expo/vector-icons";
 import COLORS_STYLE from "../../utils/styles/colors";
-import { useEffect, useState } from "react";
 import pieChartColors from "../../utils/styles/pieChartColors";
 import { CategoriesExpensesWithNames } from "../../types/expenses";
 import CustomButton from "../../utils/ui/CustomButton";
@@ -11,6 +9,8 @@ import PieChartWithFrames from "../../components/expenses/PieChartWithFrames";
 import StripsColumn from "../../utils/ui/StripsColumn";
 import PieChartRealisation from "../../components/expenses/PieChartRealisation";
 import InfoDateUpdate from "../../utils/ui/InfoDateUpdate";
+import UpdateBankAccountInfo from "../../components/informations/UpdateBankAccountInfo";
+import Label from "../../utils/ui/Label";
 
 const MonthExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
@@ -29,13 +29,16 @@ const MonthExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   const activeBankAccountStoreId = useAppSelector(
     (state) => state.bankAccounts.activeAccount.accountId
   );
+
   const bankAccountsActiveAccountIndexId = bankAccounts.findIndex(
     (item) => item.accountId === activeBankAccountStoreId
   );
+
   const monthCategoriesExpensesIndexOfCurrentId =
     monthCategoriesExpensesStore.findIndex(
       (item) => item.bankAccountId === activeBankAccountStoreId
     );
+
   const categoriesExpenses =
     monthCategoriesExpensesIndexOfCurrentId !== -1
       ? monthCategoriesExpensesStore[monthCategoriesExpensesIndexOfCurrentId]
@@ -46,8 +49,7 @@ const MonthExpensesScreen: React.FC<{ navigation: Navigation }> = ({
             sum: 0,
           },
         ];
-  console.log(monthCategoriesExpensesStore);
-  console.log(activeBankAccountStoreId);
+
   const categoriesExpensesWithNames: CategoriesExpensesWithNames =
     categoriesExpenses.map((category, index) => ({
       ...category,
@@ -68,24 +70,14 @@ const MonthExpensesScreen: React.FC<{ navigation: Navigation }> = ({
     .reduce((partialSum, a) => partialSum + a, 0);
   const toSpend = sumOfPlannedExpenses - sumOfAllExpenses;
 
-  // useEffect(() => {
-  //   stripsColumnData = categoriesExpenses.map((category) => ({
-  //     ...category,
-  //     ...plannedExpenses.find((item) => item.catId === category.catId),
-  //   }));
-  // }, [plannedExpenses, categoriesExpenses]);
-
   return (
     <View style={styles.container}>
       {(bankAccounts.length === 0 ||
         bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus ===
           0) && (
-        <View style={styles.buttonBox}>
-          <CustomButton
-            title="Uzupełnij stan konta"
-            onPress={() => navigation.navigate("Oszczędności")}
-          />
-        </View>
+        <UpdateBankAccountInfo
+          onPress={() => navigation.navigate("Oszczędności")}
+        />
       )}
       {bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus > 0 &&
         sumOfAllExpenses === 0 &&
@@ -116,12 +108,10 @@ const MonthExpensesScreen: React.FC<{ navigation: Navigation }> = ({
                     toSpend={toSpend}
                   />
                 )}
+                <Label value="Realizacja wydatków w poszczególnych kategoriach" />
 
-                <Text style={styles.label}>
-                  Realizacja wydatków w poszczególnych kategoriach
-                </Text>
                 <StripsColumn data={stripsColumnData} />
-                <Text style={styles.label}>Realizacja założeń wydatków</Text>
+                <Label value="Realizacja założeń wydatków" />
                 <PieChartRealisation
                   realExpenses={sumOfAllExpenses}
                   plannedExpenses={sumOfPlannedExpenses}

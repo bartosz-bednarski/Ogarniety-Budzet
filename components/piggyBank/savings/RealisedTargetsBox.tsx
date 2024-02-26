@@ -1,10 +1,8 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
-import PieChart from "react-native-pie-chart";
 import COLORS_STYLE from "../../../utils/styles/colors";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { RealisedTarget } from "../../../types/piggyBank";
-import { numberWithSpaces } from "../../../utils/numberWithSpaces";
+
 const RealisedTargetsBox: React.FC<{
   realised: boolean;
   onPress: () => void;

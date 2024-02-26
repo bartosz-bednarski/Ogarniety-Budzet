@@ -11,6 +11,7 @@ import { CATEGORY_ICONS } from "../../../utils/categoryIcons";
 import COLORS_STYLE from "../../../utils/styles/colors";
 import CustomButton from "../../../utils/ui/CustomButton";
 import { AddTargetFormProps } from "../../../types/piggyBank";
+
 const AddTargetForm: React.FC<AddTargetFormProps> = ({
   onSetTargetIcon,
   onSetTargetName,
@@ -21,6 +22,7 @@ const AddTargetForm: React.FC<AddTargetFormProps> = ({
   onPressHandler,
 }) => {
   const icons = CATEGORY_ICONS;
+
   const renderCategoryIconHandler = (item: any) => {
     return (
       <Pressable onPress={() => onSetTargetIcon(item.item.iconName)}>
@@ -33,6 +35,7 @@ const AddTargetForm: React.FC<AddTargetFormProps> = ({
       </Pressable>
     );
   };
+
   return (
     <View style={styles.container}>
       <View style={styles.presentDataBox}>

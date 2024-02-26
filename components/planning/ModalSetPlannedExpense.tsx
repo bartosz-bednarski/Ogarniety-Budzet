@@ -11,12 +11,14 @@ import COLORS_STYLE from "../../utils/styles/colors";
 import { useState } from "react";
 import { useAppDispatch } from "../../redux/hooks";
 import { addPlannedExpense } from "../../redux/expenses-slice";
+
 const ModalSetPlannedExpense: React.FC<{
   modalVisible: boolean;
   setModalVisible: (value: boolean) => void;
   selectedCatId: string;
 }> = ({ modalVisible, setModalVisible, selectedCatId }) => {
   const dispatch = useAppDispatch();
+
   const [value, setValue] = useState("");
   const [error, setError] = useState({ status: false, message: "" });
 

@@ -31,6 +31,7 @@ const ModalAddBankAccount: React.FC<{
   const monthCategoriesExpensesStore = useAppSelector(
     (state) => state.expenses.monthCategoriesExpenses
   );
+
   const [errorAccountName, setErrorAccountName] = useState({
     state: false,
     message: "",
@@ -63,6 +64,7 @@ const ModalAddBankAccount: React.FC<{
       setErrorIncome({ state: false, message: "" });
     }
   }, [accountName, bankAccoutInput, currency, incomesInput]);
+
   const submitCheck = () => {
     const bankAccountId = randomId();
     const incomeCatId = randomId();
@@ -172,7 +174,6 @@ const ModalAddBankAccount: React.FC<{
         })
       );
       dispatch(addPlannedExpense({ catId: catId, value: difference }));
-
       setModalVisible(false);
     } else if (
       Number(bankAccoutInput) > 0 &&
@@ -235,23 +236,6 @@ const ModalAddBankAccount: React.FC<{
         state: true,
       });
     }
-
-    // if (Number(bankAccoutInput) > 0 && accountName.length > 0 && currency.length > 0&& Number(incomesInput) === 0) {
-    //   dispatch(
-    //     addBankAccount({
-    //       accountName: accountName,
-    //       accountId: bankAccountId,
-    //       currency: currency.toUpperCase(),
-    //       bankAccountStatus: Number(bankAccoutInput),
-    //     })
-    //   );
-    //   dispatch(
-    //     createNewBankAccountInitialExpensesSetup({
-    //       bankAccountId: bankAccountId,
-    //     })
-    //   );
-    //   setModalVisible(false);
-    // }
   };
   return (
     <Modal

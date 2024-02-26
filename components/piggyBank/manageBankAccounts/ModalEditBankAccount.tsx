@@ -29,9 +29,7 @@ const ModalEditBankAccount: React.FC<{
   accountCurrency,
 }) => {
   const dispatch = useAppDispatch();
-  const monthCategoriesExpensesStore = useAppSelector(
-    (state) => state.expenses.monthCategoriesExpenses
-  );
+
   const [errorAccountName, setErrorAccountName] = useState({
     state: false,
     message: "",
@@ -77,6 +75,7 @@ const ModalEditBankAccount: React.FC<{
       }
     }
   };
+
   const onDeleteSubmitHandler = () => {
     dispatch(deleteBankAccount({ accountId: accountId }));
     setModalVisible(false);

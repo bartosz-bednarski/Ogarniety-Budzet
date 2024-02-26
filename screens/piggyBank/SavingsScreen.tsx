@@ -3,15 +3,15 @@ import COLORS_STYLE from "../../utils/styles/colors";
 import { Navigation } from "../../types/global";
 import GoldenFrame from "../../utils/ui/GoldenFrame";
 import { useAppSelector } from "../../redux/hooks";
-import CustomButton from "../../utils/ui/CustomButton";
 import { useState } from "react";
 import PieChart from "react-native-pie-chart";
 import { numberWithSpaces } from "../../utils/numberWithSpaces";
-
 import CustomModal from "../../components/piggyBank/savings/CustomModal";
 import MonthsSavingsBox from "../../components/piggyBank/savings/MonthsSavingsBox";
 import RealisedTargetsBox from "../../components/piggyBank/savings/RealisedTargetsBox";
 import Label from "../../utils/ui/Label";
+import UpdateBankAccountInfo from "../../components/informations/UpdateBankAccountInfo";
+
 const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {
@@ -21,13 +21,9 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
   const bankAccountsStore = useAppSelector(
     (state) => state.bankAccounts.accounts
   );
-  console.log("bankaccounts", bankAccountsStore[0].yearsSavings);
   const activeBankAccountStore = useAppSelector(
     (state) => state.bankAccounts.activeAccount
   );
-  const bankAccountStatus = bankAccountsStore.filter(
-    (item) => item.accountId === activeBankAccountStore.accountId
-  )[0].bankAccountStatus;
   const monthIncomes = useAppSelector(
     (state) => state.incomes.categoriesIncomes
   );
@@ -37,22 +33,28 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
   const realisedTargets = useAppSelector(
     (state) => state.piggyBank.realisedTargets
   );
+
+  const bankAccountStatus = bankAccountsStore.filter(
+    (item) => item.accountId === activeBankAccountStore.accountId
+  )[0].bankAccountStatus;
+
   const monthIncomesActiveAccountIndex = monthIncomes.findIndex(
     (item) => item.bankAccountId === activeBankAccountStore.accountId
   );
+
   const currentBankAccountInStoreIndex = bankAccountsStore.findIndex(
     (item) => item.accountId === activeBankAccountStore.accountId
   );
+
   const yearSavings =
     bankAccountsStore[currentBankAccountInStoreIndex].yearSavings;
-  console.log("yearSavings", yearSavings);
-  const monthsSavings = yearSavings.slice(0, 3);
+
   let monthIncomesSum;
   let bankAccountPlusIncomes;
   let monthExpensesSum;
   let totalBankAccount: number;
   let sumOfRealisedTargets;
-  console.log("realisedTargets", realisedTargets);
+
   if (realisedTargets !== undefined) {
     if (realisedTargets.length > 0) {
       sumOfRealisedTargets = realisedTargets
@@ -75,16 +77,14 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
     const monthExpensesActiveBankAccountIdIndex = categoriesExpenses.findIndex(
       (item) => item.bankAccountId === activeBankAccountStore.accountId
     );
+
     monthExpensesSum =
       monthExpensesActiveBankAccountIdIndex !== -1
         ? categoriesExpenses[monthExpensesActiveBankAccountIdIndex].categories
             .map((item) => Number(item.sum))
             .reduce((partialSum, a) => partialSum + a, 0)
         : 0;
-    console.log(
-      "categoriesExpenses",
-      categoriesExpenses[monthExpensesActiveBankAccountIdIndex]
-    );
+
     bankAccountPlusIncomes =
       Number(monthIncomesSum) + Number(bankAccountStatus);
     totalBankAccount = bankAccountPlusIncomes - monthExpensesSum;
@@ -131,12 +131,7 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
     <View style={styles.container}>
       <ScrollView>
         {bankAccountStatus === 0 && (
-          <View style={styles.buttonBox}>
-            <CustomButton
-              title="Uzupełnij stan konta"
-              onPress={() => setModalVisible(true)}
-            />
-          </View>
+          <UpdateBankAccountInfo onPress={() => setModalVisible(true)} />
         )}
 
         {bankAccountStatus > 0 && (
@@ -169,6 +164,11 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
                 </Text>
               </View>
             </View>
+            <Label value="Zestawienie oszczędności" />
+            <MonthsSavingsBox
+              realised={yearSavings.length > 0 ? true : false}
+              onPress={() => navigation.navigate("monthsSavings")}
+            />
           </>
         )}
         {realisedTargets.length > 0 && (
@@ -184,11 +184,6 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
             />
           </>
         )}
-        <Label value="Zestawienie oszczędności" />
-        <MonthsSavingsBox
-          realised={yearSavings.length > 0 ? true : false}
-          onPress={() => navigation.navigate("monthsSavings")}
-        />
 
         {bankAccountStatus === 0 && (
           <CustomModal

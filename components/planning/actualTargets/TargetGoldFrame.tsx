@@ -9,6 +9,7 @@ import ModalEditValue from "./ModalEditValue";
 import ModalDeleteTarget from "./ModalDeleteTarget";
 import ModalRealisedTarget from "./ModalRealisedTarget";
 import { useAppSelector } from "../../../redux/hooks";
+
 const TargetGoldFrame: React.FC<FinantialTarget> = ({
   name,
   iconName,
@@ -17,18 +18,21 @@ const TargetGoldFrame: React.FC<FinantialTarget> = ({
   targetValue,
   currency,
 }) => {
-  const activeBankAccount = useAppSelector(
+  const activeBankAccountStore = useAppSelector(
     (state) => state.bankAccounts.activeAccount
   );
+
   const [addValueModalVisible, setAddValueModalVisible] = useState(false);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [deleteTargetModalVisible, setDeleteTargetModalVisible] =
     useState(false);
   const [realisedTargetModalVisible, setRealisedTargetModalVisible] =
     useState(false);
+
   const sumOfIncomes = incomes
     .map((item) => item.value)
     .reduce((partialSum, a) => partialSum + a, 0);
+
   const pieChartData = [
     sumOfIncomes !== 0
       ? Number(((sumOfIncomes / targetValue) * 100).toFixed(2))
@@ -90,14 +94,31 @@ const TargetGoldFrame: React.FC<FinantialTarget> = ({
             {sumOfIncomes < targetValue && (
               <Pressable
                 style={styles.button}
-                onPress={() => setAddValueModalVisible(true)}
+                onPress={() => {
+                  currency === activeBankAccountStore.currency
+                    ? setAddValueModalVisible(true)
+                    : null;
+                }}
               >
                 <Ionicons
                   name="add-circle-outline"
                   size={24}
-                  color={COLORS_STYLE.basicGold}
+                  color={
+                    currency === activeBankAccountStore.currency
+                      ? COLORS_STYLE.basicGold
+                      : COLORS_STYLE.labelGrey
+                  }
                 />
-                <Text style={styles.buttonText}>Wpłać</Text>
+                <Text
+                  style={[
+                    styles.buttonText,
+                    currency !== activeBankAccountStore.currency && {
+                      color: COLORS_STYLE.labelGrey,
+                    },
+                  ]}
+                >
+                  Wpłać
+                </Text>
               </Pressable>
             )}
 

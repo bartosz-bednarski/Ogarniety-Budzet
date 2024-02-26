@@ -2,46 +2,43 @@ import { View, StyleSheet, ScrollView } from "react-native";
 import COLORS_STYLE from "../../utils/styles/colors";
 import { Navigation } from "../../types/global";
 import { useAppSelector } from "../../redux/hooks";
-import GoldenFrame from "../../utils/ui/GoldenFrame";
 import TargetGoldFrame from "../../components/planning/actualTargets/TargetGoldFrame";
 import AddCircleButton from "../../utils/ui/AddCircleButton";
-import CustomButton from "../../utils/ui/CustomButton";
+import UpdateBankAccountInfo from "../../components/informations/UpdateBankAccountInfo";
+import FinantialTargetsInfo from "../../components/informations/FinantialTargetsInfo";
+
 const ActualTargetsScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {
   const finantialTargets = useAppSelector(
     (state) => state.piggyBank.finantialTargets
   );
-
-  const targetsIncomesArray = finantialTargets.map((item) =>
-    item.incomes.map((value) => value.value)
-  );
   const bankAccounts = useAppSelector((state) => state.bankAccounts.accounts);
   const activeBankAccountStoreId = useAppSelector(
     (state) => state.bankAccounts.activeAccount.accountId
   );
+
+  const targetsIncomesArray = finantialTargets.map((item) =>
+    item.incomes.map((value) => value.value)
+  );
+
   const bankAccountsActiveAccountIndexId = bankAccounts.findIndex(
     (item) => item.accountId === activeBankAccountStoreId
   );
-  const sumOfFinantialIncomes = targetsIncomesArray
-    .flat(1)
-    .reduce((partialSum, a) => partialSum + a, 0);
+
   return (
     <View style={styles.container}>
       {(bankAccounts.length === 0 ||
         bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus ===
           0) && (
-        <View style={styles.buttonBox}>
-          <CustomButton
-            title="Uzupełnij stan konta"
-            onPress={() => navigation.navigate("account")}
-          />
-        </View>
+        <UpdateBankAccountInfo
+          onPress={() => navigation.navigate("Oszczędności")}
+        />
       )}
       {bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus > 0 && (
         <>
           <ScrollView style={styles.scrollView}>
-            <GoldenFrame name="CELE FINANSOWE" value={sumOfFinantialIncomes} />
+            {finantialTargets.length === 0 && <FinantialTargetsInfo />}
             {finantialTargets.map((item) => (
               <TargetGoldFrame
                 name={item.name}

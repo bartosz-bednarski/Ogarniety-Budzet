@@ -5,18 +5,22 @@ import { useAppSelector } from "../../redux/hooks";
 import { MONTHS } from "../../utils/months";
 import { numberWithSpaces } from "../../utils/numberWithSpaces";
 import GoldenFrame from "../../utils/ui/GoldenFrame";
+
 const MonthsSavingsScreen = () => {
   const bankAccounts = useAppSelector((state) => state.bankAccounts.accounts);
   const activeBankAccout = useAppSelector(
     (state) => state.bankAccounts.activeAccount
   );
+
   const activeBankAccountIdIndex = bankAccounts.findIndex(
     (item) => item.accountId === activeBankAccout.accountId
   );
+
   const yearSavings =
     activeBankAccountIdIndex !== -1
       ? bankAccounts[activeBankAccountIdIndex].yearSavings
       : [];
+
   const sumOfYearSavings =
     activeBankAccountIdIndex !== -1
       ? yearSavings

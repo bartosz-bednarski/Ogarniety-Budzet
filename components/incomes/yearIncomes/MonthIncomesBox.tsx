@@ -9,6 +9,7 @@ import { Ionicons } from "@expo/vector-icons";
 import StripsColumn from "../../../utils/ui/StripsColumn";
 import { useState } from "react";
 import { numberWithSpaces } from "../../../utils/numberWithSpaces";
+
 const MonthIncomesBox: React.FC<{ monthIncomes: MonthIncomesBoxProps }> = ({
   monthIncomes,
 }) => {
@@ -18,47 +19,39 @@ const MonthIncomesBox: React.FC<{ monthIncomes: MonthIncomesBoxProps }> = ({
   const incomesCategories = useAppSelector(
     (state) => state.incomesCategories.categoriesList
   );
+
   const [showDropdown, setShowDropdown] = useState(false);
-  // console.log(monthIncomes.categoriesIncomes);
-  const legend: any[] =
-    // {
-    //   catId: string;
-    //   iconName: string;
-    //   name: string | undefined;
-    //   value: number | undefined;
-    //   sum: number;
-    // }
-    monthIncomes.categoriesIncomes.map((item, index) => {
-      const filteredCategories = incomesCategories.find(
-        (category) => category.catId === item.catId
-      );
-      if (
-        item.stillExsists &&
-        filteredCategories?.catId !== undefined &&
-        filteredCategories.name !== undefined
-      ) {
-        return {
-          catId: filteredCategories!.catId,
-          iconName: filteredCategories!.iconName,
-          name: filteredCategories?.name,
-          value: monthIncomes?.sumOfAllIncomes,
-          sum: item.value,
-          // color: pieChartColors[index],
-        };
-      } else if (
-        !item.stillExsists ||
-        filteredCategories?.catId === undefined ||
-        filteredCategories.name === undefined
-      ) {
-        return {
-          name: "Inne",
-          iconName: "star",
-          // color: pieChartColors[index],
-          value: monthIncomes.sumOfAllIncomes,
-          sum: item.value,
-        };
-      }
-    });
+
+  const legend: any[] = monthIncomes.categoriesIncomes.map((item, index) => {
+    const filteredCategories = incomesCategories.find(
+      (category) => category.catId === item.catId
+    );
+    if (
+      item.stillExsists &&
+      filteredCategories?.catId !== undefined &&
+      filteredCategories.name !== undefined
+    ) {
+      return {
+        catId: filteredCategories!.catId,
+        iconName: filteredCategories!.iconName,
+        name: filteredCategories?.name,
+        value: monthIncomes?.sumOfAllIncomes,
+        sum: item.value,
+      };
+    } else if (
+      !item.stillExsists ||
+      filteredCategories?.catId === undefined ||
+      filteredCategories.name === undefined
+    ) {
+      return {
+        name: "Inne",
+        iconName: "star",
+        value: monthIncomes.sumOfAllIncomes,
+        sum: item.value,
+      };
+    }
+  });
+
   return (
     <View style={styles.container}>
       <Text style={styles.monthName}>{MONTHS[monthIncomes.month]}</Text>

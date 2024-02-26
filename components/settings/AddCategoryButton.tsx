@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import COLORS_STYLE from "../../utils/styles/colors";
+
 const AddCategoryButton: React.FC<{ onPress: () => void }> = ({ onPress }) => {
   return (
     <Pressable style={styles.container} onPress={onPress}>

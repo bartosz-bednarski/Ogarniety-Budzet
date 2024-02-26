@@ -1,15 +1,13 @@
-import { Text, View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
 import COLORS_STYLE from "../../utils/styles/colors";
 import { useAppSelector } from "../../redux/hooks";
-import PieChart from "react-native-pie-chart";
-import pieChartColors from "../../utils/styles/pieChartColors";
 import SquareGrayBox from "../../components/summary/SquareGrayBox";
-import BalanceGoldFrame from "../../components/summary/BalanceGoldFrame";
-import CustomButton from "../../utils/ui/CustomButton";
 import AnaliseGrayBox from "../../components/summary/AnaliseGrayBox";
 import Label from "../../utils/ui/Label";
 import randomId from "../../utils/randomIdFunction";
 import RealisedTargetsBox from "../../components/piggyBank/savings/RealisedTargetsBox";
+import UpdateBankAccountInfo from "../../components/informations/UpdateBankAccountInfo";
+
 const MonthSummaryScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const bankAccountsStore = useAppSelector(
     (state) => state.bankAccounts.accounts
@@ -26,12 +24,14 @@ const MonthSummaryScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const activeBankAccount = useAppSelector(
     (state) => state.bankAccounts.activeAccount
   );
-  const bankAccounts = bankAccountsStore.filter(
-    (item) => item.status === "OPEN"
-  );
   const realisedTargetsStore = useAppSelector(
     (state) => state.piggyBank.realisedTargets
   );
+
+  const bankAccounts = bankAccountsStore.filter(
+    (item) => item.status === "OPEN"
+  );
+
   const squareBoxesData = bankAccounts.map((item) => {
     const weekExpensesIndex = weekExpensesStore.findIndex(
       (i) => i.bankAccountId === item.accountId
@@ -43,7 +43,6 @@ const MonthSummaryScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
       (i) => i.bankAccountId === item.accountId
     );
 
-    console.log("expenses", weekExpensesIndex);
     const weekExpensesSum =
       weekExpensesIndex !== -1
         ? weekExpensesStore[weekExpensesIndex].categories
@@ -70,14 +69,13 @@ const MonthSummaryScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
         Number(item.bankAccountStatus) + incomesSum - monthExpensesSum,
     };
   });
-  const pieChartData = bankAccounts.map((item) =>
-    item.bankAccountStatus !== 0 ? item.bankAccountStatus : 1
-  );
+
   const balanceGoldFrameData: {
     currency: string;
     expenses: number;
     incomes: number;
   }[] = [];
+
   if (monthExpensesStore.length > 0 && monthIncomesStore.length > 0) {
     for (let i = 0; i < bankAccounts.length; i++) {
       const weekExpensesIndex = weekExpensesStore.findIndex(
@@ -167,12 +165,9 @@ const MonthSummaryScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
               (i) => i.accountId === activeBankAccount.accountId
             )
           ].bankAccountStatus === 0 && (
-            <View style={styles.buttonBox}>
-              <CustomButton
-                title="Uzupełnij stan konta"
-                onPress={() => navigation.navigate("Oszczędności")}
-              />
-            </View>
+            <UpdateBankAccountInfo
+              onPress={() => navigation.navigate("Oszczędności")}
+            />
           ))}
         {bankAccounts[
           bankAccounts.findIndex(
@@ -194,7 +189,7 @@ const MonthSummaryScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
               ))}
             </View>
             {balanceGoldFrameData.map((item) => (
-              <>
+              <View key={randomId()}>
                 <Label
                   value={`Analiza finansowa w ${item.currency}`}
                   key={randomId()}
@@ -205,19 +200,21 @@ const MonthSummaryScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
                   incomes={item.incomes}
                   currency={item.currency}
                 />
-              </>
+              </View>
             ))}
+            <Label value="Zrealizowane cele finansowe" />
+            <RealisedTargetsBox
+              realised={realisedTargetsStore.length > 0 ? true : false}
+              onPress={() => {
+                realisedTargetsStore.length > 0
+                  ? navigation.navigate("Oszczędności")
+                  : navigation.navigate("Planowanie", {
+                      screen: "actualTargets",
+                    });
+              }}
+            />
           </>
         )}
-        <Label value="Zrealizowane cele finansowe" />
-        <RealisedTargetsBox
-          realised={realisedTargetsStore.length > 0 ? true : false}
-          onPress={() => {
-            realisedTargetsStore.length > 0
-              ? navigation.navigate("Oszczędności")
-              : navigation.navigate("planning");
-          }}
-        />
       </ScrollView>
     </View>
   );

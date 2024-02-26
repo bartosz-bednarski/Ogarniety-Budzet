@@ -3,6 +3,7 @@ import { useState } from "react";
 import { OnPressHandler } from "../../types/settings";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { setFinantialTarget } from "../../redux/piggyBank-slice";
+
 const AddTargetScreen: React.FC<{
   route: any;
   navigation: any;
@@ -25,6 +26,7 @@ const AddTargetScreen: React.FC<{
   const onSetTargetValue = (value: string) => {
     setTargetValue(value);
   };
+
   const onPressHandler: OnPressHandler = () => {
     if (
       targetName.length < 20 &&

@@ -1,24 +1,15 @@
-import { Text, View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
 import COLORS_STYLE from "../../utils/styles/colors";
-import GrayBox50 from "../../utils/ui/GrayBox50";
-import PieChart from "react-native-pie-chart";
-import GoldenFrame from "../../utils/ui/GoldenFrame";
 import { useAppSelector } from "../../redux/hooks";
-import GrayBox100 from "../../utils/ui/GrayBox100";
-import SquareGrayBox from "../../components/summary/SquareGrayBox";
-import pieChartColors from "../../utils/styles/pieChartColors";
-import BalanceGoldFrame from "../../components/summary/BalanceGoldFrame";
-import SquareBorderBox from "../../components/summary/SquareBorderBox";
 import YearBalanceGoldFrame from "../../components/summary/YearBalanceGoldFrame";
 import MonthSummaryBox from "../../components/summary/MonthSummaryBox";
-import CustomButton from "../../utils/ui/CustomButton";
 import { Navigation } from "../../types/global";
 import AnaliseGrayBox from "../../components/summary/AnaliseGrayBox";
 import Label from "../../utils/ui/Label";
+import YearSummaryInfo from "../../components/informations/YearSummaryInfo";
+import randomId from "../../utils/randomIdFunction";
 
-const YearSummaryScreen: React.FC<{ navigation: Navigation }> = ({
-  navigation,
-}) => {
+const YearSummaryScreen: React.FC<{ navigation: Navigation }> = ({}) => {
   const bankAccountsStore = useAppSelector(
     (state) => state.bankAccounts.accounts
   );
@@ -32,35 +23,13 @@ const YearSummaryScreen: React.FC<{ navigation: Navigation }> = ({
     (state) => state.expenses.yearExpenses
   );
   const yearIncomesStore = useAppSelector((state) => state.incomes.yearIncomes);
-  const activeBankAccountStore = useAppSelector(
-    (state) => state.bankAccounts.activeAccount
-  );
-  // const squareBoxesData = bankAccountsStore.map((item) => {
-  //   const expensesMonthIndex = monthExpensesStore.findIndex(
-  //     (i) => i.bankAccountId === item.accountId
-  //   );
-  //   const incomesMonthIndex = monthIncomesStore.findIndex(
-  //     (i) => i.bankAccountId === item.accountId
-  //   );
-  //   const expensesSum = monthExpensesStore[expensesMonthIndex].categories
-  //     .map((i) => Number(i.sum))
-  //     .reduce((partialSum, a) => partialSum + a, 0);
-  //   const incomesSum = monthIncomesStore[incomesMonthIndex].categories
-  //     .map((i) => Number(i.value))
-  //     .reduce((partialSum, a) => partialSum + a, 0);
-  //   return {
-  //     accountName: item.accountName,
-  //     accountId: item.accountId,
-  //     currency: item.currency,
-  //     accountStatus: item.bankAccountStatus + incomesSum - expensesSum,
-  //   };
-  // });
-  const pieChartData = bankAccountsStore.map((item) => item.bankAccountStatus);
+
   const expensesWithIncomesByCurrency: {
     currency: string;
     expenses: number;
     incomes: number;
   }[] = [];
+
   const yearExpensesWithIncomesByMonths: {
     month: number;
     currency: {
@@ -69,7 +38,7 @@ const YearSummaryScreen: React.FC<{ navigation: Navigation }> = ({
       sumOfIncomes: number;
     }[];
   }[] = [];
-  //!!!!!!!!!!!!!!!!!!!!!!!POPRAW LENGTH PONIZEJ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
   if (monthExpensesStore.length > 0 && monthIncomesStore.length > 0) {
     for (let i = 0; i < bankAccountsStore.length; i++) {
       const expensesMonthIndex = monthExpensesStore.findIndex(
@@ -139,33 +108,11 @@ const YearSummaryScreen: React.FC<{ navigation: Navigation }> = ({
         };
       }
     }
-    // const yearExpensesWithIncomes = yearExpensesStore.map((item) => {
-    //   const yearIncomesBankAccoutIndex = yearIncomesStore.findIndex(
-    //     (i) => i.bankAccountId === item.bankAccountId
-    //   );
-
-    //   return {
-    //     bankAccountId: item.bankAccountId,
-    //     months: item.months.map((month) => {
-    //       const yearIncomesMonthIndex = yearIncomesStore[
-    //         yearIncomesBankAccoutIndex
-    //       ].months.findIndex((i) => i.month === month.month);
-    //       return {
-    //         month: month.month,
-    //         sumOfExpenses: month.sumOfAllExpenses,
-    //         sumOfIncomes:
-    //           yearIncomesStore[yearIncomesBankAccoutIndex].months[
-    //             yearIncomesMonthIndex
-    //           ].sumOfAllIncomes,
-    //       };
-    //     }),
-    //   };
-    // });
 
     const accountWithYearIncomesIndex = yearIncomesStore.findIndex(
       (item) => item.months.length > 0
     );
-    console.log("czczcz", yearIncomesStore[accountWithYearIncomesIndex]);
+
     if (yearIncomesStore.length > 0 && yearExpensesStore.length > 0) {
       for (
         let x = 0;
@@ -232,49 +179,24 @@ const YearSummaryScreen: React.FC<{ navigation: Navigation }> = ({
         yearExpensesWithIncomesByMonths.push(monthToPush);
       }
     }
-
-    console.log("bigBoy", expensesWithIncomesByCurrency);
   }
 
   return (
     <View style={styles.container}>
-      {yearIncomesStore.length === 0 && (
-        <View style={styles.informationBox}>
-          <Text style={styles.informationText}>
-            Tutaj będzie wyświetlane podsumowanie roczne.
-          </Text>
-        </View>
-      )}
+      {yearIncomesStore.length === 0 && <YearSummaryInfo />}
       {yearIncomesStore.length > 0 && (
         <ScrollView>
           {expensesWithIncomesByCurrency.map((item) => (
-            <>
+            <View key={randomId()}>
               <Label value={`Analiza finansowa w ${item.currency}`} />
               <AnaliseGrayBox
                 incomes={item.incomes}
                 expenses={item.expenses}
                 currency={item.currency}
               />
-            </>
+            </View>
           ))}
-          {/* <View style={styles.rowBoxTop}>
-            <SquareBorderBox
-              values={expensesWithIncomesByCurrency.map((i) => ({
-                value: i.incomes,
-                currency: i.currency,
-              }))}
-              name="Suma przychodów"
-              color="green"
-            />
-            <SquareBorderBox
-              values={expensesWithIncomesByCurrency.map((i) => ({
-                value: i.expenses,
-                currency: i.currency,
-              }))}
-              name="Suma wydatków"
-              color="red"
-            />
-          </View> */}
+
           <View
             style={{
               width: "100%",

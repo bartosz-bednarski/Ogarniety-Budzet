@@ -5,6 +5,7 @@ import { View } from "react-native";
 import COLORS_STYLE from "../utils/styles/colors";
 import { CategoryItemBoxProps } from "../types/utils";
 import { useAppSelector } from "../redux/hooks";
+
 const CategoryItemBox: React.FC<CategoryItemBoxProps> = ({
   category,
   onPressHandler,

@@ -21,7 +21,9 @@ const SingleExpense: React.FC<SingleExpenseProps> = ({
   const activeBankAccount = useAppSelector(
     (state) => state.bankAccounts.activeAccount
   );
+
   const [deleteModeVisible, setDeleteModeVisible] = useState(false);
+
   const onDeleteHandler = () => {
     dispatch(
       deleteSingleExpense({

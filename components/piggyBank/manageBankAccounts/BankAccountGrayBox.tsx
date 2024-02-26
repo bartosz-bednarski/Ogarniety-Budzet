@@ -17,7 +17,9 @@ const BankAccountGrayBox: React.FC<{
   const activeBankAccountStoreId = useAppSelector(
     (state) => state.bankAccounts.activeAccount.accountId
   );
+
   const [showModalEdit, setShowModalEdit] = useState(false);
+
   return (
     <View style={styles.grayBox}>
       <View style={styles.rowBox}>

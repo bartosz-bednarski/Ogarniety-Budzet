@@ -3,6 +3,7 @@ import COLORS_STYLE from "../../utils/styles/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { numberWithSpaces } from "../../utils/numberWithSpaces";
 import randomId from "../../utils/randomIdFunction";
+
 const SquareBorderBox: React.FC<{
   name: string;
   color: string;

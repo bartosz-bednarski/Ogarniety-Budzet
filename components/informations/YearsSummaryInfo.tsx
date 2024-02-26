@@ -5,14 +5,15 @@ import COLORS_STYLE from "../../utils/styles/colors";
 const YearsSummaryInfo: React.FC = () => {
   return (
     <View style={styles.box}>
-      <Text style={styles.goldText}>Podsumowanie Roczne</Text>
+      <Text style={styles.goldText}>Zestawienie Wieloletnie</Text>
       <View style={styles.rowBox}>
         <Ionicons name="calendar" size={88} color="white" />
         <Ionicons name="home" size={88} color="white" />
       </View>
 
       <Text style={styles.whiteText}>
-        Po roku użytkowania aplikacji pojawi się pierwsze podsumowanie roczne.
+        Po roku użytkowania aplikacji pojawi się pierwsze podsumowanie z zakresu
+        lat.
       </Text>
     </View>
   );

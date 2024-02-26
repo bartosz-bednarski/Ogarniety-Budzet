@@ -5,14 +5,15 @@ import { useEffect } from "react";
 import pieChartColors from "../../utils/styles/pieChartColors";
 import SingleExpense from "../../components/expenses/SingleExpense";
 import { CategoriesExpensesWithNames } from "../../types/expenses";
-import CustomButton from "../../utils/ui/CustomButton";
 import { Navigation } from "../../types/global";
 import PieChartWithFrames from "../../components/expenses/PieChartWithFrames";
 import StripsColumn from "../../utils/ui/StripsColumn";
 import PieChartRealisation from "../../components/expenses/PieChartRealisation";
 import AddCircleButton from "../../utils/ui/AddCircleButton";
-import { Ionicons } from "@expo/vector-icons";
 import InfoDateUpdate from "../../utils/ui/InfoDateUpdate";
+import UpdateBankAccountInfo from "../../components/informations/UpdateBankAccountInfo";
+import UpdateExpensesCategoriesInfo from "../../components/informations/UpdateExpensesCategoriesInfo";
+import Label from "../../utils/ui/Label";
 
 const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
@@ -38,6 +39,7 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   const bankAccountsActiveAccountIndexId = bankAccounts.findIndex(
     (item) => item.accountId === activeBankAccountStoreId
   );
+
   const weekCategoriesExpensesIndexOfCurrentId =
     weekCategoriesExpensesStore.findIndex(
       (item) => item.bankAccountId === activeBankAccountStoreId
@@ -53,9 +55,6 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
             sum: 0,
           },
         ];
-  // console.log("activeID", activeBankAccountStoreId);
-  // console.log("weekCategoriesExpensesStore", weekCategoriesExpensesStore);
-  console.log("CATEGORIESeXPENSES", categoriesExpenses);
 
   const categoriesExpensesWithNames: CategoriesExpensesWithNames =
     categoriesExpenses.map((category, index) => ({
@@ -73,6 +72,7 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
     ...categories.find((cat) => cat.catId === item.catId),
     iconColorNumber: categories.findIndex((cat) => cat.catId === item.catId),
   }));
+
   let stripsColumnData = categoriesExpenses.map((category) => ({
     ...category,
     ...plannedExpenses.find((item) => item.catId === category.catId),
@@ -81,29 +81,27 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   const sumOfPlannedExpenses = plannedExpenses
     .map((item) => Number(item.value))
     .reduce((partialSum, a) => partialSum + a, 0);
+
   const sumOfAllExpenses = categoriesExpenses
     .map((cat) => Number(cat.sum))
     .reduce((partialSum, a) => partialSum + a, 0);
   const toSpend = sumOfPlannedExpenses - sumOfAllExpenses;
+
   useEffect(() => {
     stripsColumnData = categoriesExpenses.map((category) => ({
       ...category,
       ...plannedExpenses.find((item) => item.catId === category.catId),
     }));
   }, [plannedExpenses, categoriesExpenses]);
-  // console.log(sumOfAllExpenses);
   return (
     <>
       <View style={styles.container}>
         {(bankAccounts.length === 0 ||
           bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus ===
             0) && (
-          <View style={styles.buttonBox}>
-            <CustomButton
-              title="Uzupełnij stan konta"
-              onPress={() => navigation.navigate("Oszczędności")}
-            />
-          </View>
+          <UpdateBankAccountInfo
+            onPress={() => navigation.navigate("Oszczędności")}
+          />
         )}
         {bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus > 0 &&
           sumOfAllExpenses === 0 &&
@@ -118,16 +116,13 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
           0 && (
           <ScrollView style={styles.scrollView}>
             {categories.length === 0 && (
-              <View style={styles.informationBox}>
-                <CustomButton
-                  title="Dodaj kategorię wydatków"
-                  onPress={() =>
-                    navigation.navigate("settingsNavigator", {
-                      screen: "addNewCategory",
-                    })
-                  }
-                />
-              </View>
+              <UpdateExpensesCategoriesInfo
+                onPress={() =>
+                  navigation.navigate("settingsNavigator", {
+                    screen: "addNewCategory",
+                  })
+                }
+              />
             )}
 
             {sumOfAllExpenses > 0 && (
@@ -137,11 +132,10 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
                   sumOfAllExpenses={sumOfAllExpenses}
                   toSpend={toSpend}
                 />
-                <Text style={styles.label}>
-                  Realizacja wydatków w poszczególnych kategoriach
-                </Text>
+                <Label value="Realizacja wydatków w poszczególnych kategoriach" />
+
                 <StripsColumn data={stripsColumnData} />
-                <Text style={styles.label}>Realizacja założeń wydatków</Text>
+                <Label value="Realizacja założeń wydatków" />
                 <PieChartRealisation
                   realExpenses={sumOfAllExpenses}
                   plannedExpenses={sumOfPlannedExpenses}
@@ -151,7 +145,7 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
             {lastExpensesToShow.length > 0 && (
               <>
                 {sumOfAllExpenses > 0 && (
-                  <Text style={styles.label}>Lista ostatnich wydatków</Text>
+                  <Label value="Lista ostatnich wydatków" />
                 )}
                 <View style={styles.lastExpensesContainer}>
                   {lastExpensesToShow.map((item) => {
