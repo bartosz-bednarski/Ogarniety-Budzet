@@ -4,6 +4,7 @@ import COLORS_STYLE from "../styles/colors";
 import pieChartColors from "../styles/pieChartColors";
 import { useAppSelector } from "../../redux/hooks";
 import { numberWithSpaces } from "../numberWithSpaces";
+
 const CircleNumberColorButton: React.FC<{
   iconName: string | undefined;
   value: number;

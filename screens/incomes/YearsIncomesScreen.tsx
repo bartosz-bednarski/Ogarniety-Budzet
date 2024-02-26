@@ -6,14 +6,17 @@ import { useAppSelector } from "../../redux/hooks";
 import YearIncomesBox from "../../components/incomes/yearsIncomes/YearIncomesBox";
 import GoldenFrame from "../../utils/ui/GoldenFrame";
 import YearsIncomesInfo from "../../components/informations/YearsIncomesInfo";
+
 const YearsIncomesScreen = () => {
   const yearsIncomes = useAppSelector((state) => state.incomes.yearsIncomes);
   const activeBankAccountStore = useAppSelector(
     (state) => state.bankAccounts.activeAccount
   );
+
   const yearsIncomesActiveAccountIdIndex = yearsIncomes.findIndex(
     (item) => item.bankAccountId === activeBankAccountStore.accountId
   );
+
   const sumOfAllIncomes =
     yearsIncomes.length > 0
       ? yearsIncomes[yearsIncomesActiveAccountIdIndex].years

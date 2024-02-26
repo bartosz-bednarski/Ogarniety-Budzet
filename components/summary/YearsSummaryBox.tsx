@@ -5,6 +5,7 @@ import COLORS_STYLE from "../../utils/styles/colors";
 import YearSummaryStrip from "./YearSummaryStrip";
 import randomId from "../../utils/randomIdFunction";
 import { numberWithSpaces } from "../../utils/numberWithSpaces";
+
 const YearsSummaryBox: React.FC<{
   data: {
     year: number;
@@ -16,6 +17,7 @@ const YearsSummaryBox: React.FC<{
   };
 }> = ({ data }) => {
   const [showDropdown, setShowDropdown] = useState(false);
+
   return (
     <View style={styles.container}>
       <Pressable

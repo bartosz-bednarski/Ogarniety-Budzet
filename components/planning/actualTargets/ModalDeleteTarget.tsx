@@ -4,12 +4,14 @@ import { ModalDeleteTargetProps } from "../../../types/piggyBank";
 import COLORS_STYLE from "../../../utils/styles/colors";
 import { useAppDispatch } from "../../../redux/hooks";
 import { deleteFinantialTarget } from "../../../redux/piggyBank-slice";
+
 const ModalDeleteTarget: React.FC<ModalDeleteTargetProps> = ({
   deleteTargetModalVisible,
   setDeleteTargetModalVisible,
   id,
 }) => {
   const dispatch = useAppDispatch();
+
   const deleteTargetSubmitHandler = () => {
     dispatch(deleteFinantialTarget({ id: id }));
     setDeleteTargetModalVisible(false);
@@ -57,7 +59,7 @@ const styles = StyleSheet.create({
   modalView: {
     margin: 20,
     width: "80%",
-    backgroundColor: "#dddbdb",
+    backgroundColor: COLORS_STYLE.tabGrey,
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
@@ -81,6 +83,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginVertical: 5,
     textAlign: "center",
+    color: "white",
   },
   buttonsBox: {
     marginVertical: 10,

@@ -3,6 +3,7 @@ import COLORS_STYLE from "../styles/colors";
 import { numberWithSpaces } from "../numberWithSpaces";
 import { Ionicons } from "@expo/vector-icons";
 import { useAppSelector } from "../../redux/hooks";
+
 const GrayBox100: React.FC<{ name: string; value: number }> = ({
   name,
   value,

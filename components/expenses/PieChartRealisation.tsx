@@ -2,6 +2,7 @@ import { View, StyleSheet, Text } from "react-native";
 import PieChart from "react-native-pie-chart";
 import FrameSmall from "../../utils/ui/FrameUnderlineSmall";
 import COLORS_STYLE from "../../utils/styles/colors";
+
 const PieChartRealisation: React.FC<{
   realExpenses: number;
   plannedExpenses: number;
@@ -28,6 +29,7 @@ const PieChartRealisation: React.FC<{
       ? Number(((realExpenses / plannedExpenses) * 100).toFixed(2))
       : 1,
   ];
+
   return (
     <View style={styles.expensesCategories}>
       <View style={styles.pieChartBox}>

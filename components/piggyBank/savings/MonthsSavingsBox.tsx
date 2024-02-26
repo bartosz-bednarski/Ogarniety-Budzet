@@ -2,17 +2,11 @@ import { View, Text, StyleSheet, Pressable } from "react-native";
 import COLORS_STYLE from "../../../utils/styles/colors";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { MonthSavings } from "../../../types/piggyBank";
-import { MONTHS } from "../../../utils/months";
-import { numberWithSpaces } from "../../../utils/numberWithSpaces";
-import { useAppSelector } from "../../../redux/hooks";
+
 const MonthsSavingsBox: React.FC<{
   realised: boolean;
   onPress: () => void;
 }> = ({ realised, onPress }) => {
-  const activeBankAccount = useAppSelector(
-    (state) => state.bankAccounts.activeAccount
-  );
   return (
     <Pressable
       style={styles.goldenContainer}
@@ -23,8 +17,8 @@ const MonthsSavingsBox: React.FC<{
           <Ionicons name="wallet" size={64} color={COLORS_STYLE.basicGold} />
           <Text style={styles.textWhiteL}>
             {realised
-              ? "Oszczędności"
-              : "Oszczędności dostępne w następnym miesiącu"}
+              ? "Zestawienie oszczędności"
+              : "Zestawienie dostępne w następnym miesiącu"}
           </Text>
         </View>
         <View style={styles.goldenBoxBottom}>
@@ -57,7 +51,7 @@ const styles = StyleSheet.create({
   },
   goldenBoxTop: {
     flexDirection: "row",
-    gap: 10,
+    gap: 20,
     paddingVertical: 10,
     paddingHorizontal: 15,
     justifyContent: "center",
@@ -78,7 +72,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     width: "70%",
     fontWeight: "600",
-    textAlign: "center",
+    textAlign: "left",
   },
   textWhiteSm: {
     color: "white",

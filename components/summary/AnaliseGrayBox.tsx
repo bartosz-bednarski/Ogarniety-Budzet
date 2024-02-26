@@ -1,8 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import COLORS_STYLE from "../../utils/styles/colors";
-import pieChartColors from "../../utils/styles/pieChartColors";
-import { numberWithSpaces } from "../../utils/numberWithSpaces";
 import PieChart from "react-native-pie-chart";
 
 const AnaliseGrayBox: React.FC<{

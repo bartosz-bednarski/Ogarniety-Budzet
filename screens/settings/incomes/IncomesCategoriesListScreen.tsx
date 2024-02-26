@@ -1,7 +1,6 @@
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, StyleSheet, FlatList } from "react-native";
 import { useAppSelector } from "../../../redux/hooks";
 import CategoryItemRow from "../../../components/settings/CategoryItemRow";
-import { CategoryItem } from "../../../types/settings";
 import AddCategoryButton from "../../../components/settings/AddCategoryButton";
 const IncomesCategoriesListScreen: React.FC<{ navigation: any }> = ({
   navigation,

@@ -12,6 +12,7 @@ import { CATEGORY_ICONS } from "../../utils/categoryIcons";
 import { AddEditCategoryProps } from "../../types/settings";
 import COLORS_STYLE from "../../utils/styles/colors";
 import CustomButton from "../../utils/ui/CustomButton";
+
 const AddEditCategory: React.FC<AddEditCategoryProps> = ({
   onSetCategoryIcon,
   onSetInputText,
@@ -20,6 +21,7 @@ const AddEditCategory: React.FC<AddEditCategoryProps> = ({
   inputText,
 }) => {
   const icons = CATEGORY_ICONS;
+
   const [dropdownActive, setDropdownActive] = useState(false);
 
   return (

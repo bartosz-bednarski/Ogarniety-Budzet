@@ -2,18 +2,18 @@ import { View, Text, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import COLORS_STYLE from "../../utils/styles/colors";
 
-const YearIncomesInfo: React.FC = () => {
+const YearSummaryInfo: React.FC = () => {
   return (
     <View style={styles.box}>
       <Text style={styles.goldText}>Zestawienie Roczne</Text>
       <View style={styles.rowBox}>
         <Ionicons name="calendar" size={88} color="white" />
-        <Ionicons name="trending-up" size={88} color="white" />
+        <Ionicons name="home" size={88} color="white" />
       </View>
 
       <Text style={styles.whiteText}>
-        Po miesiącu użytkowania aplikacji pojawi się pierwsze zestawienie roczne
-        Twoich przychodów.
+        Po miesiącu użytkowania aplikacji pojawi się pierwsze podsumowanie
+        roczne.
       </Text>
     </View>
   );
@@ -51,4 +51,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default YearIncomesInfo;
+export default YearSummaryInfo;

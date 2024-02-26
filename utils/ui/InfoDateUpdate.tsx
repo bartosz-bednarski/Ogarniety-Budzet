@@ -24,7 +24,7 @@ const InfoDateUpdate: React.FC<{
 const styles = StyleSheet.create({
   box: {
     paddingVertical: 20,
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
     flex: 9,
   },

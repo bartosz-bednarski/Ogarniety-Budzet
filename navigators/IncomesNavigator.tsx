@@ -6,10 +6,7 @@ import COLORS_STYLE from "../utils/styles/colors";
 import IncomesTabNavigator from "./incomes/IncomesTabNavigator";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { useEffect } from "react";
-import {
-  setCurrentYearIncomes,
-  updateMonthIncomes,
-} from "../redux/incomes-slice";
+import { updateMonthIncomes } from "../redux/incomes-slice";
 import {
   updateWeekExpenses,
   updateMonthExpenses,
@@ -24,9 +21,7 @@ const IncomesNavigator = () => {
     (state) => state.bankAccounts.activeAccount.accountName
   );
   const bankAccounts = useAppSelector((state) => state.bankAccounts.accounts);
-  // const bankAccountStatus = useAppSelector(
-  //   (state) => state.piggyBank.bankAccountStatus
-  // );
+
   const Stack = createNativeStackNavigator();
   const categoriesIncomes = useAppSelector(
     (state) => state.incomes.categoriesIncomes
@@ -47,16 +42,7 @@ const IncomesNavigator = () => {
   const currentMonthStore = useAppSelector(
     (state) => state.expenses.currentMonth
   );
-  const expensesCurrentYearStore = useAppSelector(
-    (state) => state.expenses.curentYear
-  );
 
-  // const date = new Date(dateCheck);
-  // const newDate = new Date();
-  // console.log("DateChecking1", newDate.setDate(date.getDate() + 30));
-
-  // console.log("DateChecking2", newDate.toJSON());
-  // console.log("checking3", dateToUpdateWeek);
   useEffect(() => {}, [weekExpensesUpdated, dispatch]);
   const dateChangeHandler = async () => {
     //TEST
@@ -65,16 +51,10 @@ const IncomesNavigator = () => {
 
     const currentMonth = new Date().getMonth();
     const currentYear = new Date().getFullYear();
-    console.log("categoriesIncomes", categoriesIncomes);
     //INCOMES
     if (categoriesIncomes.length > 0) {
       //if jest po to żeby kod się nie  wysypał jak nie ma zdefiniowanych żadnych wydatków
       //Tak powinno być:
-      console.log("Store", currentYearInStore);
-      console.log("YearExpensesStore", expensesCurrentYearStore);
-      console.log("REAL", currentYear);
-      console.log("REAL_MONTH", currentMonth);
-      console.log("STORE_MONTH", currentMonthStore);
       if (
         currentMonth > currentMonthStore ||
         currentYear > currentYearInStore
@@ -85,9 +65,6 @@ const IncomesNavigator = () => {
             .map((cat) => Number(cat.value))
             .reduce((partialSum, a) => partialSum + a, 0),
         }));
-        // const sumOfMonthIncomes = categoriesIncomes
-        //   .map((item) => Number(item.value))
-        //   .reduce((partialSum, a) => partialSum + a, 0);
         const sumOfMonthExpenses =
           categoriesExpenses.length > 0
             ? categoriesExpenses.map((item) => ({
@@ -98,10 +75,6 @@ const IncomesNavigator = () => {
               }))
             : 0;
 
-        // const sumOfMonthExpenses = categoriesExpenses
-        //   .map((item) => Number(item.value))
-        //   .reduce((partialSum, a) => partialSum + a, 0);
-        console.log("CKEKINGfasf", sumOfMonthIncomes);
         const savings = sumOfMonthIncomes.map((item) => {
           const index =
             sumOfMonthExpenses !== 0
@@ -114,20 +87,11 @@ const IncomesNavigator = () => {
             sumOfExpenses = index !== -1 ? sumOfMonthExpenses[index].sum : 0;
           }
 
-          // const sumOfExpenses =
-          //   sumOfMonthExpenses !== 0
-          //     ? sumOfMonthExpenses[
-
-          //       ].sum
-          //     : 0;
-
           return {
             bankAccountId: item.bankAccountId,
             savings: item.sum - sumOfExpenses,
           };
         });
-
-        // const savings = Number(sumOfMonthIncomes) - Number(sumOfMonthExpenses);
 
         dispatch(
           updateMonthBankAccounts({

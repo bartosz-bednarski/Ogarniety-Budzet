@@ -3,12 +3,10 @@ import pieChartColors from "../../utils/styles/pieChartColors";
 import { useState } from "react";
 import COLORS_STYLE from "../../utils/styles/colors";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import CustomButton from "../../utils/ui/CustomButton";
 import {
   CategoriesIncomesWithNames,
   CategoriesItemBoxData,
 } from "../../types/incomes";
-import { updateIncome } from "../../redux/incomes-slice";
 import { Navigation } from "../../types/global";
 import PieChartWithFrames from "../../components/incomes/PieChartWithFrames";
 import StripsColumn from "../../utils/ui/StripsColumn";
@@ -16,14 +14,15 @@ import CircleNumberColorButton from "../../utils/ui/CircleNumberColorButton";
 import CircleStringColorButton from "../../utils/ui/CircleStringColorButton";
 import ModalSetIncome from "../../components/incomes/ModalSetIncomes";
 import InfoDateUpdate from "../../utils/ui/InfoDateUpdate";
+import UpdateBankAccountInfo from "../../components/informations/UpdateBankAccountInfo";
+import Label from "../../utils/ui/Label";
+
 const MonthIncomesScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {
-  const dispatch = useAppDispatch();
   const categories = useAppSelector(
     (state) => state.incomesCategories.categoriesList
   );
-
   const categoriesIncomes = useAppSelector(
     (state) => state.incomes.categoriesIncomes
   );
@@ -34,12 +33,18 @@ const MonthIncomesScreen: React.FC<{ navigation: Navigation }> = ({
   const activeBankAccountStore = useAppSelector(
     (state) => state.bankAccounts.activeAccount
   );
+
+  const [selectedCatId, setSelectedCatId] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+
   const bankAccountsActiveAccountIndexId = bankAccounts.findIndex(
     (item) => item.accountId === activeBankAccountStoreId
   );
+
   const monthIncomesActiveAccountIdIndex = categoriesIncomes.findIndex(
     (item) => item.bankAccountId === activeBankAccountStore.accountId
   );
+
   const sumOfMonthIncomes =
     monthIncomesActiveAccountIdIndex !== -1
       ? categoriesIncomes[monthIncomesActiveAccountIdIndex].categories
@@ -58,7 +63,7 @@ const MonthIncomesScreen: React.FC<{ navigation: Navigation }> = ({
           })
         )
       : [];
-  console.log("categories", categoriesIncomes);
+
   const categoriesIncomesWithNames: CategoriesIncomesWithNames =
     monthIncomesActiveAccountIdIndex !== -1
       ? categoriesIncomes[monthIncomesActiveAccountIdIndex].categories.map(
@@ -69,6 +74,7 @@ const MonthIncomesScreen: React.FC<{ navigation: Navigation }> = ({
           })
         )
       : [];
+
   const stripsColumnData = categoriesIncomesWithNames.map((item) => ({
     catId: item.catId,
     iconName: item.iconName,
@@ -76,8 +82,6 @@ const MonthIncomesScreen: React.FC<{ navigation: Navigation }> = ({
     value: item.value,
     sum: item.value,
   }));
-  const [selectedCatId, setSelectedCatId] = useState("");
-  const [modalVisible, setModalVisible] = useState(false);
 
   const onPressHandler = (catId: string) => {
     setSelectedCatId(catId);
@@ -90,12 +94,9 @@ const MonthIncomesScreen: React.FC<{ navigation: Navigation }> = ({
         {(bankAccounts.length === 0 ||
           bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus ===
             0) && (
-          <View style={styles.buttonBox}>
-            <CustomButton
-              title="Uzupełnij stan konta"
-              onPress={() => navigation.navigate("Oszczędności")}
-            />
-          </View>
+          <UpdateBankAccountInfo
+            onPress={() => navigation.navigate("Oszczędności")}
+          />
         )}
         {bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus > 0 &&
           sumOfMonthIncomes === 0 && (
@@ -119,7 +120,7 @@ const MonthIncomesScreen: React.FC<{ navigation: Navigation }> = ({
           bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus >
             0 && (
             <>
-              <Text style={styles.label}>Kategorie przychodów</Text>
+              <Label value="Kategorie przychodów" />
 
               <View style={styles.flatlistBox}>
                 {circleColorButtonData.map((item, index) => (

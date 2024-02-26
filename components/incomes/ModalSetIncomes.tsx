@@ -21,11 +21,11 @@ const ModalSetIncome: React.FC<{
   const activeBankAccountStore = useAppSelector(
     (state) => state.bankAccounts.activeAccount
   );
+
   const [value, setValue] = useState("");
   const [inputError, setInputError] = useState({ status: false, message: "" });
 
   const submitHandler = () => {
-    console.log("INPUT!!!!!!!!!!!!!", typeof value);
     if (value !== "" && value !== "0" && isNaN(Number(value)) === false) {
       dispatch(
         updateIncome({

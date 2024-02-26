@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import COLORS_STYLE from "../../utils/styles/colors";
 import { OnPressHandler } from "../../types/settings";
+
 const DeleteCategoryButton: React.FC<{ onPress: OnPressHandler }> = ({
   onPress,
 }) => {

@@ -5,7 +5,7 @@ import COLORS_STYLE from "../../utils/styles/colors";
 const YearsExpensesInfo: React.FC = () => {
   return (
     <View style={styles.box}>
-      <Text style={styles.goldText}>Podsumowanie Roczne</Text>
+      <Text style={styles.goldText}>Zestawienie Roczne</Text>
       <View style={styles.rowBox}>
         <Ionicons name="calendar" size={88} color="white" />
         <Ionicons name="trending-down" size={88} color="white" />

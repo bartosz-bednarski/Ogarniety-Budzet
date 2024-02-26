@@ -2,19 +2,20 @@ import { View, Text, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import COLORS_STYLE from "../../utils/styles/colors";
 
-const YearIncomesInfo: React.FC = () => {
+const FinantialTargetsInfo: React.FC = () => {
   return (
     <View style={styles.box}>
-      <Text style={styles.goldText}>Zestawienie Roczne</Text>
+      <Text style={styles.goldText}>Brak celów finansowych</Text>
       <View style={styles.rowBox}>
-        <Ionicons name="calendar" size={88} color="white" />
-        <Ionicons name="trending-up" size={88} color="white" />
+        <Ionicons name="book" size={120} color="white" />
       </View>
 
-      <Text style={styles.whiteText}>
-        Po miesiącu użytkowania aplikacji pojawi się pierwsze zestawienie roczne
-        Twoich przychodów.
-      </Text>
+      <Text style={styles.whiteText}>Dodaj nowy</Text>
+      <Ionicons
+        name={`arrow-down-circle`}
+        size={32}
+        color={COLORS_STYLE.basicGold}
+      />
     </View>
   );
 };
@@ -25,7 +26,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     flex: 1,
-    gap: 30,
+    gap: 10,
   },
   rowBox: {
     flexDirection: "row",
@@ -43,7 +44,7 @@ const styles = StyleSheet.create({
   },
   whiteText: {
     color: "white",
-    fontSize: 20,
+    fontSize: 24,
     width: "100%",
     textAlign: "center",
     fontWeight: "600",
@@ -51,4 +52,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default YearIncomesInfo;
+export default FinantialTargetsInfo;

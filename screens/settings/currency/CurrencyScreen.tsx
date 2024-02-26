@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { setCurrency } from "../../../redux/currency-slice";
+
 const CurrencyScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const dispatch = useAppDispatch();
   const currencyStore = useAppSelector(

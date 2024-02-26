@@ -2,6 +2,7 @@ import { Pressable, StyleSheet, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import COLORS_STYLE from "../../../utils/styles/colors";
 import { View } from "react-native";
+
 const AddTargetButton: React.FC<{ onPress: () => void }> = ({ onPress }) => {
   return (
     <View style={styles.container}>

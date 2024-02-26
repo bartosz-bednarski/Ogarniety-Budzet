@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, Text, View, Alert, Modal } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { CategoryItemRowProps } from "../../types/settings";
 import { useNavigation } from "@react-navigation/native";
-import { Navigate, Navigation } from "../../types/global";
+import { Navigation } from "../../types/global";
 import pieChartColors from "../../utils/styles/pieChartColors";
 import COLORS_STYLE from "../../utils/styles/colors";
 import CustomButton from "../../utils/ui/CustomButton";
@@ -22,10 +22,11 @@ const CategoryItemRow: React.FC<CategoryItemRowProps> = ({
   index,
   onPress,
 }) => {
-  console.log("index", index);
   const dispatch = useAppDispatch();
   const navigation: Navigation = useNavigation();
+
   const [modalVisible, setModalVisible] = useState(false);
+
   const onCategoryDeleteHandler: OnPressHandler = () => {
     if (type === "incomes") {
       dispatch(deleteIncomesCategory({ catId: catId }));

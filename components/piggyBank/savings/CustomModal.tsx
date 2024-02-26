@@ -22,6 +22,7 @@ import { addExpensesCategory } from "../../../redux/expensesCategories-slice";
 import { addIncomesCategory } from "../../../redux/incomesCategories-slice";
 import COLORS_STYLE from "../../../utils/styles/colors";
 import randomId from "../../../utils/randomIdFunction";
+
 const CustomModal: React.FC<{
   modalVisible: boolean;
   setModalVisible: (value: boolean) => void;
@@ -46,35 +47,6 @@ const CustomModal: React.FC<{
     dispatch(setCurrentYearIncomes());
     dispatch(setCurrentYearPiggyBank());
     dispatch(setCurrentYearExpenses());
-
-    // const catIdExpenses = randomId();
-    // dispatch(
-    //   addExpensesCategory({
-    //     name: "Inne",
-    //     iconName: "star",
-    //     catId: catIdExpenses,
-    //   })
-    // );
-    // dispatch(
-    //   setPlannedExpense({
-    //     name: "Inne",
-    //     iconName: "star",
-    //     catId: catIdExpenses,
-    //     bankAccountId: bankAccountId,
-    //   })
-    // );
-    // dispatch(
-    //   setExpense({
-    //     catId: catIdExpenses,
-    //     bankAccountId: bankAccountId,
-    //   })
-    // );
-    // if (Number(bankAccountInput) === 0) {
-    //   setInputError({
-    //     status: true,
-    //     message: "Wartość stanu konta powinna być większa niż 0.",
-    //   });
-    // }
 
     if (Number(bankAccountInput) > 0 && Number(incomesInput) === 0) {
       dispatch(
@@ -104,8 +76,6 @@ const CustomModal: React.FC<{
       Number(incomesInput) > 0 &&
       Number(incomesInput) > Number(bankAccountInput)
     ) {
-      //Utworz funkcje z ifa!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       const difference = Number(incomesInput) - Number(bankAccountInput) + 1;
       const income = Number(incomesInput);
 

@@ -6,6 +6,7 @@ import YearSummaryStrip from "./YearSummaryStrip";
 import randomId from "../../utils/randomIdFunction";
 import { MONTHS } from "../../utils/months";
 import { numberWithSpaces } from "../../utils/numberWithSpaces";
+
 const MonthSummaryBox: React.FC<{
   data: {
     month: number;
@@ -17,6 +18,7 @@ const MonthSummaryBox: React.FC<{
   };
 }> = ({ data }) => {
   const [showDropdown, setShowDropdown] = useState(false);
+
   return (
     <View style={styles.container}>
       <Pressable

@@ -4,6 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useAppSelector } from "../../redux/hooks";
 import { numberWithSpaces } from "../../utils/numberWithSpaces";
 import GoldenFrame from "../../utils/ui/GoldenFrame";
+
 const RealisedTargetsScreen = () => {
   const activeBankAccount = useAppSelector(
     (state) => state.bankAccounts.activeAccount
@@ -11,9 +12,11 @@ const RealisedTargetsScreen = () => {
   const realisedTargets = useAppSelector(
     (state) => state.piggyBank.realisedTargets
   );
+
   const sum = realisedTargets
     .map((item) => item.targetValue)
     .reduce((partialSum, a) => partialSum + a, 0);
+
   return (
     <ScrollView style={styles.container}>
       <GoldenFrame name="SUMA" value={sum} />

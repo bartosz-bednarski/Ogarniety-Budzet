@@ -5,7 +5,7 @@ import COLORS_STYLE from "../../utils/styles/colors";
 const YearsIncomesInfo: React.FC = () => {
   return (
     <View style={styles.box}>
-      <Text style={styles.goldText}>Przychody Roczne</Text>
+      <Text style={styles.goldText}>Zestawienie Wieloletnie</Text>
       <View style={styles.rowBox}>
         <Ionicons name="calendar" size={88} color="white" />
         <Ionicons name="trending-up" size={88} color="white" />
@@ -13,7 +13,7 @@ const YearsIncomesInfo: React.FC = () => {
 
       <Text style={styles.whiteText}>
         Po roku użytkowania aplikacji pojawi się pierwsze zestawienie Twoich
-        przychodów na przełomie lat.
+        przychodów z zakresu lat.
       </Text>
     </View>
   );

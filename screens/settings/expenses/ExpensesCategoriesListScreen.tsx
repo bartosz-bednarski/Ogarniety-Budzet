@@ -1,7 +1,6 @@
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, StyleSheet, FlatList } from "react-native";
 import { useAppSelector } from "../../../redux/hooks";
 import CategoryItemRow from "../../../components/settings/CategoryItemRow";
-import { CategoryItem } from "../../../types/settings";
 import AddCategoryButton from "../../../components/settings/AddCategoryButton";
 const ExpensesCategoriesListScreen: React.FC<{ navigation: any }> = ({
   navigation,
@@ -9,7 +8,7 @@ const ExpensesCategoriesListScreen: React.FC<{ navigation: any }> = ({
   const categories = useAppSelector(
     (state) => state.expensesCategories.categoriesList
   );
-  console.log(categories.length);
+
   const navigateToaddNewCategoryHandler = () => {
     navigation.navigate("addNewCategory");
   };

@@ -14,16 +14,20 @@ import {
   deleteAllExpensesFromCategory,
   updatePlannedExpenseCategory,
 } from "../../../redux/expenses-slice";
+
 const EditExpensesCategoryScreen: React.FC<{
   route: any;
   navigation: any;
 }> = ({ route, navigation }) => {
   const dispatch = useAppDispatch();
+
   const categoryName = route.params.name;
   const catId = route.params.catId;
   const iconName = route.params.iconName;
+
   const [inputText, setInputText] = useState(categoryName);
   const [categoryIcon, setCategoryIcon] = useState(iconName);
+
   const onSetCategoryIcon: OnSetCategoryIcon = (icon) => {
     setCategoryIcon(icon);
   };

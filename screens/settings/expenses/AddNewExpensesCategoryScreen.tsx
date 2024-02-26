@@ -13,13 +13,15 @@ import { useAppSelector } from "../../../redux/hooks";
 const AddNewExpensesCategoryScreen: React.FC<{
   route: any;
   navigation: any;
-}> = ({ route, navigation }) => {
+}> = ({ navigation }) => {
+  const dispatch = useAppDispatch();
   const activeBankAccountStore = useAppSelector(
     (state) => state.bankAccounts.activeAccount
   );
-  const dispatch = useAppDispatch();
+
   const [inputText, setInputText] = useState("");
   const [categoryIcon, setCategoryIcon] = useState("add-circle-outline");
+
   const onSetCategoryIcon: OnSetCategoryIcon = (icon) => {
     setCategoryIcon(icon);
   };
@@ -55,6 +57,7 @@ const AddNewExpensesCategoryScreen: React.FC<{
           bankAccountId: activeBankAccountStore.accountId,
         })
       );
+      setInputText("");
       navigation.navigate("editCategories");
     }
   };

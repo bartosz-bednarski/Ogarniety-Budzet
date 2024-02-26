@@ -2,6 +2,7 @@ import { Pressable, Text, StyleSheet, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import COLORS_STYLE from "../styles/colors";
 import pieChartColors from "../styles/pieChartColors";
+
 const CircleStringColorButton: React.FC<{
   iconName: string | undefined;
   name: string;

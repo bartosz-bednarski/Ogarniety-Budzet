@@ -1,15 +1,15 @@
 import { Text, View, StyleSheet, ScrollView } from "react-native";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { useAppSelector } from "../../redux/hooks";
 import { useState } from "react";
-import { addPlannedExpense } from "../../redux/expenses-slice";
 import COLORS_STYLE from "../../utils/styles/colors";
-import CustomButton from "../../utils/ui/CustomButton";
 import { Navigation } from "../../types/global";
 import GoldenFrame from "../../utils/ui/GoldenFrame";
 import CircleNumberColorButton from "../../utils/ui/CircleNumberColorButton";
 import CircleStringColorButton from "../../utils/ui/CircleStringColorButton";
 import StripsColumn from "../../utils/ui/StripsColumn";
 import ModalSetPlannedExpense from "../../components/planning/ModalSetPlannedExpense";
+import UpdateBankAccountInfo from "../../components/informations/UpdateBankAccountInfo";
+import UpdateExpensesCategoriesInfo from "../../components/informations/UpdateExpensesCategoriesInfo";
 
 const PlannedExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
@@ -54,25 +54,19 @@ const PlannedExpensesScreen: React.FC<{ navigation: Navigation }> = ({
         {categoriesExpenses.length === 0 &&
           bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus >
             0 && (
-            <View style={styles.informationBox}>
-              <CustomButton
-                title="Dodaj kategorię wydatków"
-                onPress={() =>
-                  navigation.navigate("settingsNavigator", {
-                    screen: "addNewCategory",
-                  })
-                }
-              />
-            </View>
+            <UpdateExpensesCategoriesInfo
+              onPress={() =>
+                navigation.navigate("settingsNavigator", {
+                  screen: "addNewCategory",
+                })
+              }
+            />
           )}
         {bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus ===
           0 && (
-          <View style={styles.buttonBox}>
-            <CustomButton
-              title="Uzupełnij stan konta"
-              onPress={() => navigation.navigate("Oszczędności")}
-            />
-          </View>
+          <UpdateBankAccountInfo
+            onPress={() => navigation.navigate("Oszczędności")}
+          />
         )}
         {plannedExpenses.length > 0 && (
           <>

@@ -10,6 +10,7 @@ import {
 import COLORS_STYLE from "../../../utils/styles/colors";
 import { useAppSelector } from "../../../redux/hooks";
 import { useState } from "react";
+
 const ModalAddExpense: React.FC<{
   modalVisible: boolean;
   setModalVisible: (value: boolean) => void;
@@ -20,7 +21,6 @@ const ModalAddExpense: React.FC<{
   const currency = useAppSelector(
     (state) => state.currency.currentCurrency.currencyCode
   );
-  const [error, setError] = useState({ state: false, message: "" });
   const monthIncomes = useAppSelector(
     (state) => state.incomes.categoriesIncomes
   );
@@ -33,13 +33,12 @@ const ModalAddExpense: React.FC<{
   const realisedTargets = useAppSelector(
     (state) => state.piggyBank.realisedTargets
   );
-  const finantialTargets = useAppSelector(
-    (state) => state.piggyBank.finantialTargets
-  );
   const bankAccounts = useAppSelector((state) => state.bankAccounts.accounts);
   const activeBankAccountStoreId = useAppSelector(
     (state) => state.bankAccounts.activeAccount.accountId
   );
+
+  const [error, setError] = useState({ state: false, message: "" });
 
   const bankAccountsActiveAccountIndexId = bankAccounts.findIndex(
     (item) => item.accountId === activeBankAccountStoreId
@@ -47,11 +46,13 @@ const ModalAddExpense: React.FC<{
   const monthIncomesActiveBankAccountIdIndex = monthIncomes.findIndex(
     (item) => item.bankAccountId === activeBankAccountStore.accountId
   );
+
   let monthIncomesSum;
   let bankAccountPlusIncomes;
   let monthExpensesSum;
   let totalBankAccount: number;
   let sumOfRealisedTargets;
+
   if (realisedTargets !== undefined) {
     if (realisedTargets.length > 0) {
       sumOfRealisedTargets = realisedTargets
@@ -63,6 +64,7 @@ const ModalAddExpense: React.FC<{
   } else {
     sumOfRealisedTargets = 0;
   }
+
   if (monthIncomes.length > 0 && categoriesExpenses.length > 0) {
     monthIncomesSum =
       monthIncomesActiveBankAccountIdIndex !== -1
@@ -79,7 +81,6 @@ const ModalAddExpense: React.FC<{
             .map((item) => Number(item.sum))
             .reduce((partialSum, a) => partialSum + a, 0)
         : 0;
-
     bankAccountPlusIncomes =
       Number(monthIncomesSum) +
       Number(bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus);
@@ -102,7 +103,6 @@ const ModalAddExpense: React.FC<{
       bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus -
       sumOfRealisedTargets;
   }
-  console.log(totalBankAccount);
 
   const submitCheck = () => {
     if (value !== "" && isNaN(Number(value)) === false) {
@@ -124,6 +124,7 @@ const ModalAddExpense: React.FC<{
       });
     }
   };
+
   return (
     <Modal
       animationType="slide"

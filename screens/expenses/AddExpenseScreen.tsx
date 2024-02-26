@@ -6,6 +6,7 @@ import CustomButton from "../../utils/ui/CustomButton";
 import { Navigation } from "../../types/global";
 import CircleStringColorButton from "../../utils/ui/CircleStringColorButton";
 import ModalAddExpense from "../../components/expenses/addExpense/ModalAddExpense";
+
 const AddExpenseScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {
@@ -19,17 +20,20 @@ const AddExpenseScreen: React.FC<{ navigation: Navigation }> = ({
   const categoriesExpenses = useAppSelector(
     (state) => state.expenses.monthCategoriesExpenses
   );
+
   const [selectedCatId, setSelectedCatId] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [value, setValue] = useState("");
+
   const onPressHandler = (catId: string) => {
     setSelectedCatId(catId);
     setModalVisible(true);
   };
+
   const monthExpensesActiveBankAccountIdIndex = categoriesExpenses.findIndex(
     (item) => item.bankAccountId === activeBankAccountStore
   );
-  console.log("activeBankAccount", activeBankAccountStore);
+
   const submitHandler = () => {
     if (value !== "" && value !== "0") {
       if (monthExpensesActiveBankAccountIdIndex === -1) {

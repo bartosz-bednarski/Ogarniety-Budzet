@@ -4,6 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import pieChartColors from "../styles/pieChartColors";
 import { numberWithSpaces } from "../numberWithSpaces";
 import { useAppSelector } from "../../redux/hooks";
+
 const Strip: React.FC<{
   iconName: string;
   categoryName: string | undefined;

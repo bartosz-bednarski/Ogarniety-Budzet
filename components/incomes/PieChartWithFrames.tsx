@@ -2,7 +2,6 @@ import { View, StyleSheet } from "react-native";
 import PieChart from "react-native-pie-chart";
 import FrameUnderlineSmall from "../../utils/ui/FrameUnderlineSmall";
 import COLORS_STYLE from "../../utils/styles/colors";
-import { CategoriesExpensesWithNames } from "../../types/expenses";
 import { CategoriesIncomesWithNames } from "../../types/incomes";
 
 const PieChartWithFrames: React.FC<{
