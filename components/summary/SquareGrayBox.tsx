@@ -31,7 +31,7 @@ const SquareGrayBox: React.FC<{
           color="white"
           style={{ transform: [{ rotate: "90deg" }] }}
         />
-        <Text style={styles.whiteText}>Dostępne środki:</Text>
+        <Text style={styles.whiteText}>Stan konta:</Text>
       </View>
       <View style={styles.boxRow}>
         <Text style={styles.value}>
@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
   },
   boxRow: {
     flexDirection: "row",
+    flexWrap: "wrap",
     width: "100%",
     gap: 5,
     justifyContent: "flex-start",
@@ -70,7 +71,7 @@ const styles = StyleSheet.create({
   },
   value: {
     color: COLORS_STYLE.basicGold,
-    fontSize: 22,
+    fontSize: 16,
     fontWeight: "600",
     textAlign: "center",
   },

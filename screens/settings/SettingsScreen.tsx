@@ -25,7 +25,7 @@ const SettingsScreen: React.FC<{ navigation: Navigation }> = ({
       >
         <Text style={styles.listItemText}>Edytuj kategorie przychodów</Text>
       </Pressable>
-      <Pressable
+      {/* <Pressable
         style={({ pressed }) => [
           styles.listItemBox,
           pressed && styles.listItemBoxPressed,
@@ -33,7 +33,7 @@ const SettingsScreen: React.FC<{ navigation: Navigation }> = ({
         onPress={() => navigation.navigate("currency")}
       >
         <Text style={styles.listItemText}>Zmień walutę</Text>
-      </Pressable>
+      </Pressable> */}
     </View>
   );
 };

@@ -68,9 +68,6 @@ const bankAccountsSlice = createSlice({
       };
     },
     updateMonth: (state, action) => {
-      // const toUpdate = state.accounts.filter(
-      //   (item) => item.accountId === action.payload.accountId
-      // );
       state.accounts = state.accounts.map((item) => ({
         accountName: item.accountName,
         accountId: item.accountId,
@@ -103,24 +100,6 @@ const bankAccountsSlice = createSlice({
         status: "OPEN",
       }));
 
-      // toUpdate[0].bankAccountStatus =
-      //   Number(toUpdate[0].bankAccountStatus) + Number(action.payload.savings);
-      // if (toUpdate[0].yearSavings.length === 0) {
-      //   toUpdate[0].yearSavings = [
-      //     {
-      //       month: action.payload.month,
-      //       savings: action.payload.savings,
-      //     },
-      //   ];
-      // } else if (toUpdate[0].yearSavings.length > 0) {
-      //   toUpdate[0].yearSavings = [
-      //     ...toUpdate[0].yearSavings,
-      //     {
-      //       month: action.payload.month,
-      //       savings: action.payload.savings,
-      //     },
-      //   ];
-      // }
       //wyzeruj wartości przychodów w tablicy z przychodami z aktualnego miesiąca
 
       //TEST
@@ -149,32 +128,6 @@ const bankAccountsSlice = createSlice({
           currentYear: new Date().getFullYear(),
         }));
 
-        // if (toUpdate[0].yearSavings.length > 0) {
-        //   const sumOfSavings = toUpdate[0].yearSavings
-        //     .map((item) => Number(item.savings))
-        //     .reduce((partialSum, a) => partialSum + a, 0);
-        //   if (
-        //     toUpdate[0].yearsSavings.length === 0 ||
-        //     toUpdate[0].yearsSavings === undefined
-        //   ) {
-        //     toUpdate[0].yearsSavings = [
-        //       {
-        //         year: yearToSet,
-        //         sumOfSavings: sumOfSavings,
-        //         months: toUpdate[0].yearSavings,
-        //       },
-        //     ];
-        //   } else if (toUpdate[0].yearsSavings.length > 0) {
-        //     toUpdate[0].yearsSavings = [
-        //       ...toUpdate[0].yearsSavings,
-        //       {
-        //         year: yearToSet,
-        //         sumOfSavings: sumOfSavings,
-        //         months: toUpdate[0].yearSavings,
-        //       },
-        //     ];
-        //   }
-
         //   //wyzeruj wartości przychodów w tablicy z przychodami z poprzedniego roku
         //   toUpdate[0].yearSavings = [];
         // }
@@ -182,10 +135,6 @@ const bankAccountsSlice = createSlice({
         // state.curentYear = new Date(dateCheck).getFullYear();
         // toUpdate[0].currentYear = new Date().getFullYear();
       }
-      // state.accounts = [
-      //   toUpdate[0],
-      //   ...state.accounts.filter((item) => item !== action.payload.accountId),
-      // ];
     },
     updateBankAccountStatusRealisedFinantialTarget: (state, action) => {
       state.accounts[
@@ -220,6 +169,11 @@ const bankAccountsSlice = createSlice({
       state.accounts[accountIndex].accountName = action.payload.accountName;
       state.accounts[accountIndex].currency =
         action.payload.currency.toUpperCase();
+      state.activeAccount = {
+        accountName: action.payload.accountName,
+        accountId: action.payload.accountId,
+        currency: action.payload.currency.toUpperCase(),
+      };
     },
     deleteBankAccount: (state, action) => {
       if (action.payload.accountId !== "UNIQUE") {

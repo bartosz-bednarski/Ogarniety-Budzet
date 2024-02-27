@@ -15,7 +15,6 @@ import incomesCategoriesSlice from "./incomesCategories-slice";
 import incomesSlice from "./incomes-slice";
 import expensesSlice from "./expenses-slice";
 import piggyBankSlice from "./piggyBank-slice";
-import currencySlice from "./currency-slice";
 import bankAccountsSlice from "./bankAccounts-slice";
 
 const persistConfig = {
@@ -30,7 +29,6 @@ const rootReducer = combineReducers({
   incomesCategories: incomesCategoriesSlice,
   incomes: incomesSlice,
   piggyBank: piggyBankSlice,
-  currency: currencySlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

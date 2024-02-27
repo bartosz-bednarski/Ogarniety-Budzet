@@ -22,33 +22,67 @@ const MonthExpensesScreen: React.FC<{ navigation: Navigation }> = ({
     (state) => state.expenses.monthCategoriesExpenses
   );
 
-  const plannedExpenses = useAppSelector(
+  const plannedExpensesStore = useAppSelector(
     (state) => state.expenses.plannedExpenses
   );
   const bankAccounts = useAppSelector((state) => state.bankAccounts.accounts);
-  const activeBankAccountStoreId = useAppSelector(
-    (state) => state.bankAccounts.activeAccount.accountId
+  const activeBankAccountStore = useAppSelector(
+    (state) => state.bankAccounts.activeAccount
   );
+
+  const plannedExpensesCurrencyIndex = plannedExpensesStore.findIndex(
+    (item) => item.currency === activeBankAccountStore.currency
+  );
+  const plannedExpenses =
+    plannedExpensesCurrencyIndex !== -1
+      ? plannedExpensesStore[plannedExpensesCurrencyIndex].expenses
+      : [];
 
   const bankAccountsActiveAccountIndexId = bankAccounts.findIndex(
-    (item) => item.accountId === activeBankAccountStoreId
+    (item) => item.accountId === activeBankAccountStore.accountId
   );
 
-  const monthCategoriesExpensesIndexOfCurrentId =
-    monthCategoriesExpensesStore.findIndex(
-      (item) => item.bankAccountId === activeBankAccountStoreId
-    );
+  const bankAccountsIdsWithActiveCurrency = bankAccounts.map(
+    (item) =>
+      item.currency === activeBankAccountStore.currency && item.accountId
+  );
 
-  const categoriesExpenses =
-    monthCategoriesExpensesIndexOfCurrentId !== -1
-      ? monthCategoriesExpensesStore[monthCategoriesExpensesIndexOfCurrentId]
-          .categories
-      : [
-          {
-            catId: "null",
-            sum: 0,
-          },
-        ];
+  const categoriesExpenses: { catId: string; sum: number }[] = [];
+  for (let i = 0; i < monthCategoriesExpensesStore.length; i++) {
+    const bankAccountIndex = bankAccountsIdsWithActiveCurrency.findIndex(
+      (item) => item === monthCategoriesExpensesStore[i].bankAccountId
+    );
+    if (bankAccountIndex !== -1) {
+      for (
+        let x = 0;
+        x < monthCategoriesExpensesStore[i].categories.length;
+        x++
+      ) {
+        const catIdIndex =
+          categoriesExpenses.length > 0
+            ? categoriesExpenses.findIndex(
+                (cat) =>
+                  cat.catId ===
+                  monthCategoriesExpensesStore[i].categories[x].catId
+              )
+            : -1;
+        if (catIdIndex === -1) {
+          categoriesExpenses.push({
+            catId: monthCategoriesExpensesStore[i].categories[x].catId,
+            sum: monthCategoriesExpensesStore[i].categories[x].sum,
+          });
+        } else if (catIdIndex !== -1) {
+          const catIdIndexToUpdate = categoriesExpenses.findIndex(
+            (item) =>
+              item.catId === monthCategoriesExpensesStore[i].categories[x].catId
+          );
+          categoriesExpenses[catIdIndexToUpdate].sum =
+            Number(categoriesExpenses[catIdIndexToUpdate].sum) +
+            Number(monthCategoriesExpensesStore[i].categories[x].sum);
+        }
+      }
+    }
+  }
 
   const categoriesExpensesWithNames: CategoriesExpensesWithNames =
     categoriesExpenses.map((category, index) => ({

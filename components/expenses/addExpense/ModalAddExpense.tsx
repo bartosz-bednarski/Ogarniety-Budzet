@@ -18,9 +18,6 @@ const ModalAddExpense: React.FC<{
   setValue: (value: string) => void;
   submitHandler: () => void;
 }> = ({ modalVisible, setModalVisible, value, setValue, submitHandler }) => {
-  const currency = useAppSelector(
-    (state) => state.currency.currentCurrency.currencyCode
-  );
   const monthIncomes = useAppSelector(
     (state) => state.incomes.categoriesIncomes
   );
@@ -153,7 +150,7 @@ const ModalAddExpense: React.FC<{
               {error.message === "Nie masz tyle środków na koncie!" && (
                 <Text style={styles.error}>
                   Dostępne środki: {(totalBankAccount - 1).toFixed(2)}{" "}
-                  {currency}
+                  {activeBankAccountStore.currency}
                 </Text>
               )}
             </>

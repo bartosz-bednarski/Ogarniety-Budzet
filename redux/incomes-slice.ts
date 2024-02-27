@@ -79,40 +79,6 @@ const incomesSlice = createSlice({
             ],
           },
         ];
-        // state.categoriesIncomes.map((item) => ({
-        //   bankAccountId: item.bankAccountId,
-        //   categories: [
-        //     ...item.categories,
-        //     {
-        //       catId: action.payload.catId,
-        //       date: new Date().toJSON(),
-        //       dateString: fullDate,
-        //       value: 0,
-        //     },
-        //   ],
-        // }));
-
-        // state.categoriesIncomes = state.categoriesIncomes = [
-        //   ...state.categoriesIncomes,
-        //   //TEST
-        //   // {
-        //   //   catId: action.payload.catId,
-        //   //   date: dateCheck,
-        //   //   dateString: fullDate,
-        //   //   value: 0,
-        //   // },
-        //   {
-        //     bankAccountId: action.payload.bankAccountId,
-        //     categories: [
-        //       {
-        //         catId: action.payload.catId,
-        //         date: new Date().toJSON(),
-        //         dateString: fullDate,
-        //         value: 0,
-        //       },
-        //     ],
-        //   },
-        // ];
       }
     },
     updateIncome: (state, action) => {
@@ -168,17 +134,6 @@ const incomesSlice = createSlice({
           })),
         })),
       }));
-
-      // state.yearIncomes = state.yearIncomes.map((categories) => ({
-      //   month: categories.month,
-      //   sumOfAllIncomes: categories.sumOfAllIncomes,
-      //   categoriesIncomes: categories.categoriesIncomes.map((item) => ({
-      //     catId: item.catId,
-      //     value: item.value,
-      //     stillExsists: item.catId === action.payload.catId ? false : true,
-      //     bankAccountId: item.bankAccountId,
-      //   })),
-      // }));
     },
     updateMonth: (state) => {
       const day = new Date().getDate();
@@ -188,9 +143,7 @@ const incomesSlice = createSlice({
       const monthToSet = new Date(
         state.categoriesIncomes[0].categories[0].date
       ).getMonth();
-      // const sumOfAllIncomes = state.categoriesIncomes
-      //   .map((item) => Number(item.value))
-      //   .reduce((partialSum, a) => partialSum + a, 0);
+
       //dodaj nowy miesiac z danymi z miesiaca do tablicy
       //jezeli tablica z msc jest pusta dodajemy nowy miesiac, jezeli nie to robimy spread pozostalych i dodajemy nowy
       if (state.yearIncomes.length === 0) {

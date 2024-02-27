@@ -61,7 +61,10 @@ export type ExpensesInitialState = {
   monthCategoriesExpenses: MonthCategoriesExpenses;
   yearExpenses: YearExpenses;
   yearsExpenses: YearsExpenses;
-  plannedExpenses: PlannedExpenseCategoryItem[];
+  plannedExpenses: {
+    currency: string;
+    expenses: PlannedExpenseCategoryItem[];
+  }[];
   weekExpensesUpdated: boolean;
   dateToUpdateWeek: string;
   curentYear: number;

@@ -22,7 +22,7 @@ const FinantialTargetsInfo: React.FC = () => {
 
 const styles = StyleSheet.create({
   box: {
-    paddingVertical: 20,
+    paddingVertical: 10,
     justifyContent: "flex-start",
     alignItems: "center",
     flex: 1,
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     width: "100%",
-    gap: 20,
+    gap: 10,
   },
   goldText: {
     color: COLORS_STYLE.basicGold,
@@ -40,7 +40,6 @@ const styles = StyleSheet.create({
     width: "100%",
     textAlign: "center",
     fontWeight: "800",
-    marginBottom: 20,
   },
   whiteText: {
     color: "white",
@@ -48,7 +47,6 @@ const styles = StyleSheet.create({
     width: "100%",
     textAlign: "center",
     fontWeight: "600",
-    marginVertical: 20,
   },
 });
 

@@ -9,6 +9,7 @@ import { MonthExpensesBoxProps } from "../../../types/expenses";
 import { useState } from "react";
 import { numberWithSpaces } from "../../../utils/numberWithSpaces";
 import StripsColumn from "../../../utils/ui/StripsColumn";
+
 const MonthExpensesBox: React.FC<{ monthExpenses: MonthExpensesBoxProps }> = ({
   monthExpenses,
 }) => {
@@ -18,7 +19,9 @@ const MonthExpensesBox: React.FC<{ monthExpenses: MonthExpensesBoxProps }> = ({
   const expensesCategories = useAppSelector(
     (state) => state.expensesCategories.categoriesList
   );
+
   const [showDropdown, setShowDropdown] = useState(false);
+
   const sumOfMonthExpenses = monthExpenses.categoriesExpenses
     .map((item) => item.sum)
     .reduce((partialSum, a) => partialSum + a, 0);
@@ -46,6 +49,7 @@ const MonthExpensesBox: React.FC<{ monthExpenses: MonthExpensesBoxProps }> = ({
       }
     }
   );
+
   return (
     <View style={styles.container}>
       <Text style={styles.monthName}>{MONTHS[monthExpenses.month]}</Text>

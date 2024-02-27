@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   modalView: {
     margin: 20,
     width: "80%",
-    backgroundColor: "#dddbdb",
+    backgroundColor: COLORS_STYLE.tabGrey,
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
@@ -131,6 +131,8 @@ const styles = StyleSheet.create({
   modalLabel: {
     fontSize: 16,
     marginBottom: 20,
+    color: COLORS_STYLE.red,
+    textAlign: "center",
   },
 });
 export default CategoryItemRow;

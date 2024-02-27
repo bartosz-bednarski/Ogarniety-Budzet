@@ -229,24 +229,12 @@ const expensesSlice = createSlice({
       const catIdWeekExists = state.weekCategoriesExpenses[
         bankItemIndexWeek
       ].categories.find((i) => i.catId === action.payload.catId);
-      // console.log(
-      //   "XXXXXXXX",
-      //   state.weekCategoriesExpenses[bankItemIndex].categories.find(
-      //     (i) => i.catId === action.payload.catId
-      //   )
-      // );
       //tydzień
       if (catIdWeekExists !== undefined) {
         const categoryToUpdateIndex = state.weekCategoriesExpenses[
           bankItemIndexWeek
         ].categories.findIndex((i) => i.catId === action.payload.catId);
-        // const categoryIdWeek = state.weekCategoriesExpenses
-        //   .filter((item) => item.bankAccountId === action.payload.bankAccountId)
-        //   .map((i) => i.categories)
-        //   .find((category) => category.catId === action.payload.catId);
-        // const categoryIndexWeek = state.weekCategoriesExpenses.indexOf(
-        //   categoryIdWeek!
-        // );
+
         state.weekCategoriesExpenses[bankItemIndexWeek].categories[
           categoryToUpdateIndex
         ].sum = state.weekCategoriesExpenses[bankItemIndexWeek].categories[
@@ -298,48 +286,96 @@ const expensesSlice = createSlice({
         ];
       }
     },
-
+    setPlannedExpensesNewCurrency: (state, action) => {
+      if (state.plannedExpenses.length > 0) {
+        const indexOfCurrency = state.plannedExpenses.findIndex(
+          (item) => item.currency === action.payload.currency
+        );
+        if (indexOfCurrency === -1) {
+          state.plannedExpenses = [
+            ...state.plannedExpenses,
+            {
+              currency: action.payload.currency,
+              expenses:
+                state.plannedExpenses[0].expenses.length > 0
+                  ? state.plannedExpenses[0].expenses.map((item) => ({
+                      catId: item.catId,
+                      name: item.name,
+                      iconName: item.iconName,
+                      value: 0,
+                    }))
+                  : [],
+            },
+          ];
+        }
+      } else if (state.plannedExpenses.length === 0) {
+        state.plannedExpenses = [
+          { currency: action.payload.currency, expenses: [] },
+        ];
+      }
+    },
     setPlannedExpense: (state, action) => {
-      state.plannedExpenses = [
-        ...state.plannedExpenses,
-        {
-          catId: action.payload.catId,
-          name: action.payload.name,
-          iconName: action.payload.iconName,
-          value: 0,
-        },
-      ];
+      state.plannedExpenses = state.plannedExpenses.map((item) => ({
+        currency: item.currency,
+        expenses: [
+          ...item.expenses,
+          {
+            catId: action.payload.catId,
+            name: action.payload.name,
+            iconName: action.payload.iconName,
+            value: 0,
+          },
+        ],
+      }));
     },
 
     addPlannedExpense: (state, action) => {
-      const indexOfPlannedExpense = state.plannedExpenses.findIndex(
-        (item) => item.catId === action.payload.catId
+      const indexOfCurrency = state.plannedExpenses.findIndex(
+        (item) => item.currency === action.payload.currency
       );
-      state.plannedExpenses[indexOfPlannedExpense] = {
-        ...state.plannedExpenses[indexOfPlannedExpense],
+      const indexOfPlannedExpense = state.plannedExpenses[
+        indexOfCurrency
+      ].expenses.findIndex((item) => item.catId === action.payload.catId);
+      state.plannedExpenses[indexOfCurrency].expenses[indexOfPlannedExpense] = {
+        ...state.plannedExpenses[indexOfCurrency].expenses[
+          indexOfPlannedExpense
+        ],
         value: action.payload.value,
       };
     },
 
     updatePlannedExpenseCategory: (state, action) => {
       if (state.plannedExpenses.length > 0) {
-        const indexOfPlannedExpense = state.plannedExpenses.findIndex(
-          (item) => item.catId === action.payload.catId
-        );
-        state.plannedExpenses[indexOfPlannedExpense] = {
-          ...state.plannedExpenses[indexOfPlannedExpense],
-          name: action.payload.name,
-          iconName: action.payload.iconName,
-        };
+        // const indexOfPlannedExpense = state.plannedExpenses.findIndex(
+        //   (item) => item.catId === action.payload.catId
+        // );
+        state.plannedExpenses = state.plannedExpenses.map((item) => {
+          const indexOfItem = item.expenses.findIndex(
+            (i) => i.catId === action.payload.id
+          );
+          return {
+            currency: item.currency,
+            expenses: [
+              ...item.expenses.filter((i) => i.catId !== action.payload.id),
+              {
+                catId: action.payload.catId,
+                name: action.payload.name,
+                iconName: action.payload.iconName,
+                value: item.expenses[indexOfItem].value,
+              },
+            ],
+          };
+        });
       } else {
         return;
       }
     },
 
     deleteAllExpensesFromCategory: (state, action) => {
-      state.plannedExpenses = state.plannedExpenses.filter(
-        (item) => item.catId !== action.payload.catId
-      );
+      state.plannedExpenses = state.plannedExpenses.map((item) => ({
+        currency: item.currency,
+        expenses: item.expenses.filter((i) => i.catId !== action.payload.catId),
+      }));
       state.monthCategoriesExpenses = state.monthCategoriesExpenses.map(
         (item) => ({
           bankAccountId: item.bankAccountId,
@@ -683,4 +719,6 @@ export const setCurrentMonthExpenses = expensesSlice.actions.setCurrentMonth;
 export const deleteSingleExpense = expensesSlice.actions.deleteSingleExpense;
 export const createNewBankAccountInitialExpensesSetup =
   expensesSlice.actions.createNewBankAccountExpensesInitialSetup;
+export const setPlannedExpensesNewCurrency =
+  expensesSlice.actions.setPlannedExpensesNewCurrency;
 export default expensesSlice.reducer;

@@ -10,16 +10,17 @@ import StripsColumn from "../../utils/ui/StripsColumn";
 import ModalSetPlannedExpense from "../../components/planning/ModalSetPlannedExpense";
 import UpdateBankAccountInfo from "../../components/informations/UpdateBankAccountInfo";
 import UpdateExpensesCategoriesInfo from "../../components/informations/UpdateExpensesCategoriesInfo";
+import Label from "../../utils/ui/Label";
 
 const PlannedExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {
-  const plannedExpenses = useAppSelector(
+  const plannedExpensesStore = useAppSelector(
     (state) => state.expenses.plannedExpenses
   );
   const bankAccounts = useAppSelector((state) => state.bankAccounts.accounts);
-  const activeBankAccountStoreId = useAppSelector(
-    (state) => state.bankAccounts.activeAccount.accountId
+  const activeBankAccountStore = useAppSelector(
+    (state) => state.bankAccounts.activeAccount
   );
   const categoriesExpenses = useAppSelector(
     (state) => state.expensesCategories.categoriesList
@@ -29,8 +30,15 @@ const PlannedExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   const [modalVisible, setModalVisible] = useState(false);
 
   const bankAccountsActiveAccountIndexId = bankAccounts.findIndex(
-    (item) => item.accountId === activeBankAccountStoreId
+    (item) => item.accountId === activeBankAccountStore.accountId
   );
+  const indexOfCurrency = plannedExpensesStore.findIndex(
+    (item) => item.currency === activeBankAccountStore.currency
+  );
+  const plannedExpenses =
+    indexOfCurrency !== -1
+      ? plannedExpensesStore[indexOfCurrency].expenses
+      : [];
   const sumOfPlannedExpenses = plannedExpenses
     .map((item) => Number(item.value))
     .reduce((partialSum, a) => partialSum + a, 0);
@@ -76,7 +84,7 @@ const PlannedExpensesScreen: React.FC<{ navigation: Navigation }> = ({
               setModalVisible={(value) => setModalVisible(value)}
             />
             <GoldenFrame name="SUMA" value={sumOfPlannedExpenses} />
-            <Text style={styles.label}>Edytuj zaplanowane wydatki</Text>
+            <Label value="Edytuj zaplanowane wydatki" />
             <View style={styles.flatlistBox}>
               {plannedExpenses.map((item, index) => (
                 <CircleNumberColorButton
@@ -101,7 +109,7 @@ const PlannedExpensesScreen: React.FC<{ navigation: Navigation }> = ({
                 }
               />
             </View>
-            <Text style={styles.label}>Udziały zaplanowanych wydatków</Text>
+            <Label value="Zaplanowane wydatki" />
             <StripsColumn data={stripsColumnData} />
           </>
         )}
