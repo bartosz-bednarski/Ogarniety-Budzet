@@ -14,7 +14,7 @@ const MonthsSavingsBox: React.FC<{
     >
       <View style={styles.goldenBox}>
         <View style={styles.goldenBoxTop}>
-          <Ionicons name="wallet" size={64} color={COLORS_STYLE.basicGold} />
+          <Ionicons name="wallet" size={52} color={COLORS_STYLE.basicGold} />
           <Text style={styles.textWhiteL}>
             {realised
               ? "Zestawienie oszczędności"
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   },
   textWhiteL: {
     color: "white",
-    fontSize: 20,
+    fontSize: 16,
     width: "70%",
     fontWeight: "600",
     textAlign: "left",

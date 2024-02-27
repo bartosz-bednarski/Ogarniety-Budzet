@@ -24,37 +24,169 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   const weekCategoriesExpensesStore = useAppSelector(
     (state) => state.expenses.weekCategoriesExpenses
   );
-  const activeBankAccountStoreId = useAppSelector(
-    (state) => state.bankAccounts.activeAccount.accountId
+  const activeBankAccountStore = useAppSelector(
+    (state) => state.bankAccounts.activeAccount
   );
-
+  const monthCategoriesExpensesStore = useAppSelector(
+    (state) => state.expenses.monthCategoriesExpenses
+  );
   const weekExpensesStore = useAppSelector(
     (state) => state.expenses.weekExpenses
   );
-  const plannedExpenses = useAppSelector(
+  const plannedExpensesStore = useAppSelector(
     (state) => state.expenses.plannedExpenses
   );
+
   const bankAccounts = useAppSelector((state) => state.bankAccounts.accounts);
 
+  const plannedExpensesCurrencyIndex = plannedExpensesStore.findIndex(
+    (item) => item.currency === activeBankAccountStore.currency
+  );
+  const bankAccountsIdsWithActiveCurrency = bankAccounts.map(
+    (item) =>
+      item.currency === activeBankAccountStore.currency && item.accountId
+  );
+  const monthExpenses = [];
+  // const check = monthCategoriesExpensesStore.map((item) => {
+  //   const checkId = bankAccountsIdsWithActiveCurrency.findIndex(
+  //     (i) => i === item.bankAccountId
+  //   );
+  //   if (checkId !== -1) {
+  //     return { ...item.categories };
+  //   }
+  // });
+  const monthExpensesByCurrency: { catId: string; sum: number }[] = [];
+  for (let i = 0; i < monthCategoriesExpensesStore.length; i++) {
+    const checkId = bankAccountsIdsWithActiveCurrency.findIndex(
+      (item) => item === monthCategoriesExpensesStore[i].bankAccountId
+    );
+    if (checkId !== -1) {
+      monthExpensesByCurrency.push(
+        ...monthCategoriesExpensesStore[i].categories
+      );
+    }
+  }
+  const monthExpensesByCurrencySum: { catId: string; sum: number }[] = [];
+  for (let i = 0; i < monthExpensesByCurrency.length; i++) {
+    if (monthExpensesByCurrencySum.length === 0) {
+      monthExpensesByCurrencySum.push({
+        catId: monthExpensesByCurrency[i].catId,
+        sum: monthExpensesByCurrency[i].sum,
+      });
+    } else if (monthExpensesByCurrencySum.length > 0) {
+      const catIdIndex = monthExpensesByCurrencySum.findIndex(
+        (item) => item.catId === monthExpensesByCurrency[i].catId
+      );
+      if (catIdIndex === -1) {
+        monthExpensesByCurrencySum.push({
+          catId: monthExpensesByCurrency[i].catId,
+          sum: monthExpensesByCurrency[i].sum,
+        });
+      } else if (catIdIndex !== -1) {
+        monthExpensesByCurrencySum[catIdIndex].sum =
+          monthExpensesByCurrencySum[catIdIndex].sum +
+          monthExpensesByCurrency[i].sum;
+      }
+    }
+  }
+
+  //   const plannedExpenses:{catId:string;iconname:string;name:string;value:number}[]=[]
+  //   if(plannedExpensesCurrencyIndex !== -1){
+  // for(let i=0;i<plannedExpensesStore[plannedExpensesCurrencyIndex].expenses.length;i++){
+  //   const monthExpensesAccountId = monthCategoriesExpensesStore.findIndex(item=>item.bankAccountId===)
+  //   const objToPush = {
+  // catId:plannedExpensesStore[plannedExpensesCurrencyIndex].expenses[i].catId,
+  // iconName:plannedExpensesStore[plannedExpensesCurrencyIndex].expenses[i].iconName,
+  // name:plannedExpensesStore[plannedExpensesCurrencyIndex].expenses[i].name,
+  // value:
+  //   }
+  // }
+  //   }
+  const plannedExpenses: {
+    catId: string;
+    iconName: string;
+    name: string;
+    value: number;
+  }[] = [];
+  if (plannedExpensesCurrencyIndex !== -1) {
+    for (
+      let i = 0;
+      i < plannedExpensesStore[plannedExpensesCurrencyIndex].expenses.length;
+      i++
+    ) {
+      const monthExpensesSumIndex = monthExpensesByCurrencySum.findIndex(
+        (item) =>
+          item.catId ===
+          plannedExpensesStore[plannedExpensesCurrencyIndex].expenses[i].catId
+      );
+      if (monthExpensesSumIndex !== -1) {
+        const value =
+          Number(
+            plannedExpensesStore[plannedExpensesCurrencyIndex].expenses[i].value
+          ) - Number(monthExpensesByCurrencySum[monthExpensesSumIndex].sum);
+        plannedExpenses.push({
+          catId:
+            plannedExpensesStore[plannedExpensesCurrencyIndex].expenses[i]
+              .catId,
+          iconName:
+            plannedExpensesStore[plannedExpensesCurrencyIndex].expenses[i]
+              .iconName,
+          name: plannedExpensesStore[plannedExpensesCurrencyIndex].expenses[i]
+            .name,
+          value: value,
+        });
+      } else if (monthExpensesSumIndex === -1) {
+        plannedExpenses.push({
+          ...plannedExpensesStore[plannedExpensesCurrencyIndex].expenses[i],
+        });
+      }
+    }
+  }
+  // const plannedExpenses =
+  //   plannedExpensesCurrencyIndex !== -1
+  //     ? plannedExpensesStore[plannedExpensesCurrencyIndex].expenses
+  //     : [];
+
   const bankAccountsActiveAccountIndexId = bankAccounts.findIndex(
-    (item) => item.accountId === activeBankAccountStoreId
+    (item) => item.accountId === activeBankAccountStore.accountId
   );
 
-  const weekCategoriesExpensesIndexOfCurrentId =
-    weekCategoriesExpensesStore.findIndex(
-      (item) => item.bankAccountId === activeBankAccountStoreId
+  const categoriesExpenses: { catId: string; sum: number }[] = [];
+  for (let i = 0; i < weekCategoriesExpensesStore.length; i++) {
+    const bankAccountIndex = bankAccountsIdsWithActiveCurrency.findIndex(
+      (item) => item === weekCategoriesExpensesStore[i].bankAccountId
     );
-
-  const categoriesExpenses =
-    weekCategoriesExpensesIndexOfCurrentId !== -1
-      ? weekCategoriesExpensesStore[weekCategoriesExpensesIndexOfCurrentId]
-          .categories
-      : [
-          {
-            catId: "null",
-            sum: 0,
-          },
-        ];
+    if (bankAccountIndex !== -1) {
+      for (
+        let x = 0;
+        x < weekCategoriesExpensesStore[i].categories.length;
+        x++
+      ) {
+        const catIdIndex =
+          categoriesExpenses.length > 0
+            ? categoriesExpenses.findIndex(
+                (cat) =>
+                  cat.catId ===
+                  weekCategoriesExpensesStore[i].categories[x].catId
+              )
+            : -1;
+        if (catIdIndex === -1) {
+          categoriesExpenses.push({
+            catId: weekCategoriesExpensesStore[i].categories[x].catId,
+            sum: weekCategoriesExpensesStore[i].categories[x].sum,
+          });
+        } else if (catIdIndex !== -1) {
+          const catIdIndexToUpdate = categoriesExpenses.findIndex(
+            (item) =>
+              item.catId === weekCategoriesExpensesStore[i].categories[x].catId
+          );
+          categoriesExpenses[catIdIndexToUpdate].sum =
+            Number(categoriesExpenses[catIdIndexToUpdate].sum) +
+            Number(weekCategoriesExpensesStore[i].categories[x].sum);
+        }
+      }
+    }
+  }
 
   const categoriesExpensesWithNames: CategoriesExpensesWithNames =
     categoriesExpenses.map((category, index) => ({
@@ -64,7 +196,7 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
     }));
 
   const lastExpenses = weekExpensesStore.filter(
-    (item) => item.bankAccountId === activeBankAccountStoreId
+    (item) => item.bankAccountId === activeBankAccountStore.accountId
   );
 
   const lastExpensesToShow = lastExpenses.map((item) => ({
@@ -72,120 +204,127 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
     ...categories.find((cat) => cat.catId === item.catId),
     iconColorNumber: categories.findIndex((cat) => cat.catId === item.catId),
   }));
+  const stripsColumnData: {
+    catId: string;
+    sum: number;
+    iconName: string;
+    name: string;
+    value: number;
+  }[] = categoriesExpenses.map((category) => {
+    const plannedExpensesItemIndex = plannedExpenses.findIndex(
+      (item) => item.catId === category.catId
+    );
 
-  let stripsColumnData = categoriesExpenses.map((category) => ({
-    ...category,
-    ...plannedExpenses.find((item) => item.catId === category.catId),
-  }));
+    return {
+      catId: category.catId,
+      sum: category.sum,
+      iconName: plannedExpenses[plannedExpensesItemIndex].iconName,
+      name: plannedExpenses[plannedExpensesItemIndex].name,
+      value:
+        plannedExpenses[plannedExpensesItemIndex].value > 0
+          ? plannedExpenses[plannedExpensesItemIndex].value
+          : category.sum,
+    };
+  });
 
-  const sumOfPlannedExpenses = plannedExpenses
-    .map((item) => Number(item.value))
-    .reduce((partialSum, a) => partialSum + a, 0);
+  const sumOfPlannedExpenses =
+    plannedExpenses
+      .map((item) => Number(item.value))
+      .reduce((partialSum, a) => partialSum + a, 0) > 0
+      ? plannedExpenses
+          .map((item) => Number(item.value))
+          .reduce((partialSum, a) => partialSum + a, 0)
+      : 0;
 
   const sumOfAllExpenses = categoriesExpenses
     .map((cat) => Number(cat.sum))
     .reduce((partialSum, a) => partialSum + a, 0);
-  const toSpend = sumOfPlannedExpenses - sumOfAllExpenses;
-
-  useEffect(() => {
-    stripsColumnData = categoriesExpenses.map((category) => ({
-      ...category,
-      ...plannedExpenses.find((item) => item.catId === category.catId),
-    }));
-  }, [plannedExpenses, categoriesExpenses]);
+  const toSpend = sumOfPlannedExpenses > 0 ? sumOfPlannedExpenses : 1;
   return (
-    <>
-      <View style={styles.container}>
-        {(bankAccounts.length === 0 ||
-          bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus ===
-            0) && (
-          <UpdateBankAccountInfo
-            onPress={() => navigation.navigate("Oszczędności")}
+    <View style={styles.container}>
+      {(bankAccounts.length === 0 ||
+        bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus ===
+          0) && (
+        <UpdateBankAccountInfo
+          onPress={() => navigation.navigate("Oszczędności")}
+        />
+      )}
+      {bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus > 0 &&
+        sumOfAllExpenses === 0 &&
+        categories.length > 0 && (
+          <InfoDateUpdate
+            goldText="Nowy Tydzień"
+            whiteText="Uzupełnij swoje wydatki"
+            arrow="down"
           />
         )}
-        {bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus > 0 &&
-          sumOfAllExpenses === 0 &&
-          categories.length > 0 && (
-            <InfoDateUpdate
-              goldText="Nowy Tydzień"
-              whiteText="Uzupełnij swoje wydatki"
-              arrow="down"
+      {bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus > 0 && (
+        <ScrollView style={styles.scrollView}>
+          {categories.length === 0 && (
+            <UpdateExpensesCategoriesInfo
+              onPress={() =>
+                navigation.navigate("settingsNavigator", {
+                  screen: "addNewCategory",
+                })
+              }
             />
           )}
-        {bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus >
-          0 && (
-          <ScrollView style={styles.scrollView}>
-            {categories.length === 0 && (
-              <UpdateExpensesCategoriesInfo
-                onPress={() =>
-                  navigation.navigate("settingsNavigator", {
-                    screen: "addNewCategory",
-                  })
-                }
+
+          {sumOfAllExpenses > 0 && (
+            <>
+              <PieChartWithFrames
+                categoriesExpensesWithNames={categoriesExpensesWithNames}
+                sumOfAllExpenses={sumOfAllExpenses}
+                toSpend={toSpend}
               />
-            )}
+              <Label value="Realizacja wydatków w poszczególnych kategoriach" />
 
-            {sumOfAllExpenses > 0 && (
-              <>
-                <PieChartWithFrames
-                  categoriesExpensesWithNames={categoriesExpensesWithNames}
-                  sumOfAllExpenses={sumOfAllExpenses}
-                  toSpend={toSpend}
-                />
-                <Label value="Realizacja wydatków w poszczególnych kategoriach" />
-
-                <StripsColumn data={stripsColumnData} />
-                <Label value="Realizacja założeń wydatków" />
-                <PieChartRealisation
-                  realExpenses={sumOfAllExpenses}
-                  plannedExpenses={sumOfPlannedExpenses}
-                />
-              </>
-            )}
-            {lastExpensesToShow.length > 0 && (
-              <>
-                {sumOfAllExpenses > 0 && (
-                  <Label value="Lista ostatnich wydatków" />
-                )}
-                <View style={styles.lastExpensesContainer}>
-                  {lastExpensesToShow.map((item) => {
-                    if (item.value !== 0) {
-                      return (
-                        <SingleExpense
-                          iconName={item.iconName!}
-                          price={item.value}
-                          date={item.dateString}
-                          key={item.id}
-                          color={item.iconColorNumber}
-                          name={item.name}
-                          id={item.id}
-                          catId={item.catId}
-                        />
-                      );
-                    }
-                  })}
-                </View>
-              </>
-            )}
-          </ScrollView>
-        )}
-        {bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus >
-          0 && (
+              <StripsColumn data={stripsColumnData} />
+              <Label value="Realizacja założeń wydatków" />
+              <PieChartRealisation
+                realExpenses={sumOfAllExpenses}
+                plannedExpenses={sumOfPlannedExpenses}
+              />
+            </>
+          )}
+          {lastExpensesToShow.length > 0 && (
+            <>
+              {lastExpensesToShow[0].value !== 0 && (
+                <Label value="Lista ostatnich wydatków" />
+              )}
+              <View style={styles.lastExpensesContainer}>
+                {lastExpensesToShow.map((item) => {
+                  if (item.value !== 0) {
+                    return (
+                      <SingleExpense
+                        iconName={item.iconName!}
+                        price={item.value}
+                        date={item.dateString}
+                        key={item.id}
+                        color={item.iconColorNumber}
+                        name={item.name}
+                        id={item.id}
+                        catId={item.catId}
+                      />
+                    );
+                  }
+                })}
+              </View>
+            </>
+          )}
+        </ScrollView>
+      )}
+      {bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus > 0 &&
+        categories.length > 0 && (
           <AddCircleButton
             onPress={() => navigation.navigate("addExpense")}
             name="Dodaj wydatek"
           />
         )}
-      </View>
-    </>
+    </View>
   );
 };
 const styles = StyleSheet.create({
-  informationBox: {
-    alignItems: "center",
-    justifyContent: "center",
-    height: 100,
-  },
   container: {
     flex: 1,
     paddingVertical: 10,

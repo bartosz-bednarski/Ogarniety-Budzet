@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import {
   deleteBankAccount,
   editBankAccount,
+  setActiveBankAccount,
 } from "../../../redux/bankAccounts-slice";
 
 const ModalEditBankAccount: React.FC<{
@@ -161,6 +162,11 @@ const ModalEditBankAccount: React.FC<{
           <View style={styles.modalLayout}>
             <View style={[styles.modalView]}>
               <Text style={styles.header}>Na pewno ?</Text>
+              <Text style={styles.modalInfo}>
+                Wszystkie wydatki, które zostały zarejestrowane zostaną w
+                pamięci aplikacji i będą uwzględniane przy generowaniu
+                podsumowań.
+              </Text>
               <View style={styles.modalButtonsBox}>
                 <Pressable
                   style={styles.modalButton}
@@ -257,6 +263,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginBottom: 20,
     textAlign: "center",
+    color: "white",
   },
   deleteButtoncontainer: {
     width: "100%",

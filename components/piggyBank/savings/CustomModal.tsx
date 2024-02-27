@@ -16,6 +16,7 @@ import {
   setCurrentYearExpenses,
   setDateToUpdateWeek,
   setCurrentMonthExpenses,
+  setPlannedExpensesNewCurrency,
 } from "../../../redux/expenses-slice";
 import CustomButton from "../../../utils/ui/CustomButton";
 import { addExpensesCategory } from "../../../redux/expensesCategories-slice";
@@ -70,6 +71,7 @@ const CustomModal: React.FC<{
           bankAccountId: bankAccountId,
         })
       );
+      dispatch(setPlannedExpensesNewCurrency({ currency: "PLN" }));
       setModalVisible(false);
     } else if (
       Number(bankAccountInput) > 0 &&
@@ -117,6 +119,7 @@ const CustomModal: React.FC<{
           bankAccountId: bankAccountId,
         })
       );
+      dispatch(setPlannedExpensesNewCurrency({ currency: "PLN" }));
       dispatch(
         setPlannedExpense({
           name: "Inne",
@@ -124,7 +127,10 @@ const CustomModal: React.FC<{
           catId: catId,
         })
       );
-      dispatch(addPlannedExpense({ catId: catId, value: difference }));
+
+      dispatch(
+        addPlannedExpense({ catId: catId, value: difference, currency: "PLN" })
+      );
       setModalVisible(false);
     } else if (
       Number(bankAccountInput) > 0 &&
@@ -154,6 +160,7 @@ const CustomModal: React.FC<{
           bankAccountId: bankAccountId,
         })
       );
+      dispatch(setPlannedExpensesNewCurrency({ currency: "PLN" }));
       setModalVisible(false);
     }
   };
@@ -214,7 +221,7 @@ const styles = StyleSheet.create({
   modalView: {
     margin: 20,
     width: "90%",
-    backgroundColor: "#dddbdb",
+    backgroundColor: COLORS_STYLE.tabGrey,
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
@@ -226,35 +233,35 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    gap: 10,
   },
   modalHeader: {
     fontSize: 24,
     marginBottom: 10,
     fontWeight: "600",
+    color: COLORS_STYLE.basicGold,
   },
   modalLabel: {
     fontSize: 12,
-    marginBottom: 10,
     textAlign: "left",
     width: "100%",
     marginLeft: 5,
+    color: "white",
   },
   modalInfo: {
     fontSize: 12,
     marginBottom: 20,
     textAlign: "center",
+    color: COLORS_STYLE.basicGold,
   },
   textInput: {
-    backgroundColor: "white",
-    borderColor: "black",
-    borderWidth: 1,
+    borderColor: "white",
+    borderBottomWidth: 1,
     width: "100%",
-    borderRadius: 10,
-    height: 50,
+    height: 40,
     paddingVertical: 5,
-    paddingHorizontal: 5,
-    color: "black",
-    marginBottom: 20,
+    paddingHorizontal: 0,
+    color: "white",
   },
   errorText: {
     fontSize: 12,

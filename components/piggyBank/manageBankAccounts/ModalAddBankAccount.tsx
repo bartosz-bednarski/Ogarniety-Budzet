@@ -18,6 +18,7 @@ import {
   createNewBankAccountInitialExpensesSetup,
   setExpense,
   setPlannedExpense,
+  setPlannedExpensesNewCurrency,
 } from "../../../redux/expenses-slice";
 import { addIncomesCategory } from "../../../redux/incomesCategories-slice";
 import { setIncome, updateIncome } from "../../../redux/incomes-slice";
@@ -82,6 +83,9 @@ const ModalAddBankAccount: React.FC<{
           currency: currency.toUpperCase(),
           bankAccountStatus: Number(bankAccoutInput),
         })
+      );
+      dispatch(
+        setPlannedExpensesNewCurrency({ currency: currency.toUpperCase() })
       );
       dispatch(
         addIncomesCategory({
@@ -167,13 +171,22 @@ const ModalAddBankAccount: React.FC<{
         })
       );
       dispatch(
+        setPlannedExpensesNewCurrency({ currency: currency.toUpperCase() })
+      );
+      dispatch(
         setPlannedExpense({
           name: "Inne",
           iconName: "star",
           catId: catId,
         })
       );
-      dispatch(addPlannedExpense({ catId: catId, value: difference }));
+      dispatch(
+        addPlannedExpense({
+          catId: catId,
+          value: difference,
+          currency: currency.toUpperCase(),
+        })
+      );
       setModalVisible(false);
     } else if (
       Number(bankAccoutInput) > 0 &&
@@ -207,11 +220,17 @@ const ModalAddBankAccount: React.FC<{
           bankAccountId: bankAccountId,
         })
       );
+      dispatch(
+        setPlannedExpensesNewCurrency({ currency: currency.toUpperCase() })
+      );
       if (monthCategoriesExpensesStore.length > 0) {
         dispatch(
           createNewBankAccountInitialExpensesSetup({
             bankAccountId: bankAccountId,
           })
+        );
+        dispatch(
+          setPlannedExpensesNewCurrency({ currency: currency.toUpperCase() })
         );
       }
       setModalVisible(false);

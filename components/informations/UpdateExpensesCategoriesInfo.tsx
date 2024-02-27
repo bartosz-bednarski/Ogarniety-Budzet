@@ -14,7 +14,7 @@ const UpdateExpensesCategoriesInfo: React.FC<{ onPress: () => void }> = ({
       <View style={styles.boxIcon}>
         <Ionicons
           name="trending-down-outline"
-          size={120}
+          size={100}
           color={COLORS_STYLE.red}
         />
       </View>
@@ -32,7 +32,7 @@ const UpdateExpensesCategoriesInfo: React.FC<{ onPress: () => void }> = ({
 
 const styles = StyleSheet.create({
   box: {
-    paddingVertical: 20,
+    paddingVertical: 10,
     justifyContent: "flex-start",
     alignItems: "center",
     flex: 1,
@@ -42,20 +42,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
-    gap: 20,
+    gap: 10,
   },
   greenText: {
     color: COLORS_STYLE.green,
-    fontSize: 32,
+    fontSize: 30,
     width: "100%",
     textAlign: "center",
     fontWeight: "800",
-    marginBottom: 20,
     flexWrap: "wrap",
   },
   goldText: {
     color: COLORS_STYLE.basicGold,
-    fontSize: 30,
+    fontSize: 24,
     width: "100%",
     textAlign: "center",
     fontWeight: "600",

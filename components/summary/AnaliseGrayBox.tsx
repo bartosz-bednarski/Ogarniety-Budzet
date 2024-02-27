@@ -2,6 +2,7 @@ import { View, Text, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import COLORS_STYLE from "../../utils/styles/colors";
 import PieChart from "react-native-pie-chart";
+import { numberWithSpaces } from "../../utils/numberWithSpaces";
 
 const AnaliseGrayBox: React.FC<{
   currency: string;
@@ -30,7 +31,7 @@ const AnaliseGrayBox: React.FC<{
             color={COLORS_STYLE.green}
           />
           <Text style={styles.value}>
-            {incomes} {currency}
+            {numberWithSpaces(Number(incomes.toFixed(2)))} {currency}
           </Text>
         </View>
         <Text style={[styles.header, { color: COLORS_STYLE.red }]}>
@@ -43,7 +44,7 @@ const AnaliseGrayBox: React.FC<{
             color={COLORS_STYLE.red}
           />
           <Text style={styles.value}>
-            {expenses} {currency}
+            {numberWithSpaces(Number(expenses.toFixed(2)))} {currency}
           </Text>
         </View>
       </View>

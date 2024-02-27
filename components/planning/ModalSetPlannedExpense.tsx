@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import COLORS_STYLE from "../../utils/styles/colors";
 import { useState } from "react";
-import { useAppDispatch } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { addPlannedExpense } from "../../redux/expenses-slice";
 
 const ModalSetPlannedExpense: React.FC<{
@@ -17,6 +17,9 @@ const ModalSetPlannedExpense: React.FC<{
   setModalVisible: (value: boolean) => void;
   selectedCatId: string;
 }> = ({ modalVisible, setModalVisible, selectedCatId }) => {
+  const activeBankAccountStore = useAppSelector(
+    (state) => state.bankAccounts.activeAccount
+  );
   const dispatch = useAppDispatch();
 
   const [value, setValue] = useState("");
@@ -25,7 +28,13 @@ const ModalSetPlannedExpense: React.FC<{
   const submitHandler = () => {
     if (value !== "" && isNaN(Number(value)) === false) {
       if (Number(value) > 0) {
-        dispatch(addPlannedExpense({ catId: selectedCatId, value: value }));
+        dispatch(
+          addPlannedExpense({
+            catId: selectedCatId,
+            value: value,
+            currency: activeBankAccountStore.currency,
+          })
+        );
         setValue("");
         setError({ status: false, message: "" });
         setModalVisible(false);

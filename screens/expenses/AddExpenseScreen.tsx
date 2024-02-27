@@ -46,7 +46,7 @@ const AddExpenseScreen: React.FC<{ navigation: Navigation }> = ({
         dispatch(
           addExpense({
             catId: selectedCatId,
-            value: value,
+            value: Number(value).toFixed(2),
             bankAccountId: activeBankAccountStore,
           })
         );
@@ -54,7 +54,7 @@ const AddExpenseScreen: React.FC<{ navigation: Navigation }> = ({
         dispatch(
           addExpense({
             catId: selectedCatId,
-            value: value,
+            value: Number(value).toFixed(2),
             bankAccountId: activeBankAccountStore,
           })
         );

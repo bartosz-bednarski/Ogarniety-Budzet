@@ -28,7 +28,7 @@ const UpdateBankAccountInfo: React.FC<{ onPress: () => void }> = ({
 
 const styles = StyleSheet.create({
   box: {
-    paddingVertical: 20,
+    paddingVertical: 10,
     justifyContent: "flex-start",
     alignItems: "center",
     flex: 1,
@@ -38,15 +38,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
-    gap: 20,
   },
   greenText: {
     color: COLORS_STYLE.green,
-    fontSize: 32,
+    fontSize: 28,
     width: "100%",
     textAlign: "center",
     fontWeight: "800",
-    marginBottom: 20,
     flexWrap: "wrap",
   },
   goldText: {
@@ -55,7 +53,6 @@ const styles = StyleSheet.create({
     width: "100%",
     textAlign: "center",
     fontWeight: "600",
-    marginVertical: 20,
   },
 });
 

@@ -171,19 +171,17 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
             />
           </>
         )}
-        {realisedTargets.length > 0 && (
-          <>
-            <Label value="Zrealizowane cele finansowe" />
-            <RealisedTargetsBox
-              realised={realisedTargets.length > 0 ? true : false}
-              onPress={() => {
-                realisedTargets.length > 0
-                  ? navigation.navigate("realisedTargets")
-                  : navigation.navigate("planning");
-              }}
-            />
-          </>
-        )}
+        <>
+          <Label value="Zrealizowane cele finansowe" />
+          <RealisedTargetsBox
+            realised={realisedTargets.length > 0 ? true : false}
+            onPress={() => {
+              realisedTargets.length > 0
+                ? navigation.navigate("realisedTargets")
+                : navigation.navigate("planning");
+            }}
+          />
+        </>
 
         {bankAccountStatus === 0 && (
           <CustomModal

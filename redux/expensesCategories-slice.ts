@@ -1,6 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { RootState } from "./store";
-import { CategoryItem } from "../types/settings";
 import { ExpensesCategoriesInitialState } from "../types/expenses";
 
 const expensesCategoriesInitialState: ExpensesCategoriesInitialState = {

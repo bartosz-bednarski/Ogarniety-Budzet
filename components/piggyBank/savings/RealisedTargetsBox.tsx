@@ -11,7 +11,7 @@ const RealisedTargetsBox: React.FC<{
     <Pressable style={styles.goldenContainer} onPress={onPress}>
       <View style={styles.goldenBox}>
         <View style={styles.goldenBoxTop}>
-          <Ionicons name="book" size={64} color={COLORS_STYLE.basicGold} />
+          <Ionicons name="book" size={52} color={COLORS_STYLE.basicGold} />
           <Text style={styles.textWhiteL}>
             {realised
               ? "Zrealizowane cele finansowe"
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   },
   goldenBoxTop: {
     flexDirection: "row",
-    gap: 10,
+    gap: 20,
     paddingVertical: 10,
     paddingHorizontal: 15,
     justifyContent: "center",
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   },
   textWhiteL: {
     color: "white",
-    fontSize: 20,
+    fontSize: 16,
     width: "70%",
     fontWeight: "600",
     textAlign: "center",
