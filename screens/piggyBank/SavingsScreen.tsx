@@ -140,7 +140,7 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
               name="STAN KONTA"
               value={Number(totalBankAccount.toFixed(2))}
             />
-            <Text style={styles.label}> Udziały w oszczędnościach</Text>
+            <Label value="Środki finansowe" />
             <View style={styles.greyBoxContainer}>
               {totalBankAccount > 0 && (
                 <PieChart
@@ -178,7 +178,7 @@ const SavingsScreen: React.FC<{ navigation: Navigation }> = ({
             onPress={() => {
               realisedTargets.length > 0
                 ? navigation.navigate("realisedTargets")
-                : navigation.navigate("planning");
+                : navigation.navigate("Planowanie");
             }}
           />
         </>

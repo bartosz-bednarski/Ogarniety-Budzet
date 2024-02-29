@@ -1,4 +1,4 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
 import COLORS_STYLE from "../../utils/styles/colors";
 import BankAccountGrayBox from "../../components/piggyBank/manageBankAccounts/BankAccountGrayBox";
 import AddBankAccountBox from "../../components/piggyBank/manageBankAccounts/AddBankAccountBox";
@@ -7,6 +7,7 @@ import ModalAddBankAccount from "../../components/piggyBank/manageBankAccounts/M
 import { useAppSelector } from "../../redux/hooks";
 import UpdateBankAccountInfo from "../../components/informations/UpdateBankAccountInfo";
 import { Navigation } from "../../types/global";
+
 const ManageBankAccountsScreen: React.FC<{ navigation: Navigation }> = ({
   navigation,
 }) => {
@@ -29,61 +30,62 @@ const ManageBankAccountsScreen: React.FC<{ navigation: Navigation }> = ({
   const bankAccounts = bankAccountsStore.filter(
     (item) => item.status === "OPEN"
   );
-
   return (
     <View style={styles.container}>
       {bankAccountStatus === 0 && (
         <UpdateBankAccountInfo onPress={() => navigation.navigate("account")} />
       )}
-      {bankAccountStatus > 0 && (
-        <>
-          {bankAccounts.map((item, index) => {
-            const incomesAccountIdIndex = incomes.findIndex(
-              (income) => income.bankAccountId === item.accountId
-            );
-            const monthIncomesSum =
-              incomesAccountIdIndex !== -1
-                ? incomes[incomesAccountIdIndex].categories
-                    .map((item) => Number(item.value))
-                    .reduce((partialSum, a) => partialSum + a, 0)
-                : 0;
-            const categoriesExpensesAccountIdIndex =
-              categoriesExpenses.findIndex(
-                (catExp) => catExp.bankAccountId === item.accountId
+      <ScrollView contentContainerStyle={{ gap: 20 }}>
+        {bankAccountStatus > 0 && (
+          <>
+            {bankAccounts.map((item, index) => {
+              const incomesAccountIdIndex = incomes.findIndex(
+                (income) => income.bankAccountId === item.accountId
               );
-            const monthExpensesSum =
-              categoriesExpensesAccountIdIndex !== -1
-                ? categoriesExpenses[
-                    categoriesExpensesAccountIdIndex
-                  ].categories
-                    .map((item) => Number(item.sum))
-                    .reduce((partialSum, a) => partialSum + a, 0)
-                : 0;
+              const monthIncomesSum =
+                incomesAccountIdIndex !== -1
+                  ? incomes[incomesAccountIdIndex].categories
+                      .map((item) => Number(item.value))
+                      .reduce((partialSum, a) => partialSum + a, 0)
+                  : 0;
+              const categoriesExpensesAccountIdIndex =
+                categoriesExpenses.findIndex(
+                  (catExp) => catExp.bankAccountId === item.accountId
+                );
+              const monthExpensesSum =
+                categoriesExpensesAccountIdIndex !== -1
+                  ? categoriesExpenses[
+                      categoriesExpensesAccountIdIndex
+                    ].categories
+                      .map((item) => Number(item.sum))
+                      .reduce((partialSum, a) => partialSum + a, 0)
+                  : 0;
 
-            return (
-              <BankAccountGrayBox
-                key={item.accountId}
-                accountName={item.accountName}
-                accountValue={
-                  Number(item.bankAccountStatus) +
-                  Number(monthIncomesSum) -
-                  Number(monthExpensesSum)
-                }
-                accountId={item.accountId}
-                accountCurrency={item.currency}
+              return (
+                <BankAccountGrayBox
+                  key={item.accountId}
+                  accountName={item.accountName}
+                  accountValue={
+                    Number(item.bankAccountStatus) +
+                    Number(monthIncomesSum) -
+                    Number(monthExpensesSum)
+                  }
+                  accountId={item.accountId}
+                  accountCurrency={item.currency}
+                />
+              );
+            })}
+
+            <AddBankAccountBox onPress={() => setModalVisible(true)} />
+            {modalVisible && (
+              <ModalAddBankAccount
+                modalVisible={modalVisible}
+                setModalVisible={(value) => setModalVisible(value)}
               />
-            );
-          })}
-
-          <AddBankAccountBox onPress={() => setModalVisible(true)} />
-          {modalVisible && (
-            <ModalAddBankAccount
-              modalVisible={modalVisible}
-              setModalVisible={(value) => setModalVisible(value)}
-            />
-          )}
-        </>
-      )}
+            )}
+          </>
+        )}
+      </ScrollView>
     </View>
   );
 };
@@ -93,7 +95,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     backgroundColor: COLORS_STYLE.backgroundBlack,
-    gap: 20,
   },
 });
 export default ManageBankAccountsScreen;

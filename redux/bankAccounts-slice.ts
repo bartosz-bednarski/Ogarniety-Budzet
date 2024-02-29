@@ -97,7 +97,7 @@ const bankAccountsSlice = createSlice({
         ],
         yearsSavings: item.yearsSavings,
         currentYear: item.currentYear,
-        status: "OPEN",
+        status: item.status,
       }));
 
       //wyzeruj wartości przychodów w tablicy z przychodami z aktualnego miesiąca
@@ -105,14 +105,19 @@ const bankAccountsSlice = createSlice({
       //TEST
       // if (new Date(dateCheck).getFullYear() > state.curentYear) {
       //         const yearToSet = new Date(dateCheck).getFullYear() - 1;
-      if (new Date().getFullYear() > state.accounts[0].currentYear) {
+      if (
+        new Date().getFullYear() >
+        state.accounts[
+          state.accounts.findIndex((i) => i.accountId === "UNIQUE")
+        ].currentYear
+      ) {
         const yearToSet = new Date().getFullYear() - 1;
 
         state.accounts = state.accounts.map((item) => ({
           accountName: item.accountName,
           accountId: item.accountId,
           currency: item.currency,
-          status: "OPEN",
+          status: item.status,
           bankAccountStatus: Number(item.bankAccountStatus),
           yearSavings: [],
           yearsSavings: [
@@ -158,7 +163,7 @@ const bankAccountsSlice = createSlice({
         bankAccountStatus: item.bankAccountStatus,
         yearSavings: item.yearSavings,
         yearsSavings: item.yearsSavings,
-        status: "OPEN",
+        status: item.status,
         currentYear: new Date().getFullYear(),
       }));
     },

@@ -25,7 +25,6 @@ const YearExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   const yearExpensesStore = useAppSelector(
     (state) => state.expenses.yearExpenses
   );
-
   const yearExpensesIndexOfCurrentId = yearExpensesStore.findIndex(
     (item) => item.bankAccountId === activeBankAccountStoreId
   );

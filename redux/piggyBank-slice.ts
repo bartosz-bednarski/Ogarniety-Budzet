@@ -82,6 +82,14 @@ const piggyBankSlice = createSlice({
         (item) => item.id !== action.payload.id
       );
     },
+    deleteFinantialTargetIncomesOnAccountDelete: (state, action) => {
+      state.finantialTargets = state.finantialTargets.map((item) => ({
+        ...item,
+        incomes: item.incomes.filter(
+          (income) => income.bankAccountId !== action.payload.bankAccountId
+        ),
+      }));
+    },
     setTargetRealised: (state, action) => {
       if (state.realisedTargets === undefined) {
         state.realisedTargets = [
@@ -157,4 +165,6 @@ export const deleteFinantialTarget =
   piggyBankSlice.actions.deleteFinantialTarget;
 export const setTargetRealised = piggyBankSlice.actions.setTargetRealised;
 export const setCurrentYearPiggyBank = piggyBankSlice.actions.setCurrentYear;
+export const deleteFinantialTargetIncomesOnAccountDelete =
+  piggyBankSlice.actions.deleteFinantialTargetIncomesOnAccountDelete;
 export default piggyBankSlice.reducer;

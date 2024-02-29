@@ -165,33 +165,101 @@ const incomesSlice = createSlice({
           ],
         }));
       } else if (state.yearIncomes.length > 0) {
-        state.yearIncomes = state.yearIncomes.map((item) => {
-          const bankAccountIndex = state.categoriesIncomes.findIndex(
-            (i) => i.bankAccountId === item.bankAccountId
+        let bankAccountIndexToAddYearIncomes: number | null = null;
+        for (let i = 0; i < state.categoriesIncomes.length; i++) {
+          const yearIncomesIndex = state.yearIncomes.findIndex(
+            (item) =>
+              item.bankAccountId === state.categoriesIncomes[i].bankAccountId
           );
-          return {
-            bankAccountId: item.bankAccountId,
-            months: [
-              ...item.months,
-              {
-                month: monthToSet,
-                sumOfAllIncomes: state.categoriesIncomes[
-                  bankAccountIndex
-                ].categories
-                  .map((income) => Number(income.value))
-                  .reduce((partialSum, a) => partialSum + a, 0),
-                categoriesIncomes: state.categoriesIncomes[
-                  bankAccountIndex
-                ].categories.map((catIncome) => ({
-                  catId: catIncome.catId,
-                  value: catIncome.value,
-                  stillExsists: true,
-                  bankAccountId: item.bankAccountId,
-                })),
-              },
-            ],
-          };
-        });
+          if (yearIncomesIndex === -1) {
+            bankAccountIndexToAddYearIncomes = i;
+          }
+        }
+
+        if (bankAccountIndexToAddYearIncomes === null) {
+          state.yearIncomes = state.yearIncomes.map((item) => {
+            const bankAccountIndex = state.categoriesIncomes.findIndex(
+              (i) => i.bankAccountId === item.bankAccountId
+            );
+            return {
+              bankAccountId: item.bankAccountId,
+              months: [
+                ...item.months,
+                {
+                  month: monthToSet,
+                  sumOfAllIncomes: state.categoriesIncomes[
+                    bankAccountIndex
+                  ].categories
+                    .map((income) => Number(income.value))
+                    .reduce((partialSum, a) => partialSum + a, 0),
+                  categoriesIncomes: state.categoriesIncomes[
+                    bankAccountIndex
+                  ].categories.map((catIncome) => ({
+                    catId: catIncome.catId,
+                    value: catIncome.value,
+                    stillExsists: true,
+                    bankAccountId: item.bankAccountId,
+                  })),
+                },
+              ],
+            };
+          });
+        } else if (bankAccountIndexToAddYearIncomes !== null) {
+          state.yearIncomes = [
+            ...state.yearIncomes.map((item) => {
+              const bankAccountIndex = state.categoriesIncomes.findIndex(
+                (i) => i.bankAccountId === item.bankAccountId
+              );
+              return {
+                bankAccountId: item.bankAccountId,
+                months: [
+                  ...item.months,
+                  {
+                    month: monthToSet,
+                    sumOfAllIncomes: state.categoriesIncomes[
+                      bankAccountIndex
+                    ].categories
+                      .map((income) => Number(income.value))
+                      .reduce((partialSum, a) => partialSum + a, 0),
+                    categoriesIncomes: state.categoriesIncomes[
+                      bankAccountIndex
+                    ].categories.map((catIncome) => ({
+                      catId: catIncome.catId,
+                      value: catIncome.value,
+                      stillExsists: true,
+                      bankAccountId: item.bankAccountId,
+                    })),
+                  },
+                ],
+              };
+            }),
+            {
+              bankAccountId:
+                state.categoriesIncomes[bankAccountIndexToAddYearIncomes]
+                  .bankAccountId,
+              months: [
+                {
+                  month: monthToSet,
+                  sumOfAllIncomes: state.categoriesIncomes[
+                    bankAccountIndexToAddYearIncomes
+                  ].categories
+                    .map((income) => Number(income.value))
+                    .reduce((partialSum, a) => partialSum + a, 0),
+                  categoriesIncomes: state.categoriesIncomes[
+                    bankAccountIndexToAddYearIncomes
+                  ].categories.map((catIncome) => ({
+                    catId: catIncome.catId,
+                    value: catIncome.value,
+                    stillExsists: true,
+                    bankAccountId:
+                      state.categoriesIncomes[bankAccountIndexToAddYearIncomes!]
+                        .bankAccountId,
+                  })),
+                },
+              ],
+            },
+          ];
+        }
       }
       //wyzeruj wartości przychodów w tablicy z przychodami z aktualnego miesiąca
 
@@ -218,24 +286,85 @@ const incomesSlice = createSlice({
               ],
             }));
           } else if (state.yearsIncomes.length > 0) {
-            state.yearsIncomes = state.yearsIncomes.map((item) => {
-              const bankAccountIndex = state.yearIncomes.findIndex(
-                (i) => i.bankAccountId === item.bankAccountId
+            //bankAccountIndexToAddYearsIncomes => Sprawdzenie czy w zestawieniu wieloletnim są wszystkie waluty, które były w ostatnich miesiącach.
+            //Przykład: W ciągu roku tworzymy dwa rachunki w walutach PLN i EUR. Po roku dostajemy podsumowanie wieleletnie (yearsIncomes), następnie dodajemy nowy rachunek w walucie GBP.
+            //Przy końcu roku sprawdzamy czy GBP jest w yearsIncomes, jeżeli nie to dodajemy.
+            //bankAccountIndexToAddYearsIncomes === null => waluty się zgadzają
+            //bankAccountIndexToAddYearsIncomes !== null => waluty się nie zgadzają, trzeba zrobić update yearsIncomes
+            let bankAccountIndexToAddYearsIncomes: number | null = null;
+            for (let i = 0; i < state.yearIncomes.length; i++) {
+              const yearsIncomesIndex = state.yearsIncomes.findIndex(
+                (item) =>
+                  item.bankAccountId === state.yearIncomes[i].bankAccountId
               );
-              return {
-                bankAccountId: item.bankAccountId,
-                years: [
-                  ...item.years,
-                  {
-                    year: yearToSet,
-                    sumOfAllIncomes: state.yearIncomes[bankAccountIndex].months
-                      .map((month) => Number(month.sumOfAllIncomes))
-                      .reduce((partialSum, a) => partialSum + a, 0),
-                    months: state.yearIncomes[bankAccountIndex].months,
-                  },
-                ],
-              };
-            });
+              if (yearsIncomesIndex === -1) {
+                bankAccountIndexToAddYearsIncomes = i;
+              }
+            }
+
+            if (bankAccountIndexToAddYearsIncomes === null) {
+              state.yearsIncomes = state.yearsIncomes.map((item) => {
+                const bankAccountIndex = state.yearIncomes.findIndex(
+                  (i) => i.bankAccountId === item.bankAccountId
+                );
+                return {
+                  bankAccountId: item.bankAccountId,
+                  years: [
+                    ...item.years,
+                    {
+                      year: yearToSet,
+                      sumOfAllIncomes: state.yearIncomes[
+                        bankAccountIndex
+                      ].months
+                        .map((month) => Number(month.sumOfAllIncomes))
+                        .reduce((partialSum, a) => partialSum + a, 0),
+                      months: state.yearIncomes[bankAccountIndex].months,
+                    },
+                  ],
+                };
+              });
+            } else if (bankAccountIndexToAddYearsIncomes !== null) {
+              state.yearsIncomes = [
+                ...state.yearsIncomes.map((item) => {
+                  const bankAccountIndex = state.yearIncomes.findIndex(
+                    (i) => i.bankAccountId === item.bankAccountId
+                  );
+                  return {
+                    bankAccountId: item.bankAccountId,
+                    years: [
+                      ...item.years,
+                      {
+                        year: yearToSet,
+                        sumOfAllIncomes: state.yearIncomes[
+                          bankAccountIndex
+                        ].months
+                          .map((month) => Number(month.sumOfAllIncomes))
+                          .reduce((partialSum, a) => partialSum + a, 0),
+                        months: state.yearIncomes[bankAccountIndex].months,
+                      },
+                    ],
+                  };
+                }),
+                {
+                  bankAccountId:
+                    state.yearIncomes[bankAccountIndexToAddYearsIncomes]
+                      .bankAccountId,
+                  years: [
+                    {
+                      year: yearToSet,
+                      sumOfAllIncomes: state.yearIncomes[
+                        bankAccountIndexToAddYearsIncomes
+                      ].months
+                        .map((month) => Number(month.sumOfAllIncomes))
+                        .reduce((partialSum, a) => partialSum + a, 0),
+                      months:
+                        state.yearIncomes[bankAccountIndexToAddYearsIncomes]
+                          .months,
+                    },
+                  ],
+                },
+              ];
+            }
           }
           //TEST
           // state.categoriesIncomes = state.categoriesIncomes.map((item) => ({

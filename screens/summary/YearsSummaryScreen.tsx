@@ -2,9 +2,11 @@ import { View, StyleSheet, ScrollView } from "react-native";
 import COLORS_STYLE from "../../utils/styles/colors";
 import { useAppSelector } from "../../redux/hooks";
 import YearsSummaryBox from "../../components/summary/YearsSummaryBox";
-import SquareBorderBox from "../../components/summary/SquareBorderBox";
 import YearBalanceGoldFrame from "../../components/summary/YearBalanceGoldFrame";
 import YearsSummaryInfo from "../../components/informations/YearsSummaryInfo";
+import Label from "../../utils/ui/Label";
+import AnaliseGrayBox from "../../components/summary/AnaliseGrayBox";
+import randomId from "../../utils/randomIdFunction";
 
 const YearsSummaryScreen = () => {
   const bankAccountsStore = useAppSelector(
@@ -51,7 +53,11 @@ const YearsSummaryScreen = () => {
               sumOfAllExpenses:
                 yearsExpensesStore[expensesAccountIndex].years[
                   expensesAccountYearIndex
-                ].months[expensesAccountMonthIndex].sumOfAllExpenses,
+                ].months[expensesAccountMonthIndex] !== undefined
+                  ? yearsExpensesStore[expensesAccountIndex].years[
+                      expensesAccountYearIndex
+                    ].months[expensesAccountMonthIndex].sumOfAllExpenses
+                  : 0,
               sumOfAllIncomes: month.sumOfAllIncomes,
             };
           }),
@@ -59,7 +65,6 @@ const YearsSummaryScreen = () => {
       }),
     };
   });
-
   const yearsExpensesWithIncomesByYears: {
     year: number;
     currency: {
@@ -125,7 +130,11 @@ const YearsSummaryScreen = () => {
     }
   }
 
-  const yearsExpensesWithIncomesByCurrency = [];
+  const yearsExpensesWithIncomesByCurrency: {
+    currency: string;
+    sumOfAllExpenses: number;
+    sumOfAllIncomes: number;
+  }[] = [];
   for (let i = 0; i < yearsExpensesWithIncomesByYears.length; i++) {
     const arrToPush = yearsExpensesWithIncomesByYears[i].currency.map(
       (item) => ({
@@ -134,7 +143,29 @@ const YearsSummaryScreen = () => {
         sumOfAllIncomes: item.sumOfAllIncomes,
       })
     );
-    yearsExpensesWithIncomesByCurrency.push(...arrToPush);
+    if (yearsExpensesWithIncomesByCurrency.length === 0) {
+      yearsExpensesWithIncomesByCurrency.push(...arrToPush);
+    } else if (yearsExpensesWithIncomesByCurrency.length > 0) {
+      for (let x = 0; x < arrToPush.length; x++) {
+        const currencyIndex = yearsExpensesWithIncomesByCurrency.findIndex(
+          (item) => item.currency === arrToPush[x].currency
+        );
+        if (currencyIndex === -1) {
+          yearsExpensesWithIncomesByCurrency.push({
+            currency: arrToPush[x].currency,
+            sumOfAllExpenses: arrToPush[x].sumOfAllExpenses,
+            sumOfAllIncomes: arrToPush[x].sumOfAllIncomes,
+          });
+        } else if (currencyIndex !== -1) {
+          yearsExpensesWithIncomesByCurrency[currencyIndex].sumOfAllExpenses =
+            yearsExpensesWithIncomesByCurrency[currencyIndex].sumOfAllExpenses +
+            arrToPush[x].sumOfAllExpenses;
+          yearsExpensesWithIncomesByCurrency[currencyIndex].sumOfAllExpenses =
+            yearsExpensesWithIncomesByCurrency[currencyIndex].sumOfAllIncomes +
+            arrToPush[x].sumOfAllIncomes;
+        }
+      }
+    }
   }
   return (
     <View style={styles.container}>
@@ -146,24 +177,17 @@ const YearsSummaryScreen = () => {
             justifyContent: "center",
           }}
         >
-          <View style={styles.rowBoxTop}>
-            <SquareBorderBox
-              values={yearsExpensesWithIncomesByCurrency.map((i) => ({
-                value: i.sumOfAllIncomes,
-                currency: i.currency,
-              }))}
-              name="Suma przychodów"
-              color="green"
-            />
-            <SquareBorderBox
-              values={yearsExpensesWithIncomesByCurrency.map((i) => ({
-                value: i.sumOfAllExpenses,
-                currency: i.currency,
-              }))}
-              name="Suma wydatków"
-              color="red"
-            />
-          </View>
+          {yearsExpensesWithIncomesByCurrency.map((item) => (
+            <View key={randomId()}>
+              <Label value={`Analiza finansowa w ${item.currency}`} />
+              <AnaliseGrayBox
+                incomes={item.sumOfAllIncomes}
+                expenses={item.sumOfAllExpenses}
+                currency={item.currency}
+              />
+            </View>
+          ))}
+
           <YearBalanceGoldFrame
             data={yearsExpensesWithIncomesByCurrency.map((item) => ({
               currency: item.currency,

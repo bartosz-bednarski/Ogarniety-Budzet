@@ -16,17 +16,16 @@ const YearsIncomesScreen = () => {
   const yearsIncomesActiveAccountIdIndex = yearsIncomes.findIndex(
     (item) => item.bankAccountId === activeBankAccountStore.accountId
   );
-
   const sumOfAllIncomes =
-    yearsIncomes.length > 0
+    yearsIncomes.length > 0 && yearsIncomesActiveAccountIdIndex !== -1
       ? yearsIncomes[yearsIncomesActiveAccountIdIndex].years
           .map((item) => Number(item.sumOfAllIncomes))
           .reduce((partialSum, a) => partialSum + a, 0)
       : 0;
   return (
     <ScrollView style={styles.container}>
-      {yearsIncomes.length === 0 && <YearsIncomesInfo />}
-      {yearsIncomes.length > 0 && (
+      {yearsIncomesActiveAccountIdIndex === -1 && <YearsIncomesInfo />}
+      {yearsIncomes.length > 0 && yearsIncomesActiveAccountIdIndex !== -1 && (
         <>
           <GoldenFrame name="SUMA" value={Number(sumOfAllIncomes.toFixed(2))} />
           <View style={styles.yearChart}>
