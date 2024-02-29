@@ -80,6 +80,7 @@ export default function App() {
                 component={PiggyBankNavigator}
                 name="Oszczędności"
                 options={{
+                  tabBarLabel: "Rachunki",
                   tabBarIcon: ({ color, size }) => (
                     <Ionicons name="wallet" color={color} size={size} />
                   ),

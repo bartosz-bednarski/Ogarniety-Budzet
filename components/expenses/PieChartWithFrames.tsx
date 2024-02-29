@@ -9,6 +9,7 @@ const PieChartWithFrames: React.FC<{
   sumOfAllExpenses: number;
   toSpend: number;
 }> = ({ categoriesExpensesWithNames, sumOfAllExpenses, toSpend }) => {
+  const toSpendUpdate = toSpend === 1 ? 0 : toSpend;
   return (
     <View style={styles.expensesCategories}>
       <PieChart
@@ -24,16 +25,16 @@ const PieChartWithFrames: React.FC<{
           textDown={Number(sumOfAllExpenses.toFixed(2))}
           mainColor={COLORS_STYLE.basicGold}
         />
-        {toSpend > 0 ? (
+        {toSpendUpdate > 0 ? (
           <FrameUnderlineSmall
             textUp="DO WYDANIA"
-            textDown={Number(toSpend.toFixed(2))}
+            textDown={Number(toSpendUpdate.toFixed(2))}
             mainColor={COLORS_STYLE.green}
           />
         ) : (
           <FrameUnderlineSmall
             textUp="PRZEKROCZONO PLANOWANY BUDŻET!"
-            textDown={Number(toSpend.toFixed(2))}
+            textDown={Number(toSpendUpdate.toFixed(2))}
             mainColor={COLORS_STYLE.red}
           />
         )}

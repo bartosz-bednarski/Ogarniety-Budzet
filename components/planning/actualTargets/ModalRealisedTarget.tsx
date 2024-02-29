@@ -70,7 +70,7 @@ const ModalRealisedTarget: React.FC<ModalRealisedTargetProps> = ({
             Potwierdź wydanie pieniędzy na cel
           </Text>
           <Text style={styles.modalText}>
-            Od sumy oszczędności zostanie odjęta kwota wydana na cel.
+            Od sumy oszczędności zostanie odjęta kwota wydana na cel
           </Text>
 
           <View style={styles.buttonsBox}>
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   modalView: {
     margin: 20,
     width: "80%",
-    backgroundColor: "#dddbdb",
+    backgroundColor: COLORS_STYLE.tabGrey,
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
@@ -118,6 +118,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginVertical: 5,
     textAlign: "center",
+    color: "white",
   },
   buttonsBox: {
     marginVertical: 10,

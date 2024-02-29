@@ -26,7 +26,12 @@ const ModalSetIncome: React.FC<{
   const [inputError, setInputError] = useState({ status: false, message: "" });
 
   const submitHandler = () => {
-    if (value !== "" && value !== "0" && isNaN(Number(value)) === false) {
+    if (
+      value !== "" &&
+      value !== "0" &&
+      Number(value) > 0 &&
+      isNaN(Number(value)) === false
+    ) {
       dispatch(
         updateIncome({
           catId: selectedCatId,
@@ -38,6 +43,11 @@ const ModalSetIncome: React.FC<{
       setModalVisible(!modalVisible);
     } else if (value === "") {
       setInputError({ status: true, message: "Kwota nie może być pusta!" });
+    } else if (Number(value) < 1) {
+      setInputError({
+        status: true,
+        message: "Wprowadzona wartość musi być większa od 0!",
+      });
     } else {
       setInputError({
         status: true,

@@ -247,6 +247,7 @@ const styles = StyleSheet.create({
     width: "100%",
     marginLeft: 5,
     color: "white",
+    marginTop: 5,
   },
   modalInfo: {
     fontSize: 12,
@@ -258,10 +259,11 @@ const styles = StyleSheet.create({
     borderColor: "white",
     borderBottomWidth: 1,
     width: "100%",
-    height: 40,
+    height: 30,
     paddingVertical: 5,
     paddingHorizontal: 0,
     color: "white",
+    marginBottom: 5,
   },
   errorText: {
     fontSize: 12,

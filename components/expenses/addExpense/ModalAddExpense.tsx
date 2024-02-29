@@ -27,8 +27,8 @@ const ModalAddExpense: React.FC<{
   const activeBankAccountStore = useAppSelector(
     (state) => state.bankAccounts.activeAccount
   );
-  const realisedTargets = useAppSelector(
-    (state) => state.piggyBank.realisedTargets
+  const finantialTargetsStore = useAppSelector(
+    (state) => state.piggyBank.finantialTargets
   );
   const bankAccounts = useAppSelector((state) => state.bankAccounts.accounts);
   const activeBankAccountStoreId = useAppSelector(
@@ -48,18 +48,36 @@ const ModalAddExpense: React.FC<{
   let bankAccountPlusIncomes;
   let monthExpensesSum;
   let totalBankAccount: number;
-  let sumOfRealisedTargets;
+  let sumOfFinantialTargets;
 
-  if (realisedTargets !== undefined) {
-    if (realisedTargets.length > 0) {
-      sumOfRealisedTargets = realisedTargets
-        .map((item) => item.targetValue)
-        .reduce((partialSum, a) => partialSum + a, 0);
+  if (finantialTargetsStore !== undefined) {
+    if (finantialTargetsStore.length > 0) {
+      const finantialTargetsActiveAccount: { value: number }[] = [];
+      for (let i = 0; i < finantialTargetsStore.length; i++) {
+        for (let x = 0; x < finantialTargetsStore[i].incomes.length; x++) {
+          if (
+            finantialTargetsStore[i].incomes[x].bankAccountId ===
+            activeBankAccountStoreId
+          ) {
+            finantialTargetsActiveAccount.push({
+              value: finantialTargetsStore[i].incomes[x].value,
+            });
+          }
+        }
+      }
+
+      if (finantialTargetsActiveAccount.length > 0) {
+        sumOfFinantialTargets = finantialTargetsActiveAccount
+          .map((item) => Number(item.value))
+          .reduce((partialSum, a) => partialSum + a, 0);
+      } else {
+        sumOfFinantialTargets = 0;
+      }
     } else {
-      sumOfRealisedTargets = 0;
+      sumOfFinantialTargets = 0;
     }
   } else {
-    sumOfRealisedTargets = 0;
+    sumOfFinantialTargets = 0;
   }
 
   if (monthIncomes.length > 0 && categoriesExpenses.length > 0) {
@@ -82,7 +100,7 @@ const ModalAddExpense: React.FC<{
       Number(monthIncomesSum) +
       Number(bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus);
     totalBankAccount =
-      bankAccountPlusIncomes - monthExpensesSum - sumOfRealisedTargets;
+      bankAccountPlusIncomes - monthExpensesSum - sumOfFinantialTargets;
   } else if (monthIncomes.length > 0) {
     monthIncomesSum = monthIncomes[
       monthIncomesActiveBankAccountIdIndex
@@ -94,11 +112,11 @@ const ModalAddExpense: React.FC<{
     bankAccountPlusIncomes =
       Number(monthIncomesSum) +
       Number(bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus);
-    totalBankAccount = bankAccountPlusIncomes - sumOfRealisedTargets;
+    totalBankAccount = bankAccountPlusIncomes - sumOfFinantialTargets;
   } else {
     totalBankAccount =
       bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus -
-      sumOfRealisedTargets;
+      sumOfFinantialTargets;
   }
 
   const submitCheck = () => {

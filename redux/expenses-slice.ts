@@ -443,13 +443,15 @@ const expensesSlice = createSlice({
       state.dateToUpdateWeek = new Date(newDate.setHours(1, 0, 0, 1)).toJSON();
       state.weekExpenses = [];
       state.weekCategoriesExpenses = state.weekCategoriesExpenses.map(
-        (item) => ({ bankAccountId: item.bankAccountId, categories: [] })
+        (item) => ({
+          bankAccountId: item.bankAccountId,
+          categories: item.categories.map((i) => ({ catId: i.catId, sum: 0 })),
+        })
       );
     },
 
     updateMonth: (state) => {
-      const monthToSet = new Date(state.monthExpenses[0].date).getMonth();
-      console.log("storeCheck!!!!");
+      const monthToSet = new Date().getMonth() - 1;
       //TEST
       // state.currentMonth = new Date(dateCheck).getMonth();
 
@@ -486,33 +488,102 @@ const expensesSlice = createSlice({
         // ];
         state.monthExpenses = [];
       } else if (state.yearExpenses.length > 0) {
-        state.yearExpenses = state.yearExpenses.map((item) => {
-          const monthExpensesId = state.monthCategoriesExpenses.findIndex(
-            (i) => i.bankAccountId === item.bankAccountId
+        let bankAccountIndexToAddYearExpenses: number | null = null;
+        for (let i = 0; i < state.monthCategoriesExpenses.length; i++) {
+          const yearExpensesIndex = state.yearExpenses.findIndex(
+            (item) =>
+              item.bankAccountId ===
+              state.monthCategoriesExpenses[i].bankAccountId
           );
-          return {
-            bankAccountId: item.bankAccountId,
-            months: [
-              ...item.months,
-              {
-                month: monthToSet,
-                sumOfAllExpenses: state.monthCategoriesExpenses[
-                  monthExpensesId
-                ].categories
-                  .map((i) => Number(i.sum))
-                  .reduce((partialSum, a) => partialSum + a, 0),
-                categoriesExpenses: state.monthCategoriesExpenses[
-                  monthExpensesId
-                ].categories.map((cat) => ({
-                  catId: cat.catId,
-                  sum: cat.sum,
-                  stillExsists: true,
-                  bankAccountId: item.bankAccountId,
-                })),
-              },
-            ],
-          };
-        });
+          if (yearExpensesIndex === -1) {
+            bankAccountIndexToAddYearExpenses = i;
+          }
+        }
+        if (bankAccountIndexToAddYearExpenses === null) {
+          state.yearExpenses = state.yearExpenses.map((item) => {
+            const monthExpensesId = state.monthCategoriesExpenses.findIndex(
+              (i) => i.bankAccountId === item.bankAccountId
+            );
+            return {
+              bankAccountId: item.bankAccountId,
+              months: [
+                ...item.months,
+                {
+                  month: monthToSet,
+                  sumOfAllExpenses: state.monthCategoriesExpenses[
+                    monthExpensesId
+                  ].categories
+                    .map((i) => Number(i.sum))
+                    .reduce((partialSum, a) => partialSum + a, 0),
+                  categoriesExpenses: state.monthCategoriesExpenses[
+                    monthExpensesId
+                  ].categories.map((cat) => ({
+                    catId: cat.catId,
+                    sum: cat.sum,
+                    stillExsists: true,
+                    bankAccountId: item.bankAccountId,
+                  })),
+                },
+              ],
+            };
+          });
+        } else if (bankAccountIndexToAddYearExpenses !== null) {
+          state.yearExpenses = [
+            ...state.yearExpenses.map((item) => {
+              const monthExpensesId = state.monthCategoriesExpenses.findIndex(
+                (i) => i.bankAccountId === item.bankAccountId
+              );
+              return {
+                bankAccountId: item.bankAccountId,
+                months: [
+                  ...item.months,
+                  {
+                    month: monthToSet,
+                    sumOfAllExpenses: state.monthCategoriesExpenses[
+                      monthExpensesId
+                    ].categories
+                      .map((i) => Number(i.sum))
+                      .reduce((partialSum, a) => partialSum + a, 0),
+                    categoriesExpenses: state.monthCategoriesExpenses[
+                      monthExpensesId
+                    ].categories.map((cat) => ({
+                      catId: cat.catId,
+                      sum: cat.sum,
+                      stillExsists: true,
+                      bankAccountId: item.bankAccountId,
+                    })),
+                  },
+                ],
+              };
+            }),
+            {
+              bankAccountId:
+                state.monthCategoriesExpenses[bankAccountIndexToAddYearExpenses]
+                  .bankAccountId,
+              months: [
+                {
+                  month: monthToSet,
+                  sumOfAllExpenses: state.monthCategoriesExpenses[
+                    bankAccountIndexToAddYearExpenses
+                  ].categories
+                    .map((i) => Number(i.sum))
+                    .reduce((partialSum, a) => partialSum + a, 0),
+                  categoriesExpenses: state.monthCategoriesExpenses[
+                    bankAccountIndexToAddYearExpenses
+                  ].categories.map((cat) => ({
+                    catId: cat.catId,
+                    sum: cat.sum,
+                    stillExsists: true,
+                    bankAccountId:
+                      state.monthCategoriesExpenses[
+                        bankAccountIndexToAddYearExpenses!
+                      ].bankAccountId,
+                  })),
+                },
+              ],
+            },
+          ];
+        }
 
         // state.yearExpenses = [
         //   ...state.yearExpenses,
@@ -550,9 +621,23 @@ const expensesSlice = createSlice({
                 {
                   year: yearToSet,
                   sumOfAllExpenses: item.months
-                    .map((month) => month.sumOfAllExpenses)
+                    .map((month) =>
+                      month === undefined
+                        ? 0
+                        : month.sumOfAllExpenses === undefined
+                        ? 0
+                        : Number(month.sumOfAllExpenses)
+                    )
                     .reduce((partialSum, a) => partialSum + a, 0),
-                  months: item.months,
+                  months: item.months.map((month) => ({
+                    ...month,
+                    sumOfAllExpenses:
+                      month === undefined
+                        ? 0
+                        : month.sumOfAllExpenses === undefined
+                        ? 0
+                        : Number(month.sumOfAllExpenses),
+                  })),
                 },
               ],
             }));
@@ -565,24 +650,118 @@ const expensesSlice = createSlice({
             //   },
             // ];
           } else if (state.yearsExpenses.length > 0) {
-            state.yearsExpenses = state.yearsExpenses.map((item) => {
-              const yearExpenseId = state.yearExpenses.findIndex(
-                (i) => i.bankAccountId === item.bankAccountId
+            let bankAccountIndexToAddYearsExpenses: number | null = null;
+            for (let i = 0; i < state.yearExpenses.length; i++) {
+              const yearsExpensesIndex = state.yearsExpenses.findIndex(
+                (item) =>
+                  item.bankAccountId === state.yearExpenses[i].bankAccountId
               );
-              return {
-                bankAccountId: item.bankAccountId,
-                years: [
-                  ...item.years,
-                  {
-                    year: yearToSet,
-                    sumOfAllExpenses: state.yearExpenses[yearExpenseId].months
-                      .map((month) => month.sumOfAllExpenses)
-                      .reduce((partialSum, a) => partialSum + a, 0),
-                    months: state.yearExpenses[yearExpenseId].months,
-                  },
-                ],
-              };
-            });
+              if (yearsExpensesIndex === -1) {
+                bankAccountIndexToAddYearsExpenses = i;
+              }
+            }
+
+            if (bankAccountIndexToAddYearsExpenses === null) {
+              state.yearsExpenses = state.yearsExpenses.map((item) => {
+                const yearExpenseId = state.yearExpenses.findIndex(
+                  (i) => i.bankAccountId === item.bankAccountId
+                );
+                return {
+                  bankAccountId: item.bankAccountId,
+                  years: [
+                    ...item.years,
+                    {
+                      year: yearToSet,
+                      sumOfAllExpenses: state.yearExpenses[yearExpenseId].months
+                        .map((month) =>
+                          month === undefined
+                            ? 0
+                            : month.sumOfAllExpenses === undefined
+                            ? 0
+                            : Number(month.sumOfAllExpenses)
+                        )
+                        .reduce((partialSum, a) => partialSum + a, 0),
+                      months: state.yearExpenses[yearExpenseId].months.map(
+                        (month) => ({
+                          ...month,
+                          sumOfAllExpenses:
+                            month.sumOfAllExpenses === undefined
+                              ? 0
+                              : Number(month.sumOfAllExpenses),
+                        })
+                      ),
+                    },
+                  ],
+                };
+              });
+            } else if (bankAccountIndexToAddYearsExpenses !== null) {
+              state.yearsExpenses = [
+                ...state.yearsExpenses.map((item) => {
+                  const yearExpenseId = state.yearExpenses.findIndex(
+                    (i) => i.bankAccountId === item.bankAccountId
+                  );
+                  return {
+                    bankAccountId: item.bankAccountId,
+                    years: [
+                      ...item.years,
+                      {
+                        year: yearToSet,
+                        sumOfAllExpenses: state.yearExpenses[
+                          yearExpenseId
+                        ].months
+                          .map((month) =>
+                            month === undefined
+                              ? 0
+                              : month.sumOfAllExpenses === undefined
+                              ? 0
+                              : Number(month.sumOfAllExpenses)
+                          )
+                          .reduce((partialSum, a) => partialSum + a, 0),
+                        months: state.yearExpenses[yearExpenseId].months.map(
+                          (month) => ({
+                            ...month,
+                            sumOfAllExpenses:
+                              month.sumOfAllExpenses === undefined
+                                ? 0
+                                : Number(month.sumOfAllExpenses),
+                          })
+                        ),
+                      },
+                    ],
+                  };
+                }),
+                {
+                  bankAccountId:
+                    state.yearExpenses[bankAccountIndexToAddYearsExpenses]
+                      .bankAccountId,
+                  years: [
+                    {
+                      year: yearToSet,
+                      sumOfAllExpenses: state.yearExpenses[
+                        bankAccountIndexToAddYearsExpenses
+                      ].months
+                        .map((month) =>
+                          month === undefined
+                            ? 0
+                            : month.sumOfAllExpenses === undefined
+                            ? 0
+                            : Number(month.sumOfAllExpenses)
+                        )
+                        .reduce((partialSum, a) => partialSum + a, 0),
+                      months: state.yearExpenses[
+                        bankAccountIndexToAddYearsExpenses
+                      ].months.map((month) => ({
+                        ...month,
+                        sumOfAllExpenses:
+                          month.sumOfAllExpenses === undefined
+                            ? 0
+                            : Number(month.sumOfAllExpenses),
+                      })),
+                    },
+                  ],
+                },
+              ];
+            }
             // state.yearsExpenses = [
             //   ...state.yearsExpenses,
             //   {
@@ -627,7 +806,10 @@ const expensesSlice = createSlice({
       }
       state.weekExpenses = [];
       state.weekCategoriesExpenses = state.weekCategoriesExpenses.map(
-        (item) => ({ bankAccountId: item.bankAccountId, categories: [] })
+        (item) => ({
+          bankAccountId: item.bankAccountId,
+          categories: item.categories.map((i) => ({ catId: i.catId, sum: 0 })),
+        })
       );
       state.currentMonth = new Date().getMonth();
     },

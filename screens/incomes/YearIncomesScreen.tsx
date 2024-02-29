@@ -26,7 +26,6 @@ const YearIncomesScreen = () => {
   const yearIncomesActiveAccountIdIndex = yearIncomes.findIndex(
     (item) => item.bankAccountId === activeBankAccountStore.accountId
   );
-
   const sumOfCurrentMonthIncomes =
     currentMonthIncomes.length > 0
       ? currentMonthIncomes[currentMonthIncomesActiveAccountIdIndex].categories

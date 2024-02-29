@@ -46,15 +46,41 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
     (item) =>
       item.currency === activeBankAccountStore.currency && item.accountId
   );
-  const monthExpenses = [];
-  // const check = monthCategoriesExpensesStore.map((item) => {
-  //   const checkId = bankAccountsIdsWithActiveCurrency.findIndex(
-  //     (i) => i === item.bankAccountId
-  //   );
-  //   if (checkId !== -1) {
-  //     return { ...item.categories };
-  //   }
-  // });
+
+  const weekExpensesByCurrency: { catId: string; sum: number }[] = [];
+  for (let i = 0; i < weekCategoriesExpensesStore.length; i++) {
+    const checkId = bankAccountsIdsWithActiveCurrency.findIndex(
+      (item) => item === weekCategoriesExpensesStore[i].bankAccountId
+    );
+    if (checkId !== -1) {
+      weekExpensesByCurrency.push(...weekCategoriesExpensesStore[i].categories);
+    }
+  }
+
+  const weekExpensesByCurrencySum: { catId: string; sum: number }[] = [];
+  for (let i = 0; i < weekExpensesByCurrency.length; i++) {
+    if (weekExpensesByCurrencySum.length === 0) {
+      weekExpensesByCurrencySum.push({
+        catId: weekExpensesByCurrency[i].catId,
+        sum: weekExpensesByCurrency[i].sum,
+      });
+    } else if (weekExpensesByCurrencySum.length > 0) {
+      const catIdIndex = weekExpensesByCurrencySum.findIndex(
+        (item) => item.catId === weekExpensesByCurrency[i].catId
+      );
+      if (catIdIndex === -1) {
+        weekExpensesByCurrencySum.push({
+          catId: weekExpensesByCurrency[i].catId,
+          sum: weekExpensesByCurrency[i].sum,
+        });
+      } else if (catIdIndex !== -1) {
+        weekExpensesByCurrencySum[catIdIndex].sum =
+          weekExpensesByCurrencySum[catIdIndex].sum +
+          weekExpensesByCurrency[i].sum;
+      }
+    }
+  }
+  console.log("weekExpensesByCurrency", weekExpensesByCurrency);
   const monthExpensesByCurrency: { catId: string; sum: number }[] = [];
   for (let i = 0; i < monthCategoriesExpensesStore.length; i++) {
     const checkId = bankAccountsIdsWithActiveCurrency.findIndex(
@@ -90,18 +116,6 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
     }
   }
 
-  //   const plannedExpenses:{catId:string;iconname:string;name:string;value:number}[]=[]
-  //   if(plannedExpensesCurrencyIndex !== -1){
-  // for(let i=0;i<plannedExpensesStore[plannedExpensesCurrencyIndex].expenses.length;i++){
-  //   const monthExpensesAccountId = monthCategoriesExpensesStore.findIndex(item=>item.bankAccountId===)
-  //   const objToPush = {
-  // catId:plannedExpensesStore[plannedExpensesCurrencyIndex].expenses[i].catId,
-  // iconName:plannedExpensesStore[plannedExpensesCurrencyIndex].expenses[i].iconName,
-  // name:plannedExpensesStore[plannedExpensesCurrencyIndex].expenses[i].name,
-  // value:
-  //   }
-  // }
-  //   }
   const plannedExpenses: {
     catId: string;
     iconName: string;
@@ -119,11 +133,27 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
           item.catId ===
           plannedExpensesStore[plannedExpensesCurrencyIndex].expenses[i].catId
       );
+      const weekExpensesSumIndex = weekExpensesByCurrencySum.findIndex(
+        (item) =>
+          item.catId ===
+          plannedExpensesStore[plannedExpensesCurrencyIndex].expenses[i].catId
+      );
       if (monthExpensesSumIndex !== -1) {
-        const value =
-          Number(
+        let value = 0;
+        if (weekExpensesSumIndex === -1) {
+          value = Number(
             plannedExpensesStore[plannedExpensesCurrencyIndex].expenses[i].value
-          ) - Number(monthExpensesByCurrencySum[monthExpensesSumIndex].sum);
+          );
+        } else if (weekExpensesSumIndex !== -1) {
+          value =
+            Number(
+              plannedExpensesStore[plannedExpensesCurrencyIndex].expenses[i]
+                .value
+            ) -
+            Number(monthExpensesByCurrencySum[monthExpensesSumIndex].sum) +
+            Number(weekExpensesByCurrencySum[weekExpensesSumIndex].sum);
+        }
+
         plannedExpenses.push({
           catId:
             plannedExpensesStore[plannedExpensesCurrencyIndex].expenses[i]
@@ -142,10 +172,6 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
       }
     }
   }
-  // const plannedExpenses =
-  //   plannedExpensesCurrencyIndex !== -1
-  //     ? plannedExpensesStore[plannedExpensesCurrencyIndex].expenses
-  //     : [];
 
   const bankAccountsActiveAccountIndexId = bankAccounts.findIndex(
     (item) => item.accountId === activeBankAccountStore.accountId
@@ -226,7 +252,9 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
           : category.sum,
     };
   });
-
+  console.log("categoriesExpenses", categoriesExpenses);
+  console.log("stripsColumnData", stripsColumnData);
+  console.log("plannedExpenses", plannedExpenses);
   const sumOfPlannedExpenses =
     plannedExpenses
       .map((item) => Number(item.value))
@@ -239,7 +267,8 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   const sumOfAllExpenses = categoriesExpenses
     .map((cat) => Number(cat.sum))
     .reduce((partialSum, a) => partialSum + a, 0);
-  const toSpend = sumOfPlannedExpenses > 0 ? sumOfPlannedExpenses : 1;
+  const toSpend =
+    sumOfPlannedExpenses > 0 ? sumOfPlannedExpenses - sumOfAllExpenses : 1;
   return (
     <View style={styles.container}>
       {(bankAccounts.length === 0 ||
@@ -277,10 +306,10 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
                 sumOfAllExpenses={sumOfAllExpenses}
                 toSpend={toSpend}
               />
-              <Label value="Realizacja wydatków w poszczególnych kategoriach" />
+              <Label value="Kategorie wydatków" />
 
               <StripsColumn data={stripsColumnData} />
-              <Label value="Realizacja założeń wydatków" />
+              <Label value="Planowane wydatki" />
               <PieChartRealisation
                 realExpenses={sumOfAllExpenses}
                 plannedExpenses={sumOfPlannedExpenses}
@@ -289,7 +318,7 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
           )}
           {lastExpensesToShow.length > 0 && (
             <>
-              {lastExpensesToShow[0].value !== 0 && (
+              {sumOfAllExpenses > 0 && (
                 <Label value="Lista ostatnich wydatków" />
               )}
               <View style={styles.lastExpensesContainer}>

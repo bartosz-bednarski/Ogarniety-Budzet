@@ -21,7 +21,6 @@ const MonthIncomesBox: React.FC<{ monthIncomes: MonthIncomesBoxProps }> = ({
   );
 
   const [showDropdown, setShowDropdown] = useState(false);
-
   const legend: any[] = monthIncomes.categoriesIncomes.map((item, index) => {
     const filteredCategories = incomesCategories.find(
       (category) => category.catId === item.catId
@@ -64,7 +63,11 @@ const MonthIncomesBox: React.FC<{ monthIncomes: MonthIncomesBoxProps }> = ({
             <PieChart
               widthAndHeight={100}
               series={monthIncomes.categoriesIncomes.map((category) =>
-                category.value === 0 ? 1 : category.value
+                category.value === 0
+                  ? 1
+                  : String(category.value).length > 5
+                  ? Number(String(category.value).slice(0, 5))
+                  : category.value
               )}
               sliceColor={pieChartColors.slice(
                 0,

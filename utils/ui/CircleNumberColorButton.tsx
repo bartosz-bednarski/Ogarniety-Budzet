@@ -25,7 +25,8 @@ const CircleNumberColorButton: React.FC<{
         <Ionicons name={iconName} size={50} color={pieChartColors[color]} />
       </Pressable>
       <Text style={styles.value}>
-        {numberWithSpaces(value)} {activeBankAccount.currency}
+        {numberWithSpaces(Number(Number(value).toFixed(2)))}{" "}
+        {activeBankAccount.currency}
       </Text>
     </View>
   );

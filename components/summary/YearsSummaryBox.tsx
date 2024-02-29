@@ -34,8 +34,6 @@ const YearsSummaryBox: React.FC<{
           <Text style={styles.monthName}>{data.year}</Text>
           <View style={styles.details}>
             {data.currency.map((item) => {
-              const balanse =
-                Number(item.sumOfAllIncomes) - Number(item.sumOfAllExpenses);
               return (
                 <View style={styles.rowBox} key={randomId()}>
                   <Text
@@ -43,22 +41,43 @@ const YearsSummaryBox: React.FC<{
                       styles.value,
                       {
                         color:
-                          balanse > 0 ? COLORS_STYLE.green : COLORS_STYLE.red,
+                          Number(item.sumOfAllIncomes) -
+                            Number(item.sumOfAllExpenses) >
+                          0
+                            ? COLORS_STYLE.green
+                            : COLORS_STYLE.red,
                       },
                     ]}
                   >
-                    {balanse >= 0 ? "+" : "-"}
+                    {Number(item.sumOfAllIncomes) -
+                      Number(item.sumOfAllExpenses) >=
+                    0
+                      ? "+"
+                      : "-"}
                   </Text>
                   <Text
                     style={[
                       styles.value,
                       {
                         color:
-                          balanse > 0 ? COLORS_STYLE.green : COLORS_STYLE.red,
+                          Number(item.sumOfAllIncomes) -
+                            Number(item.sumOfAllExpenses) >
+                          0
+                            ? COLORS_STYLE.green
+                            : COLORS_STYLE.red,
                       },
                     ]}
                   >
-                    {numberWithSpaces(Math.abs(Number(balanse.toFixed(2))))}
+                    {numberWithSpaces(
+                      Math.abs(
+                        Number(
+                          (
+                            Number(item.sumOfAllIncomes) -
+                            Number(item.sumOfAllExpenses)
+                          ).toFixed(2)
+                        )
+                      )
+                    )}
                   </Text>
                   <Text
                     style={[styles.value, { color: COLORS_STYLE.basicGold }]}
@@ -72,20 +91,18 @@ const YearsSummaryBox: React.FC<{
         </View>
         {showDropdown &&
           data.currency.map((item) => (
-            <>
+            <View key={randomId()}>
               <YearSummaryStrip
-                key={"Przychody"}
                 name="Przychody"
                 currency={item.currency}
                 value={item.sumOfAllIncomes}
               />
               <YearSummaryStrip
-                key={"Wydatki"}
                 name="Wydatki"
                 currency={item.currency}
                 value={item.sumOfAllExpenses}
               />
-            </>
+            </View>
           ))}
 
         {/* {showDropdown && <StripsColumn data={stripsColumnsData} />} */}

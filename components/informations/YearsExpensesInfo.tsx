@@ -12,7 +12,7 @@ const YearsExpensesInfo: React.FC = () => {
       </View>
 
       <Text style={styles.whiteText}>
-        Po roku użytkowania aplikacji pojawi się pierwsze zestawienie roczne
+        Po miesiącu użytkowania aplikacji pojawi się pierwsze zestawienie roczne
         Twoich wydatków.
       </Text>
     </View>

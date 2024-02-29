@@ -35,8 +35,6 @@ const MonthSummaryBox: React.FC<{
           <Text style={styles.monthName}>{MONTHS[data.month]}</Text>
           <View style={styles.details}>
             {data.currency.map((item) => {
-              const balanse =
-                Number(item.sumOfIncomes) - Number(item.sumOfExpenses);
               return (
                 <View style={styles.rowBox} key={randomId()}>
                   <Text
@@ -44,22 +42,41 @@ const MonthSummaryBox: React.FC<{
                       styles.value,
                       {
                         color:
-                          balanse > 0 ? COLORS_STYLE.green : COLORS_STYLE.red,
+                          Number(item.sumOfIncomes) -
+                            Number(item.sumOfExpenses) >
+                          0
+                            ? COLORS_STYLE.green
+                            : COLORS_STYLE.red,
                       },
                     ]}
                   >
-                    {balanse >= 0 ? "+" : "-"}
+                    {Number(item.sumOfIncomes) - Number(item.sumOfExpenses) >= 0
+                      ? "+"
+                      : "-"}
                   </Text>
                   <Text
                     style={[
                       styles.value,
                       {
                         color:
-                          balanse > 0 ? COLORS_STYLE.green : COLORS_STYLE.red,
+                          Number(item.sumOfIncomes) -
+                            Number(item.sumOfExpenses) >
+                          0
+                            ? COLORS_STYLE.green
+                            : COLORS_STYLE.red,
                       },
                     ]}
                   >
-                    {numberWithSpaces(Math.abs(Number(balanse.toFixed(2))))}
+                    {numberWithSpaces(
+                      Math.abs(
+                        Number(
+                          (
+                            Number(item.sumOfIncomes) -
+                            Number(item.sumOfExpenses)
+                          ).toFixed(2)
+                        )
+                      )
+                    )}
                   </Text>
                   <Text
                     style={[styles.value, { color: COLORS_STYLE.basicGold }]}
@@ -73,23 +90,20 @@ const MonthSummaryBox: React.FC<{
         </View>
         {showDropdown &&
           data.currency.map((item) => (
-            <>
+            <View key={randomId()}>
               <YearSummaryStrip
-                key={"Przychody"}
                 name="Przychody"
                 currency={item.currency}
                 value={item.sumOfIncomes}
               />
               <YearSummaryStrip
-                key={"Wydatki"}
                 name="Wydatki"
                 currency={item.currency}
                 value={item.sumOfExpenses}
               />
-            </>
+            </View>
           ))}
 
-        {/* {showDropdown && <StripsColumn data={stripsColumnsData} />} */}
         <View style={styles.dropdownButton}>
           <Ionicons
             name={showDropdown ? "caret-up" : "caret-down"}
@@ -120,6 +134,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "white",
     marginLeft: 5,
+    width: "30%",
   },
   mainBox: {
     flexDirection: "row",
@@ -131,7 +146,7 @@ const styles = StyleSheet.create({
   },
 
   details: {
-    width: "55%",
+    width: "43%",
   },
   rowBox: {
     flexDirection: "row",

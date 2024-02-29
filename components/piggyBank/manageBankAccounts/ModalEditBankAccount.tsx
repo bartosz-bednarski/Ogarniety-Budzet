@@ -15,6 +15,7 @@ import {
   editBankAccount,
   setActiveBankAccount,
 } from "../../../redux/bankAccounts-slice";
+import { deleteFinantialTargetIncomesOnAccountDelete } from "../../../redux/piggyBank-slice";
 
 const ModalEditBankAccount: React.FC<{
   modalVisible: boolean;
@@ -79,6 +80,9 @@ const ModalEditBankAccount: React.FC<{
 
   const onDeleteSubmitHandler = () => {
     dispatch(deleteBankAccount({ accountId: accountId }));
+    dispatch(
+      deleteFinantialTargetIncomesOnAccountDelete({ bankAccountId: accountId })
+    );
     setModalVisible(false);
     setShowdeleteModal(false);
   };
@@ -166,6 +170,10 @@ const ModalEditBankAccount: React.FC<{
                 Wszystkie wydatki, które zostały zarejestrowane zostaną w
                 pamięci aplikacji i będą uwzględniane przy generowaniu
                 podsumowań.
+              </Text>
+              <Text style={styles.modalInfo}>
+                Wszystkie wpłaty na cele finansowe, które nie zostały
+                zrealizowane zostaną usunięte.
               </Text>
               <View style={styles.modalButtonsBox}>
                 <Pressable
