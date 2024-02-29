@@ -16,6 +16,7 @@ import {
   setActiveBankAccount,
 } from "../../../redux/bankAccounts-slice";
 import { deleteFinantialTargetIncomesOnAccountDelete } from "../../../redux/piggyBank-slice";
+import { setPlannedExpensesNewCurrency } from "../../../redux/expenses-slice";
 
 const ModalEditBankAccount: React.FC<{
   modalVisible: boolean;
@@ -60,6 +61,9 @@ const ModalEditBankAccount: React.FC<{
           accountName: newAccountName,
           currency: currency,
         })
+      );
+      dispatch(
+        setPlannedExpensesNewCurrency({ currency: currency.toUpperCase() })
       );
       setModalVisible(false);
     } else {
@@ -107,6 +111,7 @@ const ModalEditBankAccount: React.FC<{
               onChangeText={(text) => setNewAccountName(text)}
               keyboardType="default"
               placeholder="Rachunek 2"
+              maxLength={20}
               placeholderTextColor={COLORS_STYLE.labelGrey}
             />
             {errorAccountName.state && (

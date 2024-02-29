@@ -120,7 +120,7 @@ const ModalAddExpense: React.FC<{
   }
 
   const submitCheck = () => {
-    if (value !== "" && isNaN(Number(value)) === false) {
+    if (value !== "" && Number(value) > 0 && isNaN(Number(value)) === false) {
       if (Number(value) < totalBankAccount) {
         submitHandler();
         setError({ state: false, message: "" });

@@ -39,10 +39,14 @@ const MonthsSavingsScreen = () => {
               color={item.savings > 0 ? COLORS_STYLE.green : COLORS_STYLE.red}
             />
             <Text style={styles.monthName}>{MONTHS[Number(item.month)]}</Text>
-            <Text style={styles.value}>
-              {numberWithSpaces(Number(item.savings.toFixed(2)))}{" "}
-              {activeBankAccout.currency}
-            </Text>
+            <View
+              style={{ flexDirection: "row", flexWrap: "wrap", width: "45%" }}
+            >
+              <Text style={styles.value}>
+                {numberWithSpaces(Number(item.savings.toFixed(2)))}{" "}
+                {activeBankAccout.currency}
+              </Text>
+            </View>
           </View>
         ))}
       </View>
@@ -78,6 +82,7 @@ const styles = StyleSheet.create({
   value: {
     color: COLORS_STYLE.basicGold,
     fontSize: 20,
+    flexWrap: "wrap",
   },
 });
 export default MonthsSavingsScreen;

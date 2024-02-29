@@ -152,6 +152,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "100%",
     justifyContent: "center",
+    flexWrap: "wrap",
   },
   value: {
     fontSize: 20,

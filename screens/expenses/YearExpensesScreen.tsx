@@ -88,7 +88,13 @@ const YearExpensesScreen: React.FC<{ navigation: Navigation }> = ({
             <PieChart
               widthAndHeight={200}
               series={[
-                ...yearExpenses.map((item) => item.sumOfAllExpenses),
+                ...yearExpenses.map((item) =>
+                  item.sumOfAllExpenses > 0
+                    ? String(item.sumOfAllExpenses).length > 5
+                      ? Number(String(item.sumOfAllExpenses).slice(0, 5))
+                      : item.sumOfAllExpenses
+                    : 1
+                ),
                 sumOfMonthExpenses === 0 ? 1 : sumOfMonthExpenses,
               ]}
               sliceColor={pieChartColors.slice(0, yearExpenses.length + 1)}

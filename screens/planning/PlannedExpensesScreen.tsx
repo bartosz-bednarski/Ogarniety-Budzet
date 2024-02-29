@@ -18,6 +18,7 @@ const PlannedExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   const plannedExpensesStore = useAppSelector(
     (state) => state.expenses.plannedExpenses
   );
+
   const bankAccounts = useAppSelector((state) => state.bankAccounts.accounts);
   const activeBankAccountStore = useAppSelector(
     (state) => state.bankAccounts.activeAccount
@@ -42,7 +43,6 @@ const PlannedExpensesScreen: React.FC<{ navigation: Navigation }> = ({
   const sumOfPlannedExpenses = plannedExpenses
     .map((item) => Number(item.value))
     .reduce((partialSum, a) => partialSum + a, 0);
-
   const stripsColumnData = plannedExpenses.map((item) => ({
     catId: item.catId,
     iconName: item.iconName,
@@ -50,7 +50,6 @@ const PlannedExpensesScreen: React.FC<{ navigation: Navigation }> = ({
     value: sumOfPlannedExpenses,
     sum: Number(item.value),
   }));
-
   const onPressHandler = (catId: string) => {
     setSelectedCatId(catId);
     setModalVisible(true);

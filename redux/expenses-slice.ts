@@ -349,23 +349,36 @@ const expensesSlice = createSlice({
         // const indexOfPlannedExpense = state.plannedExpenses.findIndex(
         //   (item) => item.catId === action.payload.catId
         // );
-        state.plannedExpenses = state.plannedExpenses.map((item) => {
-          const indexOfItem = item.expenses.findIndex(
-            (i) => i.catId === action.payload.id
+        for (let i = 0; i < state.plannedExpenses.length; i++) {
+          const indexToUpdate = state.plannedExpenses[i].expenses.findIndex(
+            (item) => item.catId === action.payload.catId
           );
-          return {
-            currency: item.currency,
-            expenses: [
-              ...item.expenses.filter((i) => i.catId !== action.payload.id),
-              {
-                catId: action.payload.catId,
-                name: action.payload.name,
-                iconName: action.payload.iconName,
-                value: item.expenses[indexOfItem].value,
-              },
-            ],
+          state.plannedExpenses[i].expenses[indexToUpdate] = {
+            catId: action.payload.catId,
+            name: action.payload.name,
+            iconName: action.payload.iconName,
+            value: state.plannedExpenses[i].expenses[indexToUpdate].value,
           };
-        });
+        }
+        // state.plannedExpenses = state.plannedExpenses.map((item) => {
+        //   return {
+        //     currency: item.currency,
+        //     expenses: [
+        //       ...item.expenses.map((i) => i.catId !== action.payload.catId),
+        //       {
+        //         catId: action.payload.catId,
+        //         name: action.payload.name,
+        //         iconName: action.payload.iconName,
+        //         value:
+        //           item.expenses[
+        //             item.expenses.findIndex(
+        //               (exp) => exp.catId === action.payload.catId
+        //             )
+        //           ].value,
+        //       },
+        //     ],
+        //   };
+        // });
       } else {
         return;
       }

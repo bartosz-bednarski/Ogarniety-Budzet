@@ -14,7 +14,14 @@ const AnaliseGrayBox: React.FC<{
       <View style={styles.boxLeft}>
         <PieChart
           widthAndHeight={100}
-          series={[incomes > 0 ? incomes : 1, expenses > 0 ? expenses : 1]}
+          series={[
+            incomes > 0
+              ? String(incomes).length > 5
+                ? Number(String(incomes).slice(0, 5))
+                : incomes
+              : 1,
+            expenses > 0 ? expenses : 1,
+          ]}
           sliceColor={[COLORS_STYLE.green, COLORS_STYLE.red]}
           coverRadius={0.6}
           coverFill={COLORS_STYLE.tabGrey}
@@ -30,9 +37,13 @@ const AnaliseGrayBox: React.FC<{
             size={20}
             color={COLORS_STYLE.green}
           />
-          <Text style={styles.value}>
-            {numberWithSpaces(Number(incomes.toFixed(2)))} {currency}
-          </Text>
+          <View
+            style={{ flexDirection: "row", flexWrap: "wrap", width: "95%" }}
+          >
+            <Text style={styles.value}>
+              {numberWithSpaces(Number(incomes.toFixed(2)))} {currency}
+            </Text>
+          </View>
         </View>
         <Text style={[styles.header, { color: COLORS_STYLE.red }]}>
           Suma wydatków
@@ -43,9 +54,13 @@ const AnaliseGrayBox: React.FC<{
             size={20}
             color={COLORS_STYLE.red}
           />
-          <Text style={styles.value}>
-            {numberWithSpaces(Number(expenses.toFixed(2)))} {currency}
-          </Text>
+          <View
+            style={{ flexDirection: "row", flexWrap: "wrap", width: "95%" }}
+          >
+            <Text style={styles.value}>
+              {numberWithSpaces(Number(expenses.toFixed(2)))} {currency}
+            </Text>
+          </View>
         </View>
       </View>
     </View>
