@@ -276,6 +276,7 @@ const ModalAddBankAccount: React.FC<{
             onChangeText={(text) => setAccountName(text)}
             keyboardType="default"
             placeholder="Rachunek 2"
+            maxLength={20}
             placeholderTextColor={COLORS_STYLE.labelGrey}
           />
           {errorAccountName.state && (
