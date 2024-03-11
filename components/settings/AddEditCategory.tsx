@@ -68,6 +68,9 @@ const AddEditCategory: React.FC<AddEditCategoryProps> = ({
               onChangeText={(text) => onSetInputText(text)}
               value={inputText}
               maxLength={19}
+              placeholder="Czynsz"
+              placeholderTextColor={COLORS_STYLE.labelGrey}
+              accessibilityLabel="nazwa kategorii"
             />
             <View style={styles.buttonsBox}>
               <CustomButton title="Zatwierdź" onPress={onCategoryEdit} />
@@ -80,10 +83,13 @@ const AddEditCategory: React.FC<AddEditCategoryProps> = ({
           <Text style={styles.label}>Wybierz ikone dla kategorii</Text>
           <View style={styles.iconsBoxDropped}>
             <View style={styles.closeBox}>
-              <Pressable onPress={() => setDropdownActive(false)}>
+              <Pressable
+                onPress={() => setDropdownActive(false)}
+                accessibilityLabel="zamknij liste"
+              >
                 <Ionicons
                   name="close"
-                  color={COLORS_STYLE.labelGrey}
+                  color={COLORS_STYLE.basicGold}
                   size={24}
                 />
               </Pressable>

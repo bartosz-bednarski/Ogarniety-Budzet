@@ -15,7 +15,10 @@ const ExpensesCategoriesListScreen: React.FC<{ navigation: any }> = ({
 
   return (
     <View style={styles.editCategoriesContainer}>
-      <View style={styles.categoriesScrollList}>
+      <View
+        style={styles.categoriesScrollList}
+        accessibilityLabel="lista kategorii"
+      >
         <FlatList
           data={categories}
           renderItem={({ item, index }) => (

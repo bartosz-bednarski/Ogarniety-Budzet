@@ -123,37 +123,35 @@ const MonthExpensesScreen: React.FC<{ navigation: Navigation }> = ({
           />
         )}
       {bankAccounts[bankAccountsActiveAccountIndexId].bankAccountStatus > 0 && (
-        <>
-          <ScrollView>
-            {categoriesExpenses.length === 0 && (
-              <View style={styles.informationBox}>
-                <CustomButton
-                  title="Dodaj wydatek"
-                  onPress={() => navigation.navigate("addExpense")}
+        <ScrollView>
+          {categoriesExpenses.length === 0 && (
+            <View style={styles.informationBox}>
+              <CustomButton
+                title="Dodaj wydatek"
+                onPress={() => navigation.navigate("addExpense")}
+              />
+            </View>
+          )}
+          {sumOfAllExpenses > 0 && (
+            <View>
+              {categories !== undefined && (
+                <PieChartWithFrames
+                  categoriesExpensesWithNames={categoriesExpensesWithNames}
+                  sumOfAllExpenses={sumOfAllExpenses}
+                  toSpend={toSpend}
                 />
-              </View>
-            )}
-            {sumOfAllExpenses > 0 && (
-              <>
-                {categories !== undefined && (
-                  <PieChartWithFrames
-                    categoriesExpensesWithNames={categoriesExpensesWithNames}
-                    sumOfAllExpenses={sumOfAllExpenses}
-                    toSpend={toSpend}
-                  />
-                )}
-                <Label value="Realizacja wydatków w poszczególnych kategoriach" />
+              )}
+              <Label value="Realizacja wydatków w poszczególnych kategoriach" />
 
-                <StripsColumn data={stripsColumnData} />
-                <Label value="Realizacja założeń wydatków" />
-                <PieChartRealisation
-                  realExpenses={sumOfAllExpenses}
-                  plannedExpenses={sumOfPlannedExpenses}
-                />
-              </>
-            )}
-          </ScrollView>
-        </>
+              <StripsColumn data={stripsColumnData} />
+              <Label value="Realizacja założeń wydatków" />
+              <PieChartRealisation
+                realExpenses={sumOfAllExpenses}
+                plannedExpenses={sumOfPlannedExpenses}
+              />
+            </View>
+          )}
+        </ScrollView>
       )}
     </View>
   );

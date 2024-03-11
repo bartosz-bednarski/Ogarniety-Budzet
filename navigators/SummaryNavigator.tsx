@@ -144,6 +144,12 @@ const SummaryNavigator = () => {
               return (
                 <Pressable
                   onPress={() => navigation.navigate("settingsNavigator")}
+                  style={{
+                    width: 48,
+                    height: 48,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
                 >
                   <Ionicons
                     name="cog"
