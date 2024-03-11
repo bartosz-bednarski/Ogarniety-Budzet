@@ -37,7 +37,7 @@ const ManageBankAccountsScreen: React.FC<{ navigation: Navigation }> = ({
       )}
       <ScrollView contentContainerStyle={{ gap: 20 }}>
         {bankAccountStatus > 0 && (
-          <>
+          <View style={{ gap: 20 }}>
             {bankAccounts.map((item, index) => {
               const incomesAccountIdIndex = incomes.findIndex(
                 (income) => income.bankAccountId === item.accountId
@@ -83,7 +83,7 @@ const ManageBankAccountsScreen: React.FC<{ navigation: Navigation }> = ({
                 setModalVisible={(value) => setModalVisible(value)}
               />
             )}
-          </>
+          </View>
         )}
       </ScrollView>
     </View>

@@ -80,7 +80,6 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
       }
     }
   }
-  console.log("weekExpensesByCurrency", weekExpensesByCurrency);
   const monthExpensesByCurrency: { catId: string; sum: number }[] = [];
   for (let i = 0; i < monthCategoriesExpensesStore.length; i++) {
     const checkId = bankAccountsIdsWithActiveCurrency.findIndex(
@@ -252,9 +251,6 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
           : category.sum,
     };
   });
-  console.log("categoriesExpenses", categoriesExpenses);
-  console.log("stripsColumnData", stripsColumnData);
-  console.log("plannedExpenses", plannedExpenses);
   const sumOfPlannedExpenses =
     plannedExpenses
       .map((item) => Number(item.value))
@@ -300,7 +296,7 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
           )}
 
           {sumOfAllExpenses > 0 && (
-            <>
+            <View>
               <PieChartWithFrames
                 categoriesExpensesWithNames={categoriesExpensesWithNames}
                 sumOfAllExpenses={sumOfAllExpenses}
@@ -314,10 +310,10 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
                 realExpenses={sumOfAllExpenses}
                 plannedExpenses={sumOfPlannedExpenses}
               />
-            </>
+            </View>
           )}
           {lastExpensesToShow.length > 0 && (
-            <>
+            <View>
               {sumOfAllExpenses > 0 && (
                 <Label value="Lista ostatnich wydatków" />
               )}
@@ -339,7 +335,7 @@ const WeekExpensesScreen: React.FC<{ navigation: Navigation }> = ({
                   }
                 })}
               </View>
-            </>
+            </View>
           )}
         </ScrollView>
       )}

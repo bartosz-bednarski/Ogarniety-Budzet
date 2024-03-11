@@ -23,6 +23,7 @@ import { addExpensesCategory } from "../../../redux/expensesCategories-slice";
 import { addIncomesCategory } from "../../../redux/incomesCategories-slice";
 import COLORS_STYLE from "../../../utils/styles/colors";
 import randomId from "../../../utils/randomIdFunction";
+import { Colors } from "react-native/Libraries/NewAppScreen";
 
 const CustomModal: React.FC<{
   modalVisible: boolean;
@@ -32,11 +33,19 @@ const CustomModal: React.FC<{
 
   const [bankAccountInput, setBankAccountInput] = useState("");
   const [incomesInput, setIncomesInput] = useState("");
-  const [inputError, setInputError] = useState({ status: false, message: "" });
-
+  const [bankAccountInputError, setBankAccountInputError] = useState({
+    status: false,
+    message: "",
+  });
+  const [incomesInputError, setIncomesInputError] = useState({
+    status: false,
+    message: "",
+  });
   useEffect(() => {
     Number(bankAccountInput) > 0 &&
-      setInputError({ status: false, message: "" });
+      setBankAccountInputError({ status: false, message: "" });
+    Number(incomesInput) >= 0 &&
+      setIncomesInputError({ status: false, message: "" });
   }, [bankAccountInput]);
 
   const submitHandler = () => {
@@ -162,6 +171,44 @@ const CustomModal: React.FC<{
       );
       dispatch(setPlannedExpensesNewCurrency({ currency: "PLN" }));
       setModalVisible(false);
+    } else if (
+      Number(bankAccountInput) > 0 &&
+      Number(incomesInput) > 0 &&
+      Number(incomesInput) === Number(bankAccountInput)
+    ) {
+      const income = Number(incomesInput);
+      dispatch(
+        setBankAccount({ bankAccountStatus: 1, accountId: bankAccountId })
+      );
+      dispatch(
+        addIncomesCategory({
+          name: "Inne",
+          iconName: "star",
+          catId: incomeCatId,
+        })
+      );
+      dispatch(setIncome({ catId: incomeCatId, bankAccountId: bankAccountId }));
+      dispatch(
+        updateIncome({
+          catId: incomeCatId,
+          value: income,
+          bankAccountId: bankAccountId,
+        })
+      );
+      dispatch(setPlannedExpensesNewCurrency({ currency: "PLN" }));
+      setModalVisible(false);
+    }
+    if (Number(incomesInput) < 0) {
+      setIncomesInputError({
+        status: true,
+        message: "Kwota przychodów powinna być większa lub równa 0!",
+      });
+    }
+    if (Number(bankAccountInput) < 1) {
+      setBankAccountInputError({
+        status: true,
+        message: "Stan konta powinien być większy lub równy 1!",
+      });
     }
   };
 
@@ -172,6 +219,8 @@ const CustomModal: React.FC<{
       visible={modalVisible}
       onRequestClose={() => {
         Alert.alert("Dane nie zostały zapisane!");
+        setIncomesInputError({ message: "", status: false });
+        setBankAccountInputError({ message: "", status: false });
         setModalVisible(!modalVisible);
       }}
     >
@@ -187,9 +236,14 @@ const CustomModal: React.FC<{
             onChangeText={(text) => setBankAccountInput(text)}
             keyboardType="numeric"
             maxLength={10}
+            placeholder="10000"
+            placeholderTextColor={COLORS_STYLE.labelGrey}
+            accessibilityLabel="stan konta"
           />
-          {inputError.status && (
-            <Text style={styles.errorText}>{inputError.message}</Text>
+          {bankAccountInputError.status && (
+            <Text style={styles.errorText}>
+              {bankAccountInputError.message}
+            </Text>
           )}
           <Text style={styles.modalLabel}>
             Podaj kwotę przychodów uzyskanych w tym miesiącu
@@ -200,7 +254,13 @@ const CustomModal: React.FC<{
             onChangeText={(text) => setIncomesInput(text)}
             keyboardType="numeric"
             maxLength={10}
+            placeholder="5000"
+            placeholderTextColor={COLORS_STYLE.labelGrey}
+            accessibilityLabel="kwota przychodów"
           />
+          {incomesInputError.status && (
+            <Text style={styles.errorText}>{incomesInputError.message}</Text>
+          )}
           <Text style={styles.modalInfo}>
             Jeżeli nie uzyskałeś jeszcze przychodów w tym miesiącu wpisz 0. Po
             ich otrzymaniu wprowadź kwotę w zakładce "Przychody".
@@ -259,7 +319,7 @@ const styles = StyleSheet.create({
     borderColor: "white",
     borderBottomWidth: 1,
     width: "100%",
-    height: 30,
+    height: 50,
     paddingVertical: 5,
     paddingHorizontal: 0,
     color: "white",

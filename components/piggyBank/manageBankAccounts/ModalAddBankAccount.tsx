@@ -10,7 +10,10 @@ import {
 import COLORS_STYLE from "../../../utils/styles/colors";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { useEffect, useState } from "react";
-import { addBankAccount } from "../../../redux/bankAccounts-slice";
+import {
+  addBankAccount,
+  setBankAccount,
+} from "../../../redux/bankAccounts-slice";
 import randomId from "../../../utils/randomIdFunction";
 import {
   addExpense,
@@ -37,23 +40,26 @@ const ModalAddBankAccount: React.FC<{
     state: false,
     message: "",
   });
-  const [errorBankAccount, setErrorBankAccount] = useState({
+  const [bankAccountInputError, setBankAccountInputError] = useState({
     state: false,
     message: "",
   });
-  const [errorIncome, setErrorIncome] = useState({ state: false, message: "" });
+  const [incomesInputError, setIncomesInputError] = useState({
+    state: false,
+    message: "",
+  });
   const [errorCurrency, setErrorCurrency] = useState({
     state: false,
     message: "",
   });
-  const [bankAccoutInput, setBankAccoutInput] = useState("");
+  const [bankAccountInput, setBankAccountInput] = useState("");
   const [accountName, setAccountName] = useState("");
   const [currency, setCurrency] = useState("");
   const [incomesInput, setIncomesInput] = useState("");
 
   useEffect(() => {
-    if (Number(bankAccoutInput) > 0) {
-      setErrorBankAccount({ state: false, message: "" });
+    if (Number(bankAccountInput) > 0) {
+      setBankAccountInputError({ state: false, message: "" });
     }
     if (accountName.length > 0) {
       setErrorAccountName({ state: false, message: "" });
@@ -61,17 +67,17 @@ const ModalAddBankAccount: React.FC<{
     if (currency.length > 0) {
       setErrorCurrency({ state: false, message: "" });
     }
-    if (Number(incomesInput.length) >= 0) {
-      setErrorIncome({ state: false, message: "" });
+    if (Number(incomesInput) >= 0) {
+      setIncomesInputError({ state: false, message: "" });
     }
-  }, [accountName, bankAccoutInput, currency, incomesInput]);
+  }, [accountName, bankAccountInput, currency, incomesInput]);
 
   const submitCheck = () => {
     const bankAccountId = randomId();
     const incomeCatId = randomId();
     const catId = randomId();
     if (
-      Number(bankAccoutInput) > 0 &&
+      Number(bankAccountInput) > 0 &&
       accountName.length > 0 &&
       currency.length > 0 &&
       Number(incomesInput) === 0
@@ -81,7 +87,7 @@ const ModalAddBankAccount: React.FC<{
           accountName: accountName,
           accountId: bankAccountId,
           currency: currency.toUpperCase(),
-          bankAccountStatus: Number(bankAccoutInput),
+          bankAccountStatus: Number(bankAccountInput),
         })
       );
       dispatch(
@@ -112,13 +118,13 @@ const ModalAddBankAccount: React.FC<{
 
       setModalVisible(false);
     } else if (
-      Number(bankAccoutInput) > 0 &&
+      Number(bankAccountInput) > 0 &&
       accountName.length > 0 &&
       currency.length > 0 &&
       Number(incomesInput) > 0 &&
-      Number(incomesInput) > Number(bankAccoutInput)
+      Number(incomesInput) > Number(bankAccountInput)
     ) {
-      const difference = Number(incomesInput) - Number(bankAccoutInput) + 1;
+      const difference = Number(incomesInput) - Number(bankAccountInput) + 1;
       const income = Number(incomesInput);
       dispatch(
         addBankAccount({
@@ -189,13 +195,13 @@ const ModalAddBankAccount: React.FC<{
       );
       setModalVisible(false);
     } else if (
-      Number(bankAccoutInput) > 0 &&
+      Number(bankAccountInput) > 0 &&
       accountName.length > 0 &&
       currency.length > 0 &&
       Number(incomesInput) > 0 &&
-      Number(incomesInput) < Number(bankAccoutInput)
+      Number(incomesInput) < Number(bankAccountInput)
     ) {
-      const difference = Number(bankAccoutInput) - Number(incomesInput);
+      const difference = Number(bankAccountInput) - Number(incomesInput);
       const income = Number(incomesInput) - 1;
       dispatch(
         addBankAccount({
@@ -234,8 +240,55 @@ const ModalAddBankAccount: React.FC<{
         );
       }
       setModalVisible(false);
-    } else if (Number(bankAccoutInput) <= 0) {
-      setErrorBankAccount({
+    } else if (
+      Number(bankAccountInput) > 0 &&
+      Number(incomesInput) > 0 &&
+      accountName.length > 0 &&
+      currency.length > 0 &&
+      Number(incomesInput) === Number(bankAccountInput)
+    ) {
+      const income = Number(incomesInput);
+      dispatch(
+        addBankAccount({
+          accountName: accountName,
+          accountId: bankAccountId,
+          currency: currency.toUpperCase(),
+          bankAccountStatus: 1,
+        })
+      );
+      dispatch(
+        addIncomesCategory({
+          name: "Inne",
+          iconName: "star",
+          catId: incomeCatId,
+        })
+      );
+      dispatch(setIncome({ catId: incomeCatId, bankAccountId: bankAccountId }));
+      dispatch(
+        updateIncome({
+          catId: incomeCatId,
+          value: income,
+          bankAccountId: bankAccountId,
+        })
+      );
+      dispatch(
+        setPlannedExpensesNewCurrency({ currency: currency.toUpperCase() })
+      );
+      setModalVisible(false);
+    }
+    if (Number(incomesInput) < 0) {
+      setIncomesInputError({
+        state: true,
+        message: "Kwota przychodów powinna być większa lub równa 0!",
+      });
+    }
+    if (Number(bankAccountInput) < 1) {
+      setBankAccountInputError({
+        state: true,
+        message: "Stan konta powinien być większy lub równy 1!",
+      });
+    } else if (Number(bankAccountInput) <= 0) {
+      setBankAccountInputError({
         state: true,
         message: "Kwota rachunku musi być większa od 0 !",
       });
@@ -250,7 +303,7 @@ const ModalAddBankAccount: React.FC<{
         message: "Nazwa waluty nie może być pusta !",
       });
     } else if (Number(incomesInput) < 0) {
-      setErrorIncome({
+      setIncomesInputError({
         message: "Kwota powinna być równa 0 lub większa od 0 !",
         state: true,
       });
@@ -287,14 +340,14 @@ const ModalAddBankAccount: React.FC<{
           </Text>
           <TextInput
             style={styles.textInput}
-            value={bankAccoutInput}
-            onChangeText={(text) => setBankAccoutInput(text)}
+            value={bankAccountInput}
+            onChangeText={(text) => setBankAccountInput(text)}
             keyboardType="numeric"
             placeholder="12 000"
             placeholderTextColor={COLORS_STYLE.labelGrey}
           />
-          {errorIncome.state && (
-            <Text style={styles.error}>{errorIncome.message}</Text>
+          {incomesInputError.state && (
+            <Text style={styles.error}>{incomesInputError.message}</Text>
           )}
           <Text style={styles.label}>
             Podaj kwotę przychodów uzyskanych w tym miesiącu
@@ -311,8 +364,8 @@ const ModalAddBankAccount: React.FC<{
             Jeżeli nie uzyskałeś jeszcze przychodów w tym miesiącu wpisz 0. Po
             ich otrzymaniu wprowadź kwotę w zakładce "Przychody".
           </Text>
-          {errorBankAccount.state && (
-            <Text style={styles.error}>{errorBankAccount.message}</Text>
+          {bankAccountInputError.state && (
+            <Text style={styles.error}>{bankAccountInputError.message}</Text>
           )}
           <Text style={styles.label}>Podaj walutę:</Text>
           <TextInput
